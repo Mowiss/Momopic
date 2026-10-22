@@ -135,6 +135,8 @@ aside.tools{width:144px;background:var(--g800);border-right:1px solid var(--g700
 
 #stage{flex:1;position:relative;overflow:hidden;background:#2a2f38;min-width:0}
 #view{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+#texthandle{position:absolute;z-index:6;width:22px;height:22px;margin:-26px 0 0 -2px;display:flex;align-items:center;justify-content:center;background:#fcd34d;color:#111;border-radius:5px;cursor:move;touch-action:none}
+#texthandle svg{width:15px;height:15px}
 #textedit{position:absolute;box-shadow:none;background:rgba(255,255,255,.04);border:1px dashed #fcd34d;outline:none;resize:none;overflow:hidden;padding:0;margin:0;white-space:pre;line-height:1.2;min-width:20px;z-index:5}
 #dropzone{position:absolute;inset:10px;border:3px dashed var(--amber);border-radius:12px;background:#0008;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:var(--amber);pointer-events:none;z-index:8}
 
@@ -291,6 +293,98 @@ footer select{background:var(--g900);border:1px solid var(--g600);border-radius:
 .anchor button{width:26px;height:26px;background:var(--g700);border:1px solid var(--g600);border-radius:3px;cursor:pointer}
 .anchor button.on{background:var(--brand2)}
 
+#mc-root{position:absolute;inset:0;pointer-events:none;z-index:40;font-family:system-ui,'Segoe UI',sans-serif}
+#mc-momo{pointer-events:auto;position:absolute;left:10px;bottom:0;width:62px;height:76px;cursor:pointer;transform:translateY(46px);isolation:isolate;transition:transform .28s cubic-bezier(.3,1.4,.5,1)}
+#mc-momo svg{width:100%;height:100%}
+#mc-momo:hover{transform:translateY(27px)}
+#mc-root.open #mc-momo{transform:translateY(0)}
+#mc-momo.think svg{animation:mc-think .9s ease-in-out infinite;transform-origin:50% 80%}
+#mc-momo .mc-eye{transform-box:fill-box;transform-origin:center;animation:mc-blink 5s infinite}
+@keyframes mc-blink{0%,93%,100%{transform:scaleY(1)}95%{transform:scaleY(.15)}}
+@keyframes mc-think{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
+#mc-hint{position:absolute;z-index:-1;top:-4px;right:-12px;background:#2563eb;color:#fff;font-weight:900;font-size:12px;border-radius:10px;padding:0 6px;line-height:18px}
+#mc-hint::after{content:'';position:absolute;left:4px;bottom:-4px;border-style:solid;border-width:5px 4px 0 4px;border-color:#2563eb transparent transparent}
+#mc-hint.busy::after{border-top-color:#1d4ed8}#mc-hint.news::after{border-top-color:#dc2626}
+#mc-root.open #mc-hint{display:none}
+#mc-hint.busy{background:#1d4ed8;color:#fff;padding:0;width:20px;height:20px;display:flex;align-items:center;justify-content:center}
+#mc-hint.busy i{display:flex;animation:mcGear 1.4s linear infinite}
+#mc-hint.news{background:#dc2626;color:#fff;padding:0;width:20px;height:20px;text-align:center;animation:mcPing 1.2s ease-in-out infinite}
+@keyframes mcGear{to{transform:rotate(360deg)}}
+@keyframes mcPing{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+#mc-mini{display:none;pointer-events:auto;cursor:pointer;position:absolute;left:82px;bottom:10px;background:#1e3a8a;color:#dbeafe;border:1px solid #3b82f6;border-radius:10px;padding:4px 10px;font-size:12px;white-space:nowrap}
+#mc-root.busy:not(.open) #mc-mini{display:block}
+#mc-panel{display:none;pointer-events:auto;position:absolute;left:10px;bottom:82px;width:390px;max-width:calc(100vw - 40px);height:min(540px,calc(100% - 100px));flex-direction:column;background:#111827f7;border:1.5px solid #f5c518;border-radius:14px;color:var(--g200);font-size:13.5px;line-height:1.5;overflow:hidden}
+#mc-root.open #mc-panel{display:flex}
+#mc-root.pinned #mc-panel{border-width:3px;border-style:double}
+#mc-root.pinned #mc-pin{color:#f5c518;transform:rotate(-30deg)}
+.mc-h{display:flex;justify-content:space-between;align-items:center;padding:8px 10px 8px 12px;background:var(--g800);border-bottom:1px solid var(--g700);font-weight:800;color:#fde047}
+.mc-h>span:first-child{display:flex;align-items:center;gap:7px}
+.mc-hb{display:flex;gap:2px}
+.mc-hb button{background:none;border:0;color:var(--g400);padding:4px;border-radius:5px;display:flex}
+.mc-hb button:hover{color:#fff;background:var(--g700)}
+#mc-set{display:none;flex:1;overflow-y:auto;padding:10px 12px;flex-direction:column;gap:8px}
+#mc-root.set #mc-set{display:flex}
+#mc-root.set #mc-log,#mc-root.set #mc-sugg,#mc-root.set .mc-in{display:none}
+.mc-form{display:flex;flex-direction:column;gap:5px;font-size:12.5px}
+.mc-form>span{color:var(--g400);margin-top:4px}
+.mc-form select{width:100%}
+.mc-form .ps-seg{align-self:flex-start}
+#mc-log{flex:1;overflow-y:auto;padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+.mc-m{max-width:92%;padding:7px 10px;border-radius:12px}
+.mc-m p{margin:0 0 4px}.mc-m p:last-child{margin-bottom:0}
+.mc-m ul{margin:2px 0 4px;padding-left:18px;list-style:disc}.mc-m li{margin:1px 0}
+.mc-m kbd{padding:0 4px;border:1px solid var(--g500);border-radius:4px;background:var(--g800);color:#fde68a;font-size:12px}
+.mc-a{align-self:flex-start;background:var(--g800);border:1px solid var(--g700);border-top-left-radius:4px}
+.mc-u{align-self:flex-end;background:#6b4e07;color:#fefce8;border-top-right-radius:4px}
+.mc-err{border-color:#b91c1c;background:#450a0a}
+.mc-btn{display:inline-flex;align-items:center;gap:5px;vertical-align:middle;margin:1px 2px;padding:1px 7px 1px 3px;border-radius:6px;background:var(--g700);border:1px solid #f5c518;color:#fde68a;font-size:12px;cursor:pointer}
+.mc-btn svg{width:15px;height:15px}
+.mc-btn:hover{background:var(--g600)}
+#mc-sugg{display:flex;flex-wrap:wrap;gap:5px;padding:0 12px 6px}
+#mc-sugg button{font-size:12px;padding:3px 9px;border-radius:12px;border:1px solid var(--g600);background:var(--g800);color:var(--g300)}
+#mc-sugg button:hover{border-color:#f5c518;color:#fde68a}
+.mc-in{display:flex;gap:6px;padding:8px;border-top:1px solid var(--g700);background:#0f172a}
+.mc-in textarea{flex:1;resize:none;background:var(--g800);color:#fff;border:1px solid var(--g600);border-radius:8px;padding:6px 8px;font-size:13px;outline:none;min-height:38px}
+.mc-in textarea:focus{border-color:#f5c518}
+.mc-in button{width:42px;border-radius:8px;border:0;background:#f5c518;color:#111827;display:flex;align-items:center;justify-content:center}
+.mc-in button:hover{background:#facc15}
+.mc-in button.stop{background:#dc2626;color:#fff}
+.mc-status{color:#c4b5fd;font-style:italic;display:flex;align-items:center;gap:6px}
+.mc-status i{display:flex;animation:mcGear 1.4s linear infinite}
+.mc-st-t{color:var(--g500);font-size:11px;font-style:normal}
+.mc-acts{margin-top:6px;display:flex;flex-direction:column;gap:4px}
+.mc-act{display:flex;gap:6px;align-items:flex-start;font-size:12.5px;padding:4px 7px;border-radius:7px;background:#0f172a;border:1px solid #334155}
+.mc-act .ic-svg{margin-top:2px}
+.mc-act.mc-ok{border-color:#166534;color:#bbf7d0}.mc-act.mc-no{border-color:#7f1d1d;color:#fecaca}.mc-act.mc-err{border-color:#92400e;color:#fde68a}.mc-act.mc-ask{border-color:#f5c518;color:#fef9c3}
+.mc-ask{display:flex;flex-wrap:wrap;gap:5px;margin:2px 0 4px}
+.mc-ask button{font-size:12px;padding:3px 9px;border-radius:6px;border:1px solid var(--g600);background:var(--g800);color:var(--g200)}
+.mc-ask button:first-child{background:#16a34a;border-color:#16a34a;color:#fff;font-weight:700}
+.mc-ask button:last-child{color:#fca5a5}
+.mc-undo{font-size:11.5px;color:var(--g400);margin-top:2px}
+.mc-ring{position:fixed;z-index:950;pointer-events:none;border:2px solid #f5c518;border-radius:8px;animation:mc-pulse 1s ease-in-out infinite}
+@keyframes mc-pulse{0%,100%{box-shadow:0 0 0 3px #f5c51844}50%{box-shadow:0 0 0 8px #f5c51822}}
+@media (prefers-reduced-motion:reduce){#mc-momo .mc-eye,#mc-momo.think svg{animation:none}}
+"""
+
+.mc-keyrow{display:flex;gap:5px;align-items:center}
+.mc-keyrow input{flex:1;min-width:0;background:var(--g900);border:1px solid var(--g600);border-radius:5px;padding:5px 7px;color:#fff;font:12px ui-monospace,monospace}
+#mc-set select{background:var(--g900);border:1px solid var(--g600);border-radius:5px;padding:5px 7px;color:var(--g200)}
+#mc-set .note{font-size:12px;color:var(--g400);margin:0}
+.dbtn{background:var(--g700);border:1px solid var(--g600);border-radius:5px;padding:5px 9px;color:var(--g200);font-size:12px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.dbtn:hover{background:var(--g600)}
+.dbtn.primary{background:var(--brand);border-color:var(--brand2);color:#fff}
+.ps-seg{display:inline-flex;border:1px solid var(--g600);border-radius:6px;overflow:hidden}
+.ps-seg button{background:var(--g800);border:0;color:var(--g300);padding:5px 14px;font-size:12.5px;cursor:pointer}
+.ps-seg button+button{border-left:1px solid var(--g600)}
+.ps-seg button.on{background:var(--brand2);color:#fff;font-weight:700}
+.ps-sub{font-size:11.5px;color:var(--g500)}
+.ia-grid{display:grid;grid-template-columns:120px 1fr;gap:8px 12px;align-items:center}
+.ia-grid>span{color:var(--g400);font-size:12.5px}
+.ia-perm{display:flex;gap:8px;align-items:flex-start;padding:6px 8px;border:1px solid var(--g700);border-radius:7px;margin-bottom:5px;cursor:pointer}
+.ia-perm:has(input:checked){border-color:var(--brand3);background:#2a1414}
+.ia-perm input{margin-top:3px;accent-color:var(--brand2)}
+.ic-svg{flex:none;vertical-align:middle}
+
 #toast{position:fixed;left:50%;bottom:40px;transform:translateX(-50%);background:var(--g700);border:1px solid var(--g500);padding:9px 16px;border-radius:8px;z-index:600;display:flex;gap:12px;align-items:center;max-width:80vw}
 .custom-scroll::-webkit-scrollbar,#layers::-webkit-scrollbar,aside::-webkit-scrollbar{width:8px;height:8px}
 #layers::-webkit-scrollbar-thumb,aside::-webkit-scrollbar-thumb{background:var(--g600);border-radius:4px}
@@ -435,7 +529,7 @@ setTimeout(done,6000);
         <hr>
         <button data-act="copy">Copier <kbd>Ctrl+C</kbd></button>
         <button data-act="cut">Couper <kbd>Ctrl+X</kbd></button>
-        <button data-act="pastehint">Coller (nouveau calque) <kbd>Ctrl+V</kbd></button>
+        <button data-act="pastehint">Coller (dans le calque actif) <kbd>Ctrl+V</kbd></button>
         <hr>
         <div class="mlabel">Transformer le contenu sélectionné</div>
         <button data-act="xf:free">Rotation / échelle libre… <kbd>Ctrl+T</kbd></button>
@@ -1177,7 +1271,8 @@ function wandAt(p, mode) {
 function pickAt(p, secondary) {
   const x = Math.floor(p.x), y = Math.floor(p.y); if (x < 0 || y < 0 || x >= doc.w || y >= doc.h) return;
   let d;
-  if (opts.pkSample === 'layer') { const l = L(); const lx = x - l.x, ly = y - l.y; if (lx < 0 || ly < 0 || lx >= l.canvas.width || ly >= l.canvas.height) return; d = l.canvas.getContext('2d').getImageData(lx, ly, 1, 1).data; }
+  if (true) {   // la pipette lit toujours le calque actif
+   const l = L(); const lx = x - l.x, ly = y - l.y; if (lx < 0 || ly < 0 || lx >= l.canvas.width || ly >= l.canvas.height) return; d = l.canvas.getContext('2d').getImageData(lx, ly, 1, 1).data; }
   else d = comp.getContext('2d').getImageData(x, y, 1, 1).data;
   if (d[3] === 0) return;
   const hex = rgbToHex(d[0], d[1], d[2]); if (secondary) { color2 = hex; updateSwatches(); } else setColor1(hex);
@@ -1264,13 +1359,19 @@ function textFont(scale = 1) { return `${opts.italic ? 'italic ' : ''}${opts.bol
 function startText(p) {
   commitText(); ensureFont(opts.font).then(() => textEdit && styleTextEdit());
   const ta = document.createElement('textarea'); ta.id = 'textedit'; ta.spellcheck = false;
-  stage.appendChild(ta); textEdit = { ta, x: p.x, y: p.y };
+  const hd = document.createElement('div'); hd.id = 'texthandle'; hd.title = 'Glisser pour déplacer le texte';
+  hd.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12h20M9 5l3-3 3 3M9 19l3 3 3-3M5 9l-3 3 3 3M19 9l3 3-3 3"/></svg>';
+  hd.addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); hd.setPointerCapture(e.pointerId); const st = { sx: e.clientX, sy: e.clientY, ox: textEdit.x, oy: textEdit.y };
+    const mv = ev => { textEdit.x = st.ox + (ev.clientX - st.sx) / cam.z; textEdit.y = st.oy + (ev.clientY - st.sy) / cam.z; styleTextEdit(); };
+    const up = () => { hd.removeEventListener('pointermove', mv); hd.removeEventListener('pointerup', up); ta.focus(); };
+    hd.addEventListener('pointermove', mv); hd.addEventListener('pointerup', up); });
+  stage.appendChild(ta); stage.appendChild(hd); textEdit = { ta, hd, x: p.x, y: p.y };
   styleTextEdit(); ta.focus(); setTimeout(() => ta.focus(), 0);
   ta.addEventListener('input', sizeTextEdit);
   ta.addEventListener('wheel', e => { if (!e.ctrlKey && !e.altKey) return; e.preventDefault(); e.stopPropagation(); opts.fSize = clamp(Math.round(opts.fSize * (e.deltaY < 0 ? 1.1 : 1 / 1.1)), 6, LOGMAX.fSize); saveOpts(); styleTextEdit(); renderOptbar(); }, { passive: false });
   ta.addEventListener('keydown', e => {
     if (e.key === 'Escape') { e.preventDefault(); cancelText(); }
-    else if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); commitText(); }
+    else if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); commitText(); }   // Entrée valide · Maj+Entrée = nouvelle ligne
     e.stopPropagation();
   });
   renderOptbar();
@@ -1278,6 +1379,7 @@ function startText(p) {
 function styleTextEdit() {
   if (!textEdit) return; const ta = textEdit.ta;
   ta.style.left = (cam.x + textEdit.x * cam.z) + 'px'; ta.style.top = (cam.y + textEdit.y * cam.z) + 'px';
+  textEdit.hd.style.left = ta.style.left; textEdit.hd.style.top = ta.style.top;
   ta.style.font = textFont(cam.z); ta.style.color = color1; sizeTextEdit();
 }
 function sizeTextEdit() {
@@ -1285,19 +1387,19 @@ function sizeTextEdit() {
   const w = Math.max(30, ...lines.map(s => c.measureText(s).width)); c.restore();
   ta.style.width = (w + opts.fSize * cam.z * .6) + 'px'; ta.style.height = (lines.length * opts.fSize * cam.z * 1.2 + 4) + 'px';
 }
-function cancelText() { if (!textEdit) return; textEdit.ta.remove(); textEdit = null; renderOptbar(); }
+function cancelText() { if (!textEdit) return; textEdit.ta.remove(); textEdit.hd.remove(); textEdit = null; renderOptbar(); }
+// le texte est écrit DANS le calque actif (aucun calque n'est créé)
 function commitText() {
-  if (!textEdit) return; const txt = textEdit.ta.value, { x, y } = textEdit; cancelText();
-  if (!txt.trim()) return;
-  const font = opts.font;
-  ensureFont(font).then(() => drawTextLayer(txt, x, y));
+  if (!textEdit) return; const txt = textEdit.ta.value, { x, y } = textEdit;
+  if (txt.trim() && !editable()) { textEdit.ta.focus(); return false; }   // calque verrouillé / masqué : on reste en édition
+  cancelText(); if (!txt.trim()) return true;
+  const l = L(); ensureFont(opts.font).then(() => drawText(l, txt, x, y)); return true;
 }
-function drawTextLayer(txt, x, y) {
-  pushDoc();
-  const l = newLayer('T  ' + txt.split('\n')[0].slice(0, 24), doc.w, doc.h), c = l.canvas.getContext('2d');
-  c.font = textFont(1); c.fillStyle = color1; c.textBaseline = 'top';
-  txt.split('\n').forEach((s, i) => c.fillText(s, x, y + i * opts.fSize * 1.2 + opts.fSize * .1));
-  insertLayer(l); renderLayers(); req(true);
+function drawText(l, txt, x, y) {
+  pushPx(l); const c = l.canvas.getContext('2d');
+  c.save(); c.font = textFont(1); c.fillStyle = color1; c.textBaseline = 'top';
+  txt.split('\n').forEach((s, i) => c.fillText(s, x - l.x, y - l.y + i * opts.fSize * 1.2 + opts.fSize * .1));
+  c.restore(); afterPixelEdit(l);
 }
 
 /* ---------------- recadrage ---------------- */
@@ -1409,7 +1511,7 @@ function xfPointerDown(e, p) {
   else if (h && h.id[0] === 'q') drag = { kind: 'xf', op: 'corner', i: +h.id[1], st };
   else if (h) drag = { kind: 'xf', op: 'scale', hx: h.hx, hy: h.hy, st };
   else if (xfInside(p)) drag = { kind: 'xf', op: 'move', p0: p, st };
-  else if (xf.mode === 'affine') drag = { kind: 'xf', op: 'rot', p0: p, st };
+  else { commitTransform(); setSelection(null); }   // clic à l'extérieur : l'objet reste où il est, la sélection se ferme
 }
 function xfPointerMove(e, p) {
   const d = drag, st = d.st;
@@ -1450,7 +1552,7 @@ function xfFlip(dir) {
 function xfSpec() {
   const deg = ((xf.ang * 180 / Math.PI) % 360 + 540) % 360 - 180;
   const info = xf.mode === 'distort' ? 'Glisser un <b>coin</b> pour déformer (perspective), glisser à l\'intérieur pour déplacer.'
-    : `Taille : <b style="color:var(--g200)">${Math.round(xf.w)} × ${Math.round(xf.h)} px</b> · Angle : <b style="color:var(--g200)">${deg.toFixed(1)}°</b><br>Coins et bords = étirer librement (<b>Maj</b> : garder les proportions) · poignée ronde ou glisser à l\'extérieur = rotation (Maj : pas de 15°) · glisser à l\'intérieur = déplacer.`;
+    : `Taille : <b style="color:var(--g200)">${Math.round(xf.w)} × ${Math.round(xf.h)} px</b> · Angle : <b style="color:var(--g200)">${deg.toFixed(1)}°</b><br>Coins et bords = étirer librement (<b>Maj</b> : garder les proportions) · poignée ronde = rotation (Maj : pas de 15°) · glisser à l\'intérieur = déplacer · <b>clic à l\'extérieur = valider</b>.`;
   return [{ type: 'hint', text: (xf.paste ? '<b style="color:#f59e0b">Collé dans le calque actif</b> : place, étire ou tourne-le puis Entrée (ou double-clic). Échap annule le collage.<br>' : xf.copy ? '<b style="color:#f59e0b">Copie</b> : l\'original reste en place.<br>' : '') + info },
     { type: 'btn', label: '↺ 90°', row: 1, fn: () => xfRotate(-90) }, { type: 'btn', label: '↻ 90°', row: 1, fn: () => xfRotate(90) }, { type: 'btn', label: '180°', row: 1, fn: () => xfRotate(180) },
     { type: 'sp' },
@@ -1473,9 +1575,9 @@ let drag = null, spaceDown = false;
 view.addEventListener('contextmenu', e => e.preventDefault());
 view.addEventListener('pointerdown', e => {
   if (!doc) return; closeMenus();
-  if (textEdit) { commitText(); if (tool === 'text') return; }
   const p = toDoc(e); view.setPointerCapture(e.pointerId);
   if (e.button === 1 || spaceDown || tool === 'hand') { e.preventDefault(); drag = { kind: 'pan', sx: e.clientX, sy: e.clientY, cx: cam.x, cy: cam.y }; updateCursor(); return; }
+  if (textEdit) { e.preventDefault(); drag = { kind: 'textmove', sx: e.clientX, sy: e.clientY, ox: textEdit.x, oy: textEdit.y }; return; }
   if (e.button !== 0) return;
   if (xf) { xfPointerDown(e, p); return; }
   // Alt avec un outil de peinture = pipette temporaire
@@ -1511,7 +1613,8 @@ view.addEventListener('pointerdown', e => {
     if (!cloneOff || !opts.cAligned || cloneOff.blur) cloneOff = { x: p.x - cloneSrc.x, y: p.y - cloneSrc.y };
   }
   if (tool === 'move' && sel) { const ix = Math.floor(p.x), iy = Math.floor(p.y);
-    if (ix >= 0 && iy >= 0 && ix < doc.w && iy < doc.h && sel.mask.getContext('2d').getImageData(ix, iy, 1, 1).data[3] > 127) { if (startTransform('affine')) xfPointerDown(e, p); return; } }
+    if (ix >= 0 && iy >= 0 && ix < doc.w && iy < doc.h && sel.mask.getContext('2d').getImageData(ix, iy, 1, 1).data[3] > 127) { if (startTransform('affine')) xfPointerDown(e, p); return; }
+    setSelection(null); return; }
   if (tool === 'move') { const l = L(); pushDoc(); drag = { kind: 'move', a: p, ox: l.x, oy: l.y, moved: false }; return; }
   if (tool === 'bucket') { bucketAt(p); return; }
   if (PAINT_TOOLS.includes(tool)) {
@@ -1527,7 +1630,7 @@ view.addEventListener('pointermove', e => {
   if (!doc) return;
   const p = toDoc(e); mouse = { sx: p.sx, sy: p.sy, x: p.x, y: p.y, in: true };
   $('#st-pos').textContent = `${Math.floor(p.x)}, ${Math.floor(p.y)}`;
-  if (!drag && xf) { const h = xfHandles().find(h => Math.hypot(h.x - p.sx, h.y - p.sy) <= 8); view.style.cursor = h ? (h.id === 'rot' ? 'grab' : 'crosshair') : xfInside(p) ? 'move' : xf.mode === 'affine' ? 'alias' : 'default'; return; }
+  if (!drag && xf) { const h = xfHandles().find(h => Math.hypot(h.x - p.sx, h.y - p.sy) <= 8); view.style.cursor = h ? (h.id === 'rot' ? 'grab' : 'crosshair') : xfInside(p) ? 'move' : 'default'; return; }
   if (!drag) { if (PAINT_TOOLS.includes(tool) || S.showRulers || tool === 'clone') req(); if (tool === 'crop' && !spaceDown) { const h = cropHit(p.sx, p.sy); view.style.cursor = !h ? 'crosshair' : h === 'in' ? 'move' : ({ n: 'ns-resize', s: 'ns-resize', e: 'ew-resize', w: 'ew-resize', nw: 'nwse-resize', se: 'nwse-resize', ne: 'nesw-resize', sw: 'nesw-resize' })[h]; } return; }
   switch (drag.kind) {
     case 'pan': cam.x = drag.cx + e.clientX - drag.sx; cam.y = drag.cy + e.clientY - drag.sy; styleTextEdit(); req(); break;
@@ -1553,6 +1656,7 @@ view.addEventListener('pointermove', e => {
     case 'gradient': drag.b = p; drawGradientEffect(drag.a, p); previewEffect('source-over', opts.gOpacity / 100); break;
     case 'shape': drawShapeEffect(drag.a, p, e.shiftKey); previewEffect('source-over', shapeAlpha()); break;
     case 'xf': xfPointerMove(e, p); break;
+    case 'textmove': textEdit.x = drag.ox + (e.clientX - drag.sx) / cam.z; textEdit.y = drag.oy + (e.clientY - drag.sy) / cam.z; styleTextEdit(); break;
     case 'smudge': { const evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [e]; for (const ev of evs) smudgeTo(toDoc(ev)); break; }
     case 'measure': { let b = p; if (e.shiftKey) { const dx = p.x - drag.a.x, dy = p.y - drag.a.y, ang = Math.round(Math.atan2(dy, dx) / (Math.PI / 4)) * Math.PI / 4, len = Math.hypot(dx, dy); b = { x: drag.a.x + Math.cos(ang) * len, y: drag.a.y + Math.sin(ang) * len }; } measure = { a: drag.a, b }; renderOptbar(); req(); break; }
   }
@@ -1575,6 +1679,7 @@ view.addEventListener('pointerup', e => {
     case 'shape': if (override) commitEffect('source-over', shapeAlpha()); break;
     case 'smudge': override = null; smCarry = null; commitLayerResult(d.l, d.copy); break;
     case 'xf': renderOptbar(); break;
+    case 'textmove': if (textEdit) setTimeout(() => textEdit && textEdit.ta.focus(), 0); break;
     case 'measure': if (Math.hypot(measure.b.x - measure.a.x, measure.b.y - measure.a.y) < 1) measure = null; renderOptbar(); break;
   }
   req(true);
@@ -1746,7 +1851,7 @@ function optSpec() {
     case 'eraser': return [range('Taille', 'eSize', 1, 500, 'px'), range('Dureté', 'eHard', 0, 100, '%'), range('Opacité', 'eOpacity', 1, 100, '%')];
     case 'bucket': return [range('Tolérance', 'tol', 0, 255), check('Contigu', 'contig'), selectOpt('Échantillon', 'sample', SAMPLE), range('Opacité', 'bOpacity', 1, 100, '%')];
     case 'gradient': return [selectOpt('Type', 'gType', [['linear', 'Linéaire'], ['radial', 'Radial']]), selectOpt('Couleurs', 'gMode', [['c2', 'Couleur 1 → couleur 2'], ['tr', 'Couleur 1 → transparent']]), range('Opacité', 'gOpacity', 1, 100, '%'), { type: 'hint', text: 'Glisser pour tracer' }];
-    case 'picker': return [selectOpt('Échantillon', 'pkSample', SAMPLE), { type: 'hint', text: 'Clic : couleur 1 · Alt+clic : couleur 2' }];
+    case 'picker': return [{ type: 'hint', text: 'Prend la couleur sur le <b>calque actif</b>.<br>Clic : couleur 1 · Alt+clic : couleur 2' }];
     case 'marquee': case 'ellsel': return [SELMODE, { type: 'hint', text: 'Maj = carré / cercle · clic simple = désélectionner · Ctrl+D' }];
     case 'lasso': return [SELMODE, { type: 'hint', text: 'Glisser pour entourer la zone' }];
     case 'wand': return [SELMODE, range('Tolérance', 'wTol', 0, 255), check('Contigu', 'wContig'), selectOpt('Échantillon', 'wSample', SAMPLE)];
@@ -1757,7 +1862,7 @@ function optSpec() {
         { type: 'btn', label: 'Cadre = toute l\'image', fn: () => { cropRect = { x: 0, y: 0, w: doc.w, h: doc.h }; renderOptbar(); req(); } },
         { type: 'hint', text: 'Tirer les poignées ou les bords pour ajuster, glisser dans le cadre pour le déplacer, tracer à l\'extérieur pour un nouveau cadre. Le cadre peut dépasser l\'image pour l\'agrandir.' }]; }
     case 'text': return [{ type: 'font' }, range('Taille', 'fSize', 6, 400, 'px'), { type: 'presets', key: 'fSize', items: [12, 24, 48, 72, 120, 200, 400, 800] }, check('Gras', 'bold'), check('Italique', 'italic'),
-      textEdit ? { type: 'btn', label: 'Valider le texte (Ctrl+Entrée)', cls: 'ok', fn: commitText } : { type: 'hint', text: 'Clic sur l\'image pour écrire — le texte crée un nouveau calque' }, { type: 'hint', text: 'Taille sans limite : tape la valeur dans le champ (jusqu\'à 5000 px), molette sur le champ, ou Ctrl+molette pendant la saisie.' }];
+      textEdit ? { type: 'btn', label: 'Valider le texte (Entrée)', cls: 'ok', fn: commitText } : { type: 'hint', text: 'Clic sur l\'image pour écrire — le texte est écrit dans le calque actif' }, ...(textEdit ? [{ type: 'hint', text: '<b>En édition</b> jusqu\'à <b>Entrée</b> (Maj+Entrée = nouvelle ligne, Échap = annuler). Glisser sur l\'image ou la poignée jaune ✥ pour déplacer le texte.' }] : []), { type: 'hint', text: 'Taille sans limite : tape la valeur dans le champ (jusqu\'à 5000 px), molette sur le champ, ou Ctrl+molette pendant la saisie.' }];
     case 'rect': case 'ellipse': return [selectOpt('Style', 'shMode', [['fill', 'Plein (couleur 1)'], ['stroke', 'Contour (couleur 1)'], ['both', 'Plein 1 + contour 2']]), range('Contour', 'shWidth', 1, 100, 'px'), range('Opacité', 'shOpacity', 1, 100, '%'), { type: 'hint', text: 'Maj = carré / cercle' }];
     case 'line': return [range('Épaisseur', 'lnWidth', 1, 200, 'px'), range('Opacité', 'lnOpacity', 1, 100, '%'), { type: 'hint', text: 'Maj = angles de 45°' }];
     case 'arrow': return [range('Épaisseur', 'arWidth', 1, 100, 'px'), range('Pointe (× épaisseur)', 'arHead', 2, 10), check('Double flèche', 'arDouble'), range('Opacité', 'arOpacity', 1, 100, '%'), { type: 'hint', text: 'Couleur 1 · glisser de la queue vers la pointe · Maj = angles de 45°' }];
@@ -2240,7 +2345,7 @@ async function placeImage(img, name, px, py, floating) {
     else if (ch === 'fit') { const c = mkCanvas(Math.max(1, Math.round(iw * k)), Math.max(1, Math.round(ih * k))), x = c.getContext('2d'); x.imageSmoothingQuality = 'high'; x.drawImage(img, 0, 0, c.width, c.height); src = c; iw = c.width; ih = c.height; px = py = undefined; }
   }
   if (px === undefined) { px = Math.round((doc.w - iw) / 2); py = Math.round((doc.h - ih) / 2); }
-  if (floating && L().visible && !L().locked) { startFloat(src, px, py); updateStatus(); return; }
+  if (floating) { if (editable()) startFloat(src, px, py); updateStatus(); return; }   // collage : jamais de nouveau calque
   pushDoc(); insertLayer(layerFromImage(src, px, py, name)); renderLayers(); req(true); updateStatus();
 }
 function serialize() {
@@ -2427,7 +2532,7 @@ async function canvasSizeDialog() {
 async function settingsDialog() {
   const sel = (id, items, v) => `<select id="${id}">${items.map(([k, t]) => `<option value="${k}"${String(v) === String(k) ? ' selected' : ''}>${t}</option>`).join('')}</select>`;
   const chk = (id, v, t) => `<label class="row"><input type="checkbox" id="${id}"${v ? ' checked' : ''} style="accent-color:var(--brand2)"> ${t}</label>`;
-  const body = `<div class="stabs"><button data-t="g" class="on">Général</button><button data-t="a">Affichage</button><button data-t="d">Documents &amp; enregistrement</button><button data-t="r">Réinitialiser</button></div>
+  const body = `<div class="stabs"><button data-t="g" class="on">Général</button><button data-t="a">Affichage</button><button data-t="d">Documents &amp; enregistrement</button><button data-t="ia">MOMOtticelli</button><button data-t="r">Réinitialiser</button></div>
   <div class="spane on" data-p="g">
     <h4>Sauvegarde automatique</h4>
     <div class="row"><span>Backup auto</span>${sel('s-backup', [[0, 'Désactivé'], [1, 'Toutes les minutes'], [2, 'Toutes les 2 min'], [5, 'Toutes les 5 min'], [10, 'Toutes les 10 min'], [15, 'Toutes les 15 min'], [30, 'Toutes les 30 min']], S.backup)}</div>
@@ -2453,6 +2558,10 @@ async function settingsDialog() {
     <div class="row"><span>Qualité JPEG / WEBP</span><input type="range" id="s-q" min="10" max="100" value="${S.quality}"><span class="val" id="s-qv">${S.quality}</span></div>
     <div class="note">Enregistrer (Ctrl+S) réécrit le fichier ouvert dans son format. Pour changer de format : Enregistrer sous (.mms, PNG, JPEG, WEBP).</div>
   </div>
+  <div class="spane" data-p="ia">
+    <div class="note" style="margin-top:-2px">MOMOtticelli est ton compagnon artiste : il se cache derrière la barre du bas, en bas à gauche de la zone de dessin. Clique sur lui pour lui demander un conseil ou une retouche.</div>
+    <div id="ps-ia-box"></div>
+  </div>
   <div class="spane" data-p="r">
     <div class="row"><span>Outils</span><button class="mini" id="s-r-tools" type="button">Remettre les réglages des outils par défaut</button></div>
     <div class="row"><span>Couleurs favorites</span><button class="mini" id="s-r-favs" type="button">Remettre la palette par défaut</button></div>
@@ -2461,6 +2570,7 @@ async function settingsDialog() {
   </div>`;
   const r = await dialog({ title: 'Paramètres', body, ok: 'Enregistrer', wide: true, onOpen: o => {
     o.querySelectorAll('.stabs button').forEach(b => b.onclick = () => { o.querySelectorAll('.stabs button').forEach(x => x.classList.toggle('on', x === b)); o.querySelectorAll('.spane').forEach(x => x.classList.toggle('on', x.dataset.p === b.dataset.t)); });
+    psIaRender();
     o.querySelector('#s-q').oninput = e => o.querySelector('#s-qv').textContent = e.target.value;
     o.querySelector('#s-stage-reset').onclick = () => o.querySelector('#s-stage').value = S_DEF.stageBg;
     o.querySelector('#s-r-tools').onclick = () => { opts = Object.assign({}, OPT_DEFAULTS); saveOpts(); renderOptbar(); toast('Réglages des outils remis par défaut.'); };
@@ -2531,7 +2641,7 @@ const GUIDE = [
     GI('Déplacer au pixel près', `Avec une sélection, les ${K('flèches')} déplacent le contour d\'un pixel (${K('Maj')} : 10 px). Avec l\'outil Déplacer ${K('V')}, elles déplacent les <b>pixels sélectionnés</b> (Entrée pour fixer) ; glisser dans la sélection avec cet outil fait de même. Sans sélection, les flèches font défiler la vue.`),
     GI('La sélection limite tout', 'Pinceau, gomme, pot, dégradé, formes, filtres et effacement ne touchent que l\'intérieur de la sélection.'),
     GI('Menu Sélection', `Tout ${K('Ctrl+A')}, désélectionner ${K('Ctrl+D')}, intervertir ${K('Ctrl+Maj+I')}, sélectionner le contenu du calque, copier ${K('Ctrl+C')}, couper ${K('Ctrl+X')}, coller ${K('Ctrl+V')} : le collage arrive <b>dans le calque actif</b>, en sélection flottante avec ses poignées pour le placer, l\'étirer (${K('Maj')} = proportions) ou le tourner, puis ${K('Entrée')} ou double-clic pour le fixer, ${K('Échap')} pour l\'annuler. Une image copiée ailleurs (capture d\'écran…) se colle aussi.`),
-    GI('Copie miroir, rotation, déformer', `Troisième ligne de la palette <b>SÉLECTION</b> (et menu <b>Sélection</b>). Agit sur le contenu sélectionné du calque actif, ou sur tout le calque sans sélection. <b>Copie miroir</b> : une copie retournée se place juste à côté, l\'original reste ; on la déplace avant de valider. <b>Rotation / échelle</b> ${K('Ctrl+T')} : poignées de coin et de bord pour étirer librement (${K('Maj')} maintenu = proportions conservées), poignée ronde ou glisser à l\'extérieur (rotation, Maj = pas de 15°), glisser à l\'intérieur (déplacer). <b>Déformer</b> : chacun des 4 coins se tire librement (perspective). Le volet Outil en cours propose ±90°, 180°, miroirs, passage d\'un mode à l\'autre. ${K('Entrée')} valide, ${K('Échap')} annule. Le menu Sélection a aussi les rotations et miroirs instantanés.`),
+    GI('Copie miroir, rotation, déformer', `Troisième ligne de la palette <b>SÉLECTION</b> (et menu <b>Sélection</b>). Agit sur le contenu sélectionné du calque actif, ou sur tout le calque sans sélection. <b>Copie miroir</b> : une copie retournée se place juste à côté, l\'original reste ; on la déplace avant de valider. <b>Rotation / échelle</b> ${K('Ctrl+T')} : poignées de coin et de bord pour étirer librement (${K('Maj')} maintenu = proportions conservées), poignée ronde (rotation, Maj = pas de 15°), glisser à l\'intérieur (déplacer). <b>Déformer</b> : chacun des 4 coins se tire librement (perspective). Le volet Outil en cours propose ±90°, 180°, miroirs, passage d\'un mode à l\'autre. ${K('Entrée')}, double-clic ou un <b>clic à l\'extérieur</b> valident (l\'objet reste où il est et la sélection se ferme), ${K('Échap')} annule. Le menu Sélection a aussi les rotations et miroirs instantanés.`),
     GI('Déplacer ' + K('V'), 'Glisse le calque actif. Le volet <b>Outil en cours</b> permet de le recentrer ou de le remettre à 0,0.'),
     GI('Recadrage ' + K('C'), `<b>Avec une sélection</b>, l\'outil (ou Image → Recadrer) recadre <b>immédiatement</b> au rectangle qui contient toute la sélection, même irrégulière (lasso, baguette). <b>Sans sélection</b>, il propose un cadre sur toute l\'image. Tire les poignées ou les bords pour l\'ajuster, glisse dans le cadre pour le déplacer, ou trace un nouveau cadre. ${K('Entrée')}, double-clic dans le cadre ou <b>Valider</b> appliquent ; ${K('Échap')} annule. Le cadre peut dépasser l\'image pour l\'agrandir. Aussi dans le menu <b>Image → Recadrer</b>.`)]]]],
   ['paint', '🖌️', 'Peinture & couleurs', [
@@ -2548,7 +2658,7 @@ const GUIDE = [
       GI('Sélecteur', 'Carré saturation / luminosité, barre de teinte, code hexadécimal modifiable.'),
       GI('Favoris', '<b>Ajouter</b> mémorise la couleur 1. Clic : couleur 1, Alt+clic : couleur 2, clic droit : retirer.')]]]],
   ['shapes', '🔤', 'Formes & texte', [[null, [
-    GI('Texte ' + K('T'), `Clic sur l\'image, tape le texte (Entrée = nouvelle ligne). Taille sans plafond : champ chiffré (jusqu\'à 5000 px), tailles rapides, molette sur le champ ou Ctrl+molette pendant la saisie, puis ${K('Ctrl+Entrée')}, clic ailleurs ou bouton Valider. Chaque texte crée un <b>nouveau calque</b>. Police, taille, gras, italique dans le volet <b>Outil en cours</b>. Le choix de police propose les polices du système et <b>toutes les Google Fonts (environ 1 900)</b> : recherche par nom, filtres Sans serif / Serif / Fantaisie / Manuscrite / Chasse fixe, aperçu de chaque nom dans sa police, et les 8 dernières utilisées en tête. Une Google Font est téléchargée la première fois qu\'on l\'utilise (connexion nécessaire), puis gardée en cache par le navigateur. Le texte est ensuite dessiné dans l\'image : le fichier .mms ou PNG n\'a plus besoin de la police. ${K('Échap')} annule.`),
+    GI('Texte ' + K('T'), `Clic sur l\'image, tape le texte (${K('Maj+Entrée')} = nouvelle ligne). Le texte reste <b>en édition</b> jusqu\'à ${K('Entrée')} : pendant ce temps, glisser n\'importe où sur l\'image (ou sur la poignée jaune ✥) le <b>déplace</b>, et on peut changer police, taille, gras, couleur. Taille sans plafond : champ chiffré (jusqu\'à 5000 px), tailles rapides, molette sur le champ ou Ctrl+molette pendant la saisie. ${K('Entrée')} ou le bouton Valider l\'écrit <b>dans le calque actif</b> (aucun calque n\'est créé ; crée-en un avant si tu veux le texte à part). Police, taille, gras, italique dans le volet <b>Outil en cours</b>. Le choix de police propose les polices du système et <b>toutes les Google Fonts (environ 1 900)</b> : recherche par nom, filtres Sans serif / Serif / Fantaisie / Manuscrite / Chasse fixe, aperçu de chaque nom dans sa police, et les 8 dernières utilisées en tête. Une Google Font est téléchargée la première fois qu\'on l\'utilise (connexion nécessaire), puis gardée en cache par le navigateur. Le texte est ensuite dessiné dans l\'image : le fichier .mms ou PNG n\'a plus besoin de la police. ${K('Échap')} annule.`),
     GI('Rectangle ' + K('R') + ' et ellipse ' + K('U'), `Plein, contour, ou plein couleur 1 + contour couleur 2. ${K('Maj')} : carré / cercle.`),
     GI('Ligne ' + K('Y'), `Épaisseur et opacité réglables. ${K('Maj')} : angles de 45°.`),
     GI('Flèche ' + K('A'), `Glisser de la queue vers la pointe. Épaisseur, taille de la pointe, flèche double, opacité. ${K('Maj')} : angles de 45°. Pratique pour annoter une photo de chantier.`),
@@ -2577,9 +2687,15 @@ const GUIDE = [
     GI('Édition', `${K('Ctrl+Z')} annuler · ${K('Ctrl+Y')} rétablir · ${K('Ctrl+C / X / V')} copier, couper, coller · ${K('Suppr')} effacer · ${K('Alt+Suppr')} remplir`),
     GI('Calques', `${K('Ctrl+Maj+N')} nouveau · ${K('Ctrl+J')} calque par copie · ${K('Ctrl+T')} rotation / échelle de la sélection · ${K('Ctrl+E')} fusionner`),
     GI('Divers', `${K('[')} ${K(']')} taille · ${K('X')} échanger les couleurs · ${K('D')} noir / blanc · ${K('Ctrl+R')} règles · ${K('Ctrl+\'')} grille · ${K('F1')} guide`)]]]],
+  ['ia', '🎨', 'MOMOtticelli, le compagnon IA', [[null, [
+    GI('Qui est-ce ?', 'Le petit peintre au béret et à la moustache caché derrière la barre du bas, en bas à gauche de la zone de dessin. Survole-le, il sort la tête ; clique dessus pour ouvrir sa bulle de discussion.'),
+    GI('Son cerveau', 'Il fonctionne avec <b>Gemini</b> (Google, offre gratuite possible) ou <b>Claude</b> (Anthropic, payant à l\'usage). Il faut une clé API, à coller dans sa bulle ou dans <b>Paramètres › MOMOtticelli</b>. La clé reste sur ce poste et ne part jamais dans le fichier .mms.'),
+    GI('Ce qu\'il sait', 'Le guide de MomoPIC, la liste de tes calques, la sélection, les couleurs et, si l\'option est cochée, un aperçu réduit de ton image. Il peut te montrer un outil à l\'écran : clique sur les boutons jaunes dans ses réponses.'),
+    GI('Ce qu\'il peut faire', 'Choisir, créer ou régler un calque, faire une sélection, changer les couleurs, dessiner une forme, écrire un texte, remplir ou effacer, appliquer un filtre, redimensionner, recadrer, tourner. Trois modes dans les paramètres : <b>lecture seule</b>, <b>il demande avant chaque modification</b> (conseillé) ou <b>sans demander</b>. Tout reste annulable avec ' + K('Ctrl+Z') + '.'),
+    GI('Pendant qu\'il travaille', 'Une pastille bleue tourne sur son béret ; un point rouge signale une réponse qui t\'attend. Le bouton rouge carré l\'arrête. L\'épingle garde la bulle ouverte quand tu reprends le dessin.')]]]],
   ['install', '📲', 'Installation & réglages', [[null, [
     GI('Installer l\'appli', 'Depuis GitHub Pages, le bouton vert <b>Installer l\'appli</b> lance l\'installation (Chrome, Edge). Si le navigateur ne la propose pas, le bouton explique comment faire à la main (menu du navigateur, ou « Sur l\'écran d\'accueil » sur iPhone). Installée, MomoPIC s\'ouvre dans sa propre fenêtre et s\'associe aux fichiers .mms.'),
-    GI('Paramètres ⚙', 'Quatre onglets : <b>Général</b> (backup auto, nombre d\'annulations, confirmation à la fermeture), <b>Affichage</b> (animation d\'ouverture, molette, damier, fond de travail, grille de pixels), <b>Documents &amp; enregistrement</b> (taille et fond du nouveau document, qualité JPEG / WEBP), <b>Réinitialiser</b>. Tout est mémorisé sur ce poste.'),
+    GI('Paramètres ⚙', 'Cinq onglets : <b>Général</b> (backup auto, nombre d\'annulations, confirmation à la fermeture), <b>Affichage</b> (animation d\'ouverture, molette, damier, fond de travail, grille de pixels), <b>Documents &amp; enregistrement</b> (taille et fond du nouveau document, qualité JPEG / WEBP), <b>MOMOtticelli</b> (fournisseur, clé, modèle, permissions), <b>Réinitialiser</b>. Tout est mémorisé sur ce poste.'),
     GI('Mise à jour', `Après une mise en ligne, fais ${K('Ctrl+Maj+R')} pour recharger sans le cache.`)]]]],
 ];
 function buildGuide() {
@@ -2648,7 +2764,7 @@ function act(a) {
     case 'sel': return v === 'all' ? selectAll() : v === 'none' ? setSelection(null) : v === 'inv' ? invertSel() : selectLayerAlpha();
     case 'copy': return copySel(false);
     case 'cut': if (!editable()) return; return copySel(true);
-    case 'pastehint': return toast('Utilise Ctrl+V pour coller (image du presse-papiers ou dernière copie).');
+    case 'pastehint': return toast('Utilise Ctrl+V : le collage arrive dans le calque actif, avec ses poignées.');
     case 'fill': return fillSelection();
     case 'clear': return clearSelectionPixels();
     case 'flt': return runFilter(v);
@@ -2707,6 +2823,529 @@ if ('launchQueue' in window) launchQueue.setConsumer(async p => { if (!p.files |
 
 window.addEventListener('beforeunload', e => { if (dirty) { doBackup(false); if (S.confirmClose) { e.preventDefault(); e.returnValue = ''; } } });
 
+/* =========================================================================
+   MOMOtticelli — le compagnon IA de MomoPIC (Gemini ou Claude), au béret de peintre.
+   La clé API reste sur ce poste (localStorage), jamais dans le .mms.
+   À chaque question partent : le guide, la liste des outils/boutons, un résumé du document
+   et (si l'option est cochée) un aperçu réduit de l'image.
+   ========================================================================= */
+const ICO = {
+  gear: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
+  reset: '<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/>',
+  pin: '<path d="M12 17v5"/><path d="M9 10.8V4h6v6.8l3 3.2v2H6v-2z"/>',
+  minus: '<path d="M5 12h14"/>',
+  send: '<path d="m22 2-7 20-4-9-9-4z"/><path d="M22 2 11 13"/>',
+  stop: '<rect x="6" y="6" width="12" height="12" rx="1.5" fill="currentColor"/>',
+  eye: '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+  key: '<circle cx="7.5" cy="15.5" r="4.5"/><path d="m10.7 12.3 9.8-9.8M17 6l3 3M15 8l2 2"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  help: '<circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/>',
+  check: '<path d="M20 6 9 17l-5-5"/>',
+  close: '<path d="M18 6 6 18M6 6l12 12"/>',
+  warn: '<path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/>',
+  info: '<circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/>',
+  beret: '<path d="M3 11c0-4 4-6.5 9-6.5s9 2.5 9 6.5c0 1.3-1.2 2-3 2H6c-1.8 0-3-.7-3-2z" fill="currentColor" fill-opacity=".25"/><path d="M16 4.5 17 2.5"/><circle cx="8.5" cy="17" r="2.5"/><circle cx="15.5" cy="17" r="2.5"/>'
+};
+const ico = (n, s = 16) => `<svg class="ic-svg" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICO[n] || ICO.info}</svg>`;
+const plural = (n, a, b) => n + ' ' + (n > 1 ? b : a);
+
+const IA_MODELS = {
+  gemini: [['gemini-flash-latest', 'Gemini Flash (dernier, offre gratuite possible)'], ['gemini-3.5-flash', 'Gemini 3.5 Flash'], ['gemini-3.1-flash-lite', 'Gemini 3.1 Flash-Lite (très rapide)'], ['gemini-3.1-pro-preview', 'Gemini 3.1 Pro (aperçu)']],
+  claude: [['claude-sonnet-5-5', 'Claude Sonnet 5.5 (conseillé)'], ['claude-haiku-5-5', 'Claude Haiku 5.5 (rapide, économique)'], ['claude-opus-5-5', 'Claude Opus 5.5 (le plus fort)']]
+};
+const IA_PROV = {
+  gemini: { name: 'Gemini', ph: 'AIza…', link: 'https://aistudio.google.com/app/api-keys', site: 'Google AI Studio', def: 'gemini-flash-latest',
+    need: 'une <b>clé Gemini</b> : clique sur le bouton ci-dessous, crée ta clé (gratuite pour commencer), copie-la et colle-la ici.',
+    note: 'Ta question, un résumé du document et un aperçu réduit de l\'image partent chez Google ; avec une clé gratuite, Google peut s\'en servir pour améliorer ses services : rien de confidentiel.' },
+  claude: { name: 'Claude', ph: 'sk-ant-…', link: 'https://console.anthropic.com/settings/keys', site: 'la console Anthropic', def: 'claude-sonnet-5-5',
+    need: 'une <b>clé Claude</b> : clique sur le bouton ci-dessous, crée ta clé dans la console Anthropic, copie-la et colle-la ici. Claude est payant à l\'usage : il faut un peu de crédit sur ton compte (quelques centimes par question).',
+    note: 'Ta question, un résumé du document et un aperçu réduit de l\'image partent chez Anthropic, qui facture chaque question sur ton crédit.' }
+};
+let iaCfg = { provider: 'gemini', model: 'gemini-flash-latest', key: '', perm: 'ask', see: true };
+try { Object.assign(iaCfg, JSON.parse(localStorage.getItem('momopic-ia') || '{}')); } catch (e) {}
+if (!IA_MODELS[iaCfg.provider]) iaCfg.provider = 'gemini';
+iaCfg.store = iaCfg.store || {}; iaCfg.store[iaCfg.provider] = { key: iaCfg.key || '', model: iaCfg.model };
+function iaSave() { try { iaCfg.store[iaCfg.provider] = { key: iaCfg.key || '', model: iaCfg.model }; localStorage.setItem('momopic-ia', JSON.stringify(iaCfg)); } catch (e) {} }
+function iaSetProvider(p) {
+  if (!IA_PROV[p] || p === iaCfg.provider) return;
+  iaCfg.store[iaCfg.provider] = { key: iaCfg.key || '', model: iaCfg.model };
+  const o = iaCfg.store[p] || {}; iaCfg.provider = p; iaCfg.key = o.key || ''; iaCfg.model = o.model || IA_PROV[p].def;
+  mcHist = []; iaSave(); iaFormRender(); psIaRender();
+}
+const iaProvSwitch = () => `<div class="ps-seg ia-prov">${Object.keys(IA_PROV).map(p => `<button type="button" data-prov="${p}" class="${iaCfg.provider === p ? 'on' : ''}">${IA_PROV[p].name}</button>`).join('')}</div>`;
+const iaModelSel = id => { const M = IA_MODELS[iaCfg.provider] || [], known = M.some(m => m[0] === iaCfg.model); return `<select id="${id}">${M.map(m => `<option value="${m[0]}" ${m[0] === iaCfg.model ? 'selected' : ''}>${esc(m[1])}</option>`).join('')}${known ? '' : `<option selected>${esc(iaCfg.model)}</option>`}</select>`; };
+function iaWire(box, keyId, testId) {
+  box.querySelectorAll('[data-prov]').forEach(b => b.onclick = () => iaSetProvider(b.dataset.prov));
+  const m = box.querySelector('select'); if (m) m.onchange = () => { iaCfg.model = m.value; iaSave(); };
+  const k = box.querySelector('#' + keyId); if (k) k.oninput = () => { iaCfg.key = k.value.trim(); iaSave(); };
+  box.querySelectorAll('[data-eye]').forEach(b => b.onclick = () => { k.type = k.type === 'password' ? 'text' : 'password'; });
+  box.querySelectorAll('[data-test]').forEach(b => b.onclick = () => iaTest(testId));
+}
+/* réglages dans la bulle (tant qu'il n'a pas de clé, ou via son bouton ⚙) */
+function iaFormRender() {
+  const box = $('#mc-set'); if (!box) return; const PV = IA_PROV[iaCfg.provider];
+  box.innerHTML = `<div class="mc-m mc-a"><p>${iaCfg.key ? 'Ma clé n\'est pas acceptée : vérifie-la ou colles-en une autre, puis <b>Tester</b>.' : 'Ciao ! Pour peindre avec toi, il me faut ' + PV.need}</p></div>
+    <div class="mc-form"><span>Mon cerveau</span>${iaProvSwitch()}<span>Modèle</span>${iaModelSel('ia-model')}
+      <span>Clé API</span><div class="mc-keyrow"><input id="ia-key" type="password" autocomplete="off" spellcheck="false" placeholder="${PV.ph}" value="${esc(iaCfg.key)}"><button type="button" class="dbtn" data-eye title="Afficher / masquer">${ico('eye', 14)}</button><button type="button" class="dbtn primary" data-test>Tester</button></div></div>
+    <div id="ia-test" class="note" style="min-height:1.2em"></div>
+    <a href="${PV.link}" target="_blank" rel="noopener" class="dbtn" style="text-decoration:none;display:inline-flex;gap:6px;align-items:center;align-self:flex-start">${ico('key', 14)}Obtenir ma clé sur ${PV.site}</a>
+    <p class="note">La clé reste <b>sur ce poste</b>. ${PV.note} Tout se règle aussi dans Paramètres › MOMOtticelli. Je peux me tromper : garde un œil sur le résultat.</p>`;
+  iaWire(box, 'ia-key', 'ia-test');
+}
+function psIaRender() {
+  const box = $('#ps-ia-box'); if (!box) return; const PV = IA_PROV[iaCfg.provider], k = iaCfg.key || '';
+  const rb = (v, t, d) => `<label class="ia-perm"><input type="radio" name="ia-perm" value="${v}" ${iaCfg.perm === v ? 'checked' : ''}><span><b>${t}</b><br><span class="ps-sub">${d}</span></span></label>`;
+  box.innerHTML = `<div class="ia-grid"><span>Fournisseur</span><div>${iaProvSwitch()}<div class="ps-sub" style="margin-top:4px">${iaCfg.provider === 'claude' ? 'Claude (Anthropic) : payant à l\'usage, sur ton crédit.' : 'Gemini (Google) : offre gratuite possible.'} Chaque fournisseur garde sa propre clé.</div></div>
+      <span>Clé API ${PV.name}</span><div class="mc-keyrow"><input id="ps-ia-key" type="password" autocomplete="off" spellcheck="false" placeholder="Aucune clé : colle-la ici" value="${esc(k)}"><button type="button" class="dbtn" data-eye title="Afficher / masquer">${ico('eye', 14)}</button><button type="button" class="dbtn" data-test>Tester</button><button type="button" class="dbtn" id="ps-ia-clear" style="color:#fca5a5">Effacer</button></div>
+      <span>Modèle</span>${iaModelSel('ps-ia-model')}</div>
+    <div id="ps-ia-test" class="ps-sub" style="min-height:1.2em;margin-top:6px">${k ? 'Clé enregistrée sur ce poste : …' + esc(k.slice(-4)) : 'Aucune clé enregistrée.'}</div>
+    <a href="${PV.link}" target="_blank" rel="noopener" class="dbtn" style="text-decoration:none;display:inline-flex;gap:6px;align-items:center;margin-top:4px">${ico('key', 14)}Gérer mes clés sur ${PV.site}</a>
+    <h4>Ce qu'il voit</h4>
+    <label class="row"><input type="checkbox" id="ps-ia-see" ${iaCfg.see ? 'checked' : ''} style="accent-color:var(--brand2)"> Lui montrer un aperçu réduit de l'image à chaque question (pour qu'il juge les couleurs, le cadrage…)</label>
+    <h4>Ce que MOMOtticelli peut faire dans ton image</h4>
+    <div>${rb('off', 'Lecture seule', 'Il regarde et te conseille, mais ne touche à rien.')}${rb('ask', 'Il demande avant chaque modification (conseillé)', 'Appliquer un filtre, écrire un texte, dessiner une forme… chaque action attend ton Autoriser.')}${rb('auto', 'Il modifie sans demander', 'Il agit directement. Chaque action reste annulable avec Ctrl+Z.')}</div>
+    <p class="note">La clé reste sur ce poste : elle ne part jamais dans le fichier .mms.</p>`;
+  iaWire(box, 'ps-ia-key', 'ps-ia-test');
+  box.querySelectorAll('[name=ia-perm]').forEach(r => r.onchange = () => { iaCfg.perm = r.value; agAllowSession = false; iaSave(); });
+  box.querySelector('#ps-ia-see').onchange = e => { iaCfg.see = e.target.checked; iaSave(); };
+  box.querySelector('#ps-ia-clear').onclick = () => { iaCfg.key = ''; iaSave(); psIaRender(); mcRefresh(); };
+}
+async function iaTest(outId) {
+  const out = document.getElementById(outId); if (!out) return;
+  if (!iaCfg.key) { out.innerHTML = '<span style="color:#fca5a5">Colle d\'abord ta clé API.</span>'; return; }
+  out.textContent = 'Test en cours…';
+  try {
+    const t0 = performance.now(); const r = await (iaCfg.provider === 'claude' ? iaClaude : iaGemini)([{ role: 'user', parts: [{ text: 'Réponds juste « Bellissimo, prêt à peindre ! »' }] }], 'Tu es un test de connexion.', null, null);
+    out.innerHTML = '<span style="color:#86efac">Connexion réussie en ' + ((performance.now() - t0) / 1000).toFixed(1).replace('.', ',') + ' s : « ' + esc(r.text.trim().slice(0, 60)) + ' »</span>';
+    if (outId === 'ia-test') setTimeout(() => { mcSet = false; mcRefresh(); }, 1400);
+  } catch (e) { out.innerHTML = '<span style="color:#fca5a5">' + esc(e.message) + '</span>'; }
+}
+function iaErr(status, body) {
+  const m = (body && (body.error && (body.error.message || body.error.type))) || '';
+  if (status === 400 && /api key|API_KEY/i.test(m)) return 'Clé API refusée : vérifie-la dans Paramètres › MOMOtticelli.';
+  if (iaCfg.provider === 'claude' && /credit balance/i.test(m)) return 'Crédit Claude épuisé : ajoute du crédit sur ton compte Anthropic, puis réessaie.';
+  if (status === 401 || status === 403) return 'Clé API refusée ou sans droit sur ce modèle (' + status + ').';
+  if (status === 404) return 'Modèle introuvable : choisis-en un autre dans Paramètres › MOMOtticelli.';
+  if (status === 429) return 'Quota dépassé (trop de questions d\'un coup, ou limite gratuite atteinte). Réessaie dans un moment.';
+  if (status >= 500) return 'Le service du fournisseur ne répond pas (' + status + '). Réessaie plus tard.';
+  return 'Erreur ' + status + (m ? ' : ' + m : '');
+}
+
+/* ---------- ce que MOMOtticelli sait : le guide, les outils, le document ---------- */
+function guideText() {
+  const strip = h => String(h).replace(/<kbd>(.*?)<\/kbd>/g, '[$1]').replace(/<\/b>/, ' : ').replace(/<[^>]+>/g, '').replace(/\\'/g, "'").replace(/\s+/g, ' ').trim();
+  return GUIDE.map(([id, i, name, subs]) => '## ' + name + '\n' + subs.map(([sub, list]) => (sub ? '### ' + sub + '\n' : '') + list.map(li => '- ' + strip(li)).join('\n')).join('\n')).join('\n\n');
+}
+let iaGuideCache = null;
+function iaRefs() {
+  const out = [];
+  TOOLS.forEach(g => g.items.forEach(t => { if (!t.sep) out.push(`outil:${t.id} = outil ${t.name} (touche ${t.key}), palette ${g.group}`); }));
+  document.querySelectorAll('header [data-act][title], header [data-menu][title], aside.tools [data-toggle][title], aside.tools [data-xf][title]').forEach(b => {
+    const k = b.dataset.act ? 'act:' + b.dataset.act : b.dataset.menu ? 'menu:' + b.dataset.menu : b.dataset.toggle ? 'vue:' + b.dataset.toggle : 'sel:' + b.dataset.xf;
+    out.push(k + ' = ' + b.title.replace(/\s+/g, ' ').slice(0, 90));
+  });
+  return out.join('\n');
+}
+function iaGuide() { return iaGuideCache || (iaGuideCache = { guide: guideText().slice(0, 45000), refs: iaRefs() }); }
+const FILTER_NAMES = { gray: 'noir et blanc', sepia: 'sépia', invert: 'négatif', sharpen: 'netteté rapide' };
+function iaFilters() {
+  const o = Object.entries(FILTER_NAMES).map(([k, v]) => `${k} (${v}, sans réglage)`);
+  Object.entries(ADJUST).forEach(([k, F]) => o.push(`${k} (${F.title}) réglages : ` + F.params.map(q => Array.isArray(q) ? `${q[1]}=${q[0]} [${q[2]}…${q[3]}, défaut ${q[4]}]` : q.t === 'select' ? `${q.k}=${q.lab} [${q.opts.map(x => x[0]).join('|')}]` : `${q.k}=${q.lab} (${q.t === 'color' ? 'couleur #rrggbb' : 'oui/non'})`).join(', ')));
+  return o.join('\n');
+}
+function iaSystem() {
+  const G = iaGuide();
+  return `Tu es MOMOtticelli, le compagnon artistique intégré à MomoPIC, un éditeur d'images multicalques (retouche photo, dessin, graphisme) qui tourne dans le navigateur. Tu es un peintre de la Renaissance avec un béret et une moustache à la Dalí, passionné de couleur et de composition.
+Ton style : français, tutoiement, chaleureux et inspiré mais concis (5 à 10 lignes en général), listes à puces pour une marche à suivre. Pas de titres. Mets en **gras** les noms d'outils, de menus et les valeurs clés. Une touche italienne de temps en temps (« Bellissimo ! », « Mamma mia »), sans en faire trop.
+Règles :
+- Pour l'utilisation de MomoPIC, appuie-toi UNIQUEMENT sur le GUIDE ci-dessous. N'invente jamais un outil, un menu ou un raccourci. Si le guide ne dit rien, dis-le simplement.
+- Ne parle d'aucun autre logiciel.
+- Pour montrer un outil ou un bouton à l'écran, écris sa référence entre doubles crochets, par exemple [[outil:brush]] ou [[menu:m-filters]] : MomoPIC l'affiche comme un bouton cliquable qui s'allume. N'utilise que des références de la LISTE DES RÉFÉRENCES.
+- Pour le document en cours, sers-toi du RÉSUMÉ DU DOCUMENT (fourni à chaque question)${iaCfg.see ? ' et de l\'APERÇU de l\'image joint à la question' : ''}. Les coordonnées sont en pixels du document, origine en haut à gauche.
+- En graphisme et retouche (couleurs, contraste, composition, typographie, recadrage), donne des conseils concrets et chiffrés.
+${iaCfg.perm === 'off' ? '- Tu ne peux pas modifier l\'image toi-même : tu expliques les gestes à faire.' : `- Tu peux MODIFIER L'IMAGE avec les fonctions fournies : choisir/créer/régler un calque, faire une sélection, changer les couleurs, dessiner une forme, écrire un texte, remplir ou effacer la sélection, appliquer un filtre, redimensionner, tourner. Tout se fait sur le calque actif (choisis-le d'abord si besoin). Ne crée un calque que si l'utilisateur le demande ou si c'est clairement utile, en le disant. ${iaCfg.perm === 'ask' ? 'L\'utilisateur valide chaque modification ; s\'il refuse, n\'insiste pas. ' : ''}Annonce en une phrase ce que tu vas faire, agis, puis résume. Ne supprime rien sans demande explicite. Si la demande est floue, pose d'abord la question.`}
+
+=== FILTRES DISPONIBLES (nom : réglages) ===
+${iaFilters()}
+
+=== LISTE DES RÉFÉRENCES (référence = rôle) ===
+${G.refs}
+
+=== GUIDE DE MOMOPIC ===
+${G.guide}`;
+}
+function iaPlan() {
+  if (!doc) return '(aucun document)';
+  const out = [`Document « ${doc.name} » : ${doc.w} × ${doc.h} px · ${plural(doc.layers.length, 'calque', 'calques')} · ${dirty ? 'modifications non enregistrées' : 'enregistré'}`];
+  out.push('Calques (du haut vers le bas, n° 1 = le plus haut) :');
+  [...doc.layers].reverse().forEach((l, k) => out.push(`  ${k + 1}. « ${l.name} »${doc.layers.indexOf(l) === doc.active ? ' [ACTIF]' : ''} · opacité ${Math.round(l.opacity * 100)} % · fusion ${(BLENDS.find(b => b[0] === l.blend) || [0, l.blend])[1]}${l.visible ? '' : ' · masqué'}${l.locked ? ' · verrouillé' : ''}${l.x || l.y ? ` · décalé ${l.x},${l.y}` : ''} · ${l.canvas.width}×${l.canvas.height}`));
+  out.push('Sélection : ' + (sel ? `${sel.bbox.w} × ${sel.bbox.h} px en ${sel.bbox.x},${sel.bbox.y}` : 'aucune') + (xf ? ' · une sélection flottante (collage / transformation) est en cours' : ''));
+  out.push(`Outil actif : ${TOOL_BY_ID[tool].name} · couleur 1 ${color1} · couleur 2 ${color2} · zoom ${Math.round(cam.z * 100)} %`);
+  return out.join('\n');
+}
+function iaSnapshot() {
+  try { const k = Math.min(1, 768 / Math.max(doc.w, doc.h)), c = flatCanvas('jpeg', k, '#ffffff'); return c.toDataURL('image/jpeg', .8).split(',')[1]; } catch (e) { return null; }
+}
+
+/* ---------- l'interface : MOMOtticelli et sa bulle de discussion ---------- */
+const MOMOTTICELLI_SVG = `<svg viewBox="0 0 100 122" xmlns="http://www.w3.org/2000/svg" aria-label="MOMOtticelli">
+  <g transform="translate(0 6) rotate(-7 50 30)">
+    <path d="M70 10 L72 3" stroke="#141414" stroke-width="5" stroke-linecap="round"/>
+    <path d="M8 34 C6 16 28 8 52 8 C78 8 96 18 93 33 C91 41 76 42 50 42 C26 42 10 41 8 34 Z" fill="#141414" stroke="#3f3f46" stroke-width="1.2"/>
+    <path d="M10 33 C6 20 26 11 46 10 C30 14 18 21 18 34 Z" fill="#2e2e2e"/>
+    <path d="M18 27 C34 30 52 30 66 28" stroke="#6b6b6b" stroke-width="3.2" stroke-linecap="round" fill="none"/>
+  </g>
+  <g fill="#111" stroke="#52525b" stroke-width="1" stroke-linejoin="round" transform="translate(0 6)">
+    <path d="M50 81 C45 76 37 77 31 81 C25 85 17 84 14.5 76 C13 70 14 63 11 56 C17.5 61 20 67 20.5 72 C21 77 28 75 34 72.5 C41 70 47 71 50 75.5 Z"/>
+    <path d="M50 81 C55 76 63 77 69 81 C75 85 83 84 85.5 76 C87 70 86 63 89 56 C82.5 61 80 67 79.5 72 C79 77 72 75 66 72.5 C59 70 53 71 50 75.5 Z"/></g>
+  <circle class="mc-eye" cx="33" cy="64" r="11" fill="none" stroke="#a1a1aa" stroke-width="6.5"/>
+  <circle class="mc-eye" cx="67" cy="64" r="11" fill="none" stroke="#a1a1aa" stroke-width="6.5"/>
+  <path d="M36 117 L36 92 L50 106 L64 92 L64 117" fill="none" stroke="#a1a1aa" stroke-width="6.5" stroke-linejoin="round" stroke-linecap="round"/></svg>`;
+let mcMsgs = [], mcBusy = false, mcOpen = false, mcNews = false, mcSet = false, mcPinned = false;
+function mcEl() { return $('#mc-root'); }
+function mcHint() {
+  const h = $('#mc-hint'); if (!h) return; if (mcOpen) mcNews = false;
+  const wait = mcMsgs.some(m => (m.acts || []).some(a => a.answer));
+  const st = !mcOpen && (mcNews || wait) ? 'news' : (mcBusy ? 'busy' : '');
+  if (h.dataset.st === st) return; h.dataset.st = st; h.className = st;
+  h.innerHTML = st === 'busy' ? `<i>${ico('gear', 12)}</i>` : st === 'news' ? '!' : '…';
+}
+function mcRefresh() {
+  let r = mcEl();
+  if (!r) {
+    r = document.createElement('div'); r.id = 'mc-root';
+    r.innerHTML = `<div id="mc-panel"><div class="mc-h"><span>${ico('beret', 17)}MOMOtticelli · compagnon artiste</span><span class="mc-hb">
+        <button type="button" id="mc-new" title="Nouvelle discussion">${ico('reset', 14)}</button>
+        <button type="button" id="mc-gear" title="Son cerveau et sa clé">${ico('gear', 14)}</button>
+        <button type="button" id="mc-pin" title="Épingler : la bulle reste ouverte">${ico('pin', 14)}</button>
+        <button type="button" id="mc-min" title="Réduire la bulle">${ico('minus', 14)}</button></span></div>
+      <div id="mc-set"></div><div id="mc-log"></div><div id="mc-sugg"></div>
+      <div class="mc-in"><textarea id="mc-q" rows="2" placeholder="Demande-lui quelque chose… (Entrée pour envoyer)"></textarea><button type="button" id="mc-send" title="Envoyer">${ico('send', 17)}</button></div></div>
+      <div id="mc-momo" title="MOMOtticelli, ton compagnon artiste : clique pour lui parler"><span id="mc-hint">…</span>${MOMOTTICELLI_SVG}</div><div id="mc-mini"></div>`;
+    $('#stage').appendChild(r);
+    r.querySelector('#mc-momo').onclick = () => mcToggle();
+    r.querySelector('#mc-mini').onclick = () => mcToggle(true);
+    r.querySelector('#mc-min').onclick = () => mcToggle(false);
+    r.querySelector('#mc-gear').onclick = () => { mcSet = !mcSet; mcRefresh(); };
+    r.querySelector('#mc-pin').onclick = () => { mcPinned = !mcPinned; mcRefresh(); };
+    r.querySelector('#mc-new').onclick = () => { if (mcBusy) return; mcMsgs = []; mcHist = []; agAllowSession = false; mcRenderLog(); };
+    r.querySelector('#mc-send').onclick = () => mcBusy ? mcStop() : mcSend();
+    const q = r.querySelector('#mc-q');
+    ['keydown', 'keyup', 'keypress', 'pointerdown', 'wheel'].forEach(ev => r.addEventListener(ev, e => e.stopPropagation()));
+    q.addEventListener('input', () => { q.style.height = 'auto'; q.style.height = Math.min(q.scrollHeight + 2, 130) + 'px'; });
+    q.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); mcSend(); } if (e.key === 'Escape') { e.preventDefault(); mcToggle(false); } });
+    r.querySelector('#mc-log').addEventListener('click', e => {
+      const g = e.target.closest('[data-ag]'); if (g) { const [mi, k, v] = g.dataset.ag.split(':'); const act = ((mcMsgs[+mi] || {}).acts || [])[+k]; if (act && act.answer) { const f = act.answer; act.answer = null; act.state = 'wait'; f(v); mcRenderLog(); } return; }
+      const b = e.target.closest('[data-mcbtn]'); if (b) mcShowBtn(b.dataset.mcbtn);
+    });
+    r.querySelector('#mc-sugg').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { $('#mc-q').value = b.textContent; mcSend(); } });
+    document.addEventListener('pointerdown', e => { if (mcOpen && !mcPinned && !e.target.closest('#mc-root') && !e.target.closest('.ovl') && !e.target.closest('.mc-ring')) mcToggle(false); }, true);
+    mcRenderLog();
+  }
+  r.classList.toggle('open', mcOpen); r.classList.toggle('pinned', mcPinned);
+  const showSet = mcSet || !iaCfg.key; r.classList.toggle('set', showSet);
+  const sb = $('#mc-set'); if (sb && showSet && !sb.dataset.on) { sb.dataset.on = '1'; iaFormRender(); } if (sb && !showSet) delete sb.dataset.on;
+}
+function mcToggle(v) { mcOpen = v === undefined ? !mcOpen : !!v; mcRefresh(); mcHint(); if (mcOpen) setTimeout(() => { const q = $('#mc-q'); if (q && !q.closest('.set')) q.focus(); }, 30); }
+function mcRefEl(ref) {
+  const [k, v] = String(ref).split(':'); if (!v) return null;
+  const q = { outil: `[data-tool="${v}"]`, act: `[data-act="${v}"]`, menu: `[data-menu="${v}"]`, vue: `[data-toggle="${v}"]`, sel: `[data-xf="${v}"]` }[k];
+  return q ? document.querySelector(q) : null;
+}
+function mcMd(t) {
+  let h = esc(t);
+  h = h.replace(/\[\[((?:outil|act|menu|vue|sel):[\w:-]+)\]\]/g, (m, ref) => { const b = mcRefEl(ref); if (!b) return ''; const T = ref.startsWith('outil:') ? (TOOL_BY_ID[ref.slice(6)] || {}).name : ''; const lab = esc((T || b.title || b.textContent || ref).split(/\n| : |\(|,|—/)[0].trim().slice(0, 40)); const svg = b.querySelector('svg'); return `<button type="button" class="mc-btn" data-mcbtn="${ref}" title="Montrer à l'écran">${svg ? svg.outerHTML : ''}<span>${lab}</span></button>`; });
+  h = h.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>').replace(/(^|[^*])\*([^*\n]+)\*/g, '$1<i>$2</i>').replace(/`([^`]+)`/g, '<kbd>$1</kbd>');
+  const o = []; let ul = false;
+  h.split('\n').forEach(l => { const m = l.match(/^\s*(?:[-•*]|\d+[.)])\s+(.*)$/); if (m) { if (!ul) { o.push('<ul>'); ul = true; } o.push('<li>' + m[1] + '</li>'); } else { if (ul) { o.push('</ul>'); ul = false; } if (l.trim()) o.push('<p>' + l + '</p>'); } });
+  if (ul) o.push('</ul>'); return o.join('');
+}
+function mcRenderLog() {
+  setTimeout(mcHint, 0);
+  const log = $('#mc-log'), sg = $('#mc-sugg'); if (!log) return;
+  if (!mcMsgs.length) log.innerHTML = `<div class="mc-m mc-a"><p>Ciao ! C'est <b>MOMOtticelli</b>. Demande-moi un conseil sur ton image ou sur MomoPIC : je vois tes calques${iaCfg.see ? ' et un aperçu de ton image' : ''}, et je peux même retoucher pour toi.</p></div>`;
+  else log.innerHTML = mcMsgs.map((m, mi) => `<div class="mc-m ${m.role === 'user' ? 'mc-u' : 'mc-a'}${m.err ? ' mc-err' : ''}">${m.role === 'user' ? '<p>' + esc(m.text).replace(/\n/g, '<br>') + '</p>' : (m.text ? mcMd(m.text) : (mcBusy && mi === mcMsgs.length - 1 ? '' : (m.acts && m.acts.length ? '' : mcMd('…')))) + mcActs(m, mi) + (mcBusy && m.role !== 'user' && mi === mcMsgs.length - 1 ? `<p class="mc-status"><i>${ico('gear', 13)}</i> <span id="mc-st">${esc(mcSt.txt)}</span> <span id="mc-st-t" class="mc-st-t">${Math.round((Date.now() - mcSt.t0) / 1000)} s</span></p>` : '')}</div>`).join('');
+  log.scrollTop = log.scrollHeight;
+  if (sg) sg.innerHTML = mcMsgs.length ? '' : ['Que penses-tu de mon image ?', 'Rends la photo plus lumineuse', 'Ajoute un titre en haut', 'Comment détourer un objet ?'].map(t => `<button type="button">${t}</button>`).join('');
+}
+function mcActs(m, mi) {
+  if (!m.acts || !m.acts.length) return '';
+  const ic = { wait: 'clock', ask: 'help', ok: 'check', no: 'close', err: 'warn' };
+  return '<div class="mc-acts">' + m.acts.map((x, k) => `<div class="mc-act mc-${x.state}">${ico(ic[x.state] || 'info', 13)}<span>${esc(x.desc)}${x.state === 'no' ? ' — refusé' : ''}</span></div>` +
+    (x.state === 'ask' ? `<div class="mc-ask"><button type="button" data-ag="${mi}:${k}:yes">Autoriser</button><button type="button" data-ag="${mi}:${k}:session" title="Autoriser toutes ses modifications jusqu'à la fin de cette discussion">Toujours (cette discussion)</button><button type="button" data-ag="${mi}:${k}:no">Refuser</button></div>` : '')).join('')
+    + (m.acts.some(x => x.state === 'ok') ? '<div class="mc-undo">Une retouche ne te plaît pas ? <kbd>Ctrl</kbd>+<kbd>Z</kbd> l\'annule.</div>' : '') + '</div>';
+}
+function mcShowBtn(ref) {
+  const b = mcRefEl(ref); if (!b) return;
+  const r = b.getBoundingClientRect(); if (!r.width) return;
+  const ring = document.createElement('div'); ring.className = 'mc-ring'; Object.assign(ring.style, { left: (r.left - 4) + 'px', top: (r.top - 4) + 'px', width: (r.width + 8) + 'px', height: (r.height + 8) + 'px' });
+  document.body.appendChild(ring); setTimeout(() => ring.remove(), 2600);
+}
+let mcHist = [], mcAbort = null, mcStopped = false;
+function mcHistTrim() { const u = []; mcHist.forEach((c, k) => { if (c.role === 'user' && c.parts.some(p => p.text)) u.push(k); }); if (u.length > 10) mcHist = mcHist.slice(u[u.length - 10]); }
+const mcSt = { txt: '', t0: 0, last: 0, timer: null, timedOut: false, paused: 0 };
+function mcStatus(t) { mcSt.txt = t; mcSt.last = Date.now(); const e = $('#mc-st'); if (e) e.textContent = t; mcMini(); }
+function mcMini() { const r = mcEl(); if (r) r.classList.toggle('busy', !!mcBusy); const m = $('#mc-mini'); if (m) m.textContent = (mcSt.txt || 'Je réfléchis…') + ' ' + Math.round((Date.now() - mcSt.t0) / 1000) + ' s'; }
+function mcStTick() {
+  const e = $('#mc-st-t'); if (e) e.textContent = Math.round((Date.now() - mcSt.t0) / 1000) + ' s'; mcMini();
+  const asking = mcMsgs.some(m => (m.acts || []).some(x => x.answer));
+  if (mcBusy && !asking && Date.now() - mcSt.last > 150000) { mcSt.timedOut = 'silence'; mcStop(); }
+  else if (mcBusy && !asking && Date.now() - mcSt.t0 - mcSt.paused > 300000) { mcSt.timedOut = 'long'; mcStop(); }
+}
+function mcStop() { if (!mcBusy) return; mcStopped = true; try { if (mcAbort) mcAbort.abort(); } catch (e) {} mcMsgs.forEach(m => (m.acts || []).forEach(x => { if (x.answer) { const f = x.answer; x.answer = null; f('no'); } })); }
+function mcBtnUpd() { const b = $('#mc-send'); if (!b) return; b.classList.toggle('stop', mcBusy); b.innerHTML = mcBusy ? ico('stop', 15) : ico('send', 17); b.title = mcBusy ? 'Arrêter MOMOtticelli' : 'Envoyer'; }
+async function mcSend() {
+  const q = $('#mc-q'); if (!q || mcBusy) return; const text = q.value.trim(); if (!text) return;
+  if (!iaCfg.key) { mcSet = true; mcRefresh(); return; }
+  if (navigator.onLine === false) { mcMsgs.push({ role: 'assistant', text: 'Pas de connexion Internet : je ne peux pas réfléchir hors ligne. Reconnecte-toi et repose ta question.', acts: [] }); mcRenderLog(); return; }
+  q.value = ''; q.style.height = ''; mcMsgs.push({ role: 'user', text }); const a = { role: 'assistant', text: '', acts: [] }; mcMsgs.push(a); mcBusy = true; mcRenderLog(); mcHint();
+  const momo = $('#mc-momo'); if (momo) momo.classList.add('think');
+  // un seul aperçu d'image dans l'historique : celui de la dernière question
+  mcHist.forEach(c => { if (c.parts) c.parts = c.parts.filter(p => !p.inlineData); });
+  const parts = [{ text }]; const shot = iaCfg.see ? iaSnapshot() : null; if (shot) parts.push({ inlineData: { mimeType: 'image/jpeg', data: shot } });
+  mcHist.push({ role: 'user', parts }); mcHistTrim();
+  const h0 = mcHist.length - 1; mcStopped = false; mcAbort = new AbortController(); mcBtnUpd();
+  mcSt.t0 = Date.now(); mcSt.paused = 0; mcSt.timedOut = false; mcStatus('J\'envoie ta question…'); clearInterval(mcSt.timer); mcSt.timer = setInterval(mcStTick, 1000);
+  try {
+    let before = '';
+    for (let round = 0; round < 12; round++) {
+      const sys = iaSystem() + '\n\n=== RÉSUMÉ DU DOCUMENT EN COURS ===\n' + iaPlan(); if (round) mcStatus('Je réfléchis… (étape ' + (round + 1) + ')');
+      const r = await (iaCfg.provider === 'claude' ? iaClaude : iaGemini)(mcHist, sys, iaCfg.perm === 'off' ? AG_TOOLS.filter(t => AG_READ.includes(t.name)) : AG_TOOLS, t => { a.text = before + t; mcRenderLog(); });
+      mcHist.push({ role: 'model', parts: r.parts }); before = a.text ? a.text + '\n' : '';
+      if (!r.calls.length) break;
+      if (mcStopped) throw new Error('__stop');
+      const resp = []; for (const c of r.calls) { const fr = { name: c.name, response: await agExec(c, a) }; if (c.id) fr.id = c.id; resp.push({ functionResponse: fr }); }
+      mcHist.push({ role: 'user', parts: resp });
+    }
+    if (!a.text.trim() && !a.acts.length) a.text = '…';
+  } catch (e) {
+    if (mcStopped || e.name === 'AbortError' || e.message === '__stop') { a.text = (a.text ? a.text + '\n' : '') + (mcSt.timedOut === 'silence' ? 'Pas de réponse depuis 2 min 30 : le service est peut-être saturé, ou ton quota est atteint. Réessaie dans un moment, ou change de modèle dans Paramètres › MOMOtticelli.' : mcSt.timedOut === 'long' ? 'J\'ai travaillé 5 minutes sans finir : je m\'arrête là. Demande-moi la suite en plus petits morceaux.' : 'Arrêté.') + (a.acts.some(x => x.state === 'ok') ? ' Ce qui a déjà été fait reste dans l\'image (Ctrl+Z pour l\'annuler).' : ''); mcHist = mcHist.slice(0, h0); }
+    else { a.text = (a.text ? a.text + '\n' : '') + e.message; a.err = true; mcHist = mcHist.filter(c => !(c.role === 'user' && c.parts.some(p => p.text === text))); if (/Clé API refusée|Aucune clé/.test(e.message)) setTimeout(() => { mcSet = true; mcRefresh(); }, 1600); }
+  }
+  clearInterval(mcSt.timer); mcBusy = false; mcMini(); mcAbort = null; mcBtnUpd(); if (momo) momo.classList.remove('think'); if (!mcOpen) mcNews = true; mcRenderLog(); mcHint();
+}
+
+/* =========================================================================
+   MOMOtticelli RETOUCHE : fonctions proposées au modèle, avec ta permission
+   'off' = lecture seule · 'ask' = il demande avant chaque modification · 'auto' = sans demander
+   ========================================================================= */
+const P_ = (t, req) => ({ type: 'OBJECT', properties: t, required: req || [] }), NUM = d => ({ type: 'NUMBER', description: d }), STR = d => ({ type: 'STRING', description: d }), BOOL = d => ({ type: 'BOOLEAN', description: d });
+const CAL = STR('nom exact du calque, ou son numéro dans la liste du résumé (1 = le plus haut)');
+const AG_READ = ['lire_document', 'montrer'];
+const AG_TOOLS = [
+  { name: 'lire_document', description: 'Relit l\'état du document (taille, calques, calque actif, sélection, couleurs) après des modifications.', parameters: P_({}) },
+  { name: 'montrer', description: 'Fait clignoter un outil ou un bouton à l\'écran pour le montrer à l\'utilisateur.', parameters: P_({ ref: STR('référence de la LISTE DES RÉFÉRENCES, ex. outil:brush') }, ['ref']) },
+  { name: 'choisir_calque', description: 'Rend un calque actif (les retouches suivantes s\'y appliquent).', parameters: P_({ calque: CAL }, ['calque']) },
+  { name: 'creer_calque', description: 'Crée un nouveau calque vide au-dessus du calque actif et le rend actif.', parameters: P_({ nom: STR('nom du calque') }) },
+  { name: 'regler_calque', description: 'Change le nom, l\'opacité, le mode de fusion, la visibilité ou le verrou d\'un calque.', parameters: P_({ calque: CAL, nom: STR('nouveau nom'), opacite: NUM('0 à 100'), fusion: STR('normal, produit, superposition, incrustation, obscurcir, éclaircir, lumière tamisée, lumière crue, différence, teinte, saturation, couleur, luminosité…'), visible: BOOL('visible ou non'), verrouille: BOOL('verrouillé ou non') }, ['calque']) },
+  { name: 'supprimer_calque', description: 'Supprime un calque. Seulement si l\'utilisateur l\'a demandé.', parameters: P_({ calque: CAL }, ['calque']) },
+  { name: 'selection', description: 'Fait ou modifie la sélection : tout, aucune, inverser, rectangle ou ellipse (x, y, largeur, hauteur en pixels du document).', parameters: P_({ type: STR('tout, aucune, inverser, rectangle ou ellipse'), x: NUM('gauche'), y: NUM('haut'), largeur: NUM('largeur'), hauteur: NUM('hauteur') }, ['type']) },
+  { name: 'couleurs', description: 'Change la couleur 1 (premier plan) et/ou la couleur 2 (arrière-plan).', parameters: P_({ couleur1: STR('#rrggbb'), couleur2: STR('#rrggbb') }) },
+  { name: 'dessiner_forme', description: 'Dessine une forme sur le calque actif (limitée à la sélection s\'il y en a une).', parameters: P_({ forme: STR('rectangle, ellipse, ligne ou fleche'), x: NUM('x de départ'), y: NUM('y de départ'), largeur: NUM('largeur (rectangle/ellipse)'), hauteur: NUM('hauteur (rectangle/ellipse)'), x2: NUM('x d\'arrivée (ligne/flèche)'), y2: NUM('y d\'arrivée (ligne/flèche)'), couleur: STR('#rrggbb (couleur 1 par défaut)'), plein: BOOL('rempli (sinon contour)'), epaisseur: NUM('épaisseur du trait en px'), opacite: NUM('0 à 100') }, ['forme', 'x', 'y']) },
+  { name: 'ecrire_texte', description: 'Écrit un texte sur le calque actif. Plusieurs lignes possibles avec \\n.', parameters: P_({ texte: STR('le texte'), x: NUM('gauche du texte'), y: NUM('haut du texte'), taille: NUM('taille en px'), police: STR('police système ou Google Font (ex. Arial, Georgia, Montserrat, Pacifico)'), couleur: STR('#rrggbb'), gras: BOOL('gras'), italique: BOOL('italique') }, ['texte', 'x', 'y']) },
+  { name: 'remplir_selection', description: 'Remplit la sélection (ou tout le calque) d\'une couleur.', parameters: P_({ couleur: STR('#rrggbb (couleur 1 par défaut)'), opacite: NUM('0 à 100') }) },
+  { name: 'effacer_selection', description: 'Efface (rend transparent) le contenu sélectionné du calque actif, ou tout le calque sans sélection.', parameters: P_({}) },
+  { name: 'appliquer_filtre', description: 'Applique un filtre de la liste FILTRES DISPONIBLES au calque actif (limité à la sélection s\'il y en a une).', parameters: P_({ filtre: STR('nom du filtre, ex. bc, hsl, blur, unsharp, vignette, gray'), reglages: { type: 'OBJECT', description: 'réglages du filtre (clés de la liste), les autres gardent leur valeur par défaut', properties: { b: NUM('luminosité'), c: NUM('contraste'), h: NUM('teinte'), s: NUM('saturation / adoucissement'), l: NUM('luminosité'), r: NUM('rayon'), a: NUM('intensité / angle / quantité'), f: NUM('force'), t: NUM('seuil / tolérance / chaleur'), col: STR('couleur #rrggbb'), dx: NUM('décalage x'), dy: NUM('décalage y'), o: NUM('opacité'), sp: NUM('étendue'), op: STR('opération'), edge: STR('bords'), fill: BOOL('combler les coins'), sz: NUM('taille'), k: NUM('courbure'), ang: NUM('angle'), q: NUM('quantité'), sc: NUM('échelle'), oc: NUM('détail'), seed: NUM('graine'), sat: NUM('saturation minimum') } } }, ['filtre']) },
+  { name: 'taille_image', description: 'Redimensionne tout le document (tous les calques).', parameters: P_({ largeur: NUM('px'), hauteur: NUM('px') }, ['largeur', 'hauteur']) },
+  { name: 'zone_de_travail', description: 'Agrandit ou réduit la toile sans déformer, contenu centré.', parameters: P_({ largeur: NUM('px'), hauteur: NUM('px') }, ['largeur', 'hauteur']) },
+  { name: 'tourner_symetrie', description: 'Tourne ou retourne tout le document.', parameters: P_({ action: STR('90, -90, 180, miroir_horizontal ou miroir_vertical') }, ['action']) },
+  { name: 'recadrer', description: 'Recadre le document sur un rectangle (x, y, largeur, hauteur).', parameters: P_({ x: NUM('gauche'), y: NUM('haut'), largeur: NUM('largeur'), hauteur: NUM('hauteur') }, ['x', 'y', 'largeur', 'hauteur']) },
+  { name: 'choisir_outil', description: 'Sélectionne un outil dans la palette pour que l\'utilisateur l\'utilise.', parameters: P_({ outil: STR('identifiant d\'outil, ex. brush, eraser, wand, text') }, ['outil']) }
+];
+const BLEND_FR = { normal: 'source-over', produit: 'multiply', superposition: 'screen', incrustation: 'overlay', obscurcir: 'darken', eclaircir: 'lighten', 'éclaircir': 'lighten', 'densite couleur -': 'color-dodge', 'densité couleur −': 'color-dodge', 'densité couleur +': 'color-burn', 'lumiere crue': 'hard-light', 'lumière crue': 'hard-light', 'lumiere tamisee': 'soft-light', 'lumière tamisée': 'soft-light', difference: 'difference', 'différence': 'difference', exclusion: 'exclusion', teinte: 'hue', saturation: 'saturation', couleur: 'color', luminosite: 'luminosity', 'luminosité': 'luminosity' };
+function findLayer(ref) {
+  if (ref === undefined || ref === null || ref === '') return null; const q = String(ref).trim().toLowerCase();
+  if (/^\d+$/.test(q)) { const n = +q; const l = doc.layers[doc.layers.length - n]; if (l) return l; }
+  if (['actif', 'calque actif', 'courant'].includes(q)) return L();
+  return doc.layers.find(l => l.name.trim().toLowerCase() === q) || doc.layers.find(l => l.name.toLowerCase().includes(q)) || null;
+}
+const okHex = c => /^#[\da-f]{6}$/i.test(c || '') ? c.toLowerCase() : /^#[\da-f]{3}$/i.test(c || '') ? ('#' + c.slice(1).split('').map(x => x + x).join('')).toLowerCase() : null;
+function agDescr(n, a) {
+  const C = x => { const l = findLayer(x); return l ? '« ' + l.name + ' »' : '« ' + x + ' »'; };
+  switch (n) {
+    case 'lire_document': return 'Relire le document';
+    case 'montrer': return 'Montrer ' + a.ref;
+    case 'choisir_calque': return 'Activer le calque ' + C(a.calque);
+    case 'creer_calque': return 'Créer le calque « ' + (a.nom || 'Calque') + ' »';
+    case 'regler_calque': return 'Régler le calque ' + C(a.calque) + [a.nom ? ' → nom « ' + a.nom + ' »' : '', a.opacite !== undefined ? ' · opacité ' + a.opacite + ' %' : '', a.fusion ? ' · fusion ' + a.fusion : '', a.visible !== undefined ? (a.visible ? ' · visible' : ' · masqué') : '', a.verrouille !== undefined ? (a.verrouille ? ' · verrouillé' : ' · déverrouillé') : ''].join('');
+    case 'supprimer_calque': return 'Supprimer le calque ' + C(a.calque);
+    case 'selection': return 'Sélection : ' + a.type + (/rect|ell/.test(a.type || '') ? ` ${Math.round(a.largeur || 0)}×${Math.round(a.hauteur || 0)} en ${Math.round(a.x || 0)},${Math.round(a.y || 0)}` : '');
+    case 'couleurs': return 'Couleurs' + (a.couleur1 ? ' 1 = ' + a.couleur1 : '') + (a.couleur2 ? ' 2 = ' + a.couleur2 : '');
+    case 'dessiner_forme': return `Dessiner ${a.forme === 'fleche' ? 'une flèche' : a.forme === 'ligne' ? 'une ligne' : a.forme === 'ellipse' ? 'une ellipse' : 'un rectangle'}${a.couleur ? ' ' + a.couleur : ''} sur « ${L().name} »`;
+    case 'ecrire_texte': return `Écrire « ${String(a.texte || '').slice(0, 40)} » sur « ${L().name} »`;
+    case 'remplir_selection': return 'Remplir ' + (sel ? 'la sélection' : 'le calque') + ' en ' + (a.couleur || color1);
+    case 'effacer_selection': return 'Effacer ' + (sel ? 'la sélection' : 'tout le calque « ' + L().name + ' »');
+    case 'appliquer_filtre': return 'Filtre ' + ((ADJUST[a.filtre] || {}).title || FILTER_NAMES[a.filtre] || a.filtre) + ' sur « ' + L().name + ' »' + (a.reglages && Object.keys(a.reglages).length ? ' (' + Object.entries(a.reglages).map(([k, v]) => k + ' ' + v).join(', ') + ')' : '');
+    case 'taille_image': return `Redimensionner l'image en ${Math.round(a.largeur)} × ${Math.round(a.hauteur)} px`;
+    case 'zone_de_travail': return `Zone de travail ${Math.round(a.largeur)} × ${Math.round(a.hauteur)} px`;
+    case 'tourner_symetrie': return 'Image : ' + a.action;
+    case 'recadrer': return `Recadrer sur ${Math.round(a.largeur)} × ${Math.round(a.hauteur)} px en ${Math.round(a.x)},${Math.round(a.y)}`;
+    case 'choisir_outil': return 'Prendre l\'outil ' + ((TOOL_BY_ID[a.outil] || {}).name || a.outil);
+  }
+  return n;
+}
+function agFilter(name, set) {
+  const l = L();
+  if (FILTERS[name]) { commitLayerResult(l, pixelFilter(l.canvas, FILTERS[name])); return; }
+  const F = ADJUST[name]; if (!F) throw new Error('filtre inconnu : ' + name);
+  const PS = F.params.map(q => Array.isArray(q) ? { k: q[1], def: q[4], min: q[2], max: q[3], t: 'range' } : q);
+  const p = {}; PS.forEach(q => p[q.k] = q.def); if (F.init) F.init(p);
+  Object.entries(set || {}).forEach(([k, v]) => { const q = PS.find(q => q.k === k); if (!q) return; p[k] = q.t === 'range' ? clamp(+v, q.min, q.max) : q.t === 'check' ? !!v : q.t === 'color' ? (okHex(v) || q.def) : String(v); });
+  const b = sel ? sel.bbox : { x: l.x, y: l.y, w: l.canvas.width, h: l.canvas.height };
+  const X = { cx: b.x - l.x + b.w / 2, cy: b.y - l.y + b.h / 2, rw: b.w / 2, rh: b.h / 2, mask: null };
+  if (sel) { X.mask = mkCanvas(l.canvas.width, l.canvas.height); X.mask.getContext('2d').drawImage(sel.mask, -l.x, -l.y); }
+  const out = F.run(l.canvas, p, X);
+  if (F.noMask) { pushPx(l); const c = l.canvas.getContext('2d'); c.clearRect(0, 0, l.canvas.width, l.canvas.height); c.drawImage(out, 0, 0); afterPixelEdit(l); }
+  else commitLayerResult(l, out);
+}
+async function agRun(n, a) {
+  const needL = ref => { const l = findLayer(ref); if (!l) throw new Error('calque « ' + ref + ' » introuvable'); return l; };
+  const edit = () => { if (xf) commitTransform(); if (textEdit) commitText(); const l = L(); if (l.locked) throw new Error('le calque actif « ' + l.name + ' » est verrouillé'); if (!l.visible) throw new Error('le calque actif « ' + l.name + ' » est masqué'); return l; };
+  switch (n) {
+    case 'lire_document': return { ok: true, document: iaPlan() };
+    case 'montrer': mcShowBtn(a.ref); return { ok: !!mcRefEl(a.ref) };
+    case 'choisir_calque': { const l = needL(a.calque); doc.active = doc.layers.indexOf(l); renderLayers(); req(); return { ok: true, actif: l.name }; }
+    case 'creer_calque': { if (xf) commitTransform(); pushDoc(); const l = newLayer(String(a.nom || 'Calque ' + (doc.layers.length + 1)), doc.w, doc.h); insertLayer(l); renderLayers(); req(true); return { ok: true, calque: l.name }; }
+    case 'regler_calque': {
+      const l = needL(a.calque); pushDoc();
+      if (a.nom) l.name = String(a.nom);
+      if (a.opacite !== undefined) l.opacity = clamp(+a.opacite, 0, 100) / 100;
+      if (a.fusion) { const f = String(a.fusion).toLowerCase().trim(); l.blend = BLEND_FR[f] || (BLENDS.find(b => b[0] === f || b[1].toLowerCase() === f) || [l.blend])[0]; }
+      if (a.visible !== undefined) l.visible = !!a.visible; if (a.verrouille !== undefined) l.locked = !!a.verrouille;
+      renderLayers(); req(true); return { ok: true };
+    }
+    case 'supprimer_calque': { const l = needL(a.calque); if (doc.layers.length < 2) throw new Error('il faut garder au moins un calque'); pushDoc(); const i = doc.layers.indexOf(l); doc.layers.splice(i, 1); doc.active = clamp(doc.active >= i ? doc.active - 1 : doc.active, 0, doc.layers.length - 1); renderLayers(); req(true); return { ok: true }; }
+    case 'selection': {
+      if (xf) commitTransform(); const t = String(a.type || '').toLowerCase();
+      if (t.startsWith('tout')) selectAll(); else if (t.startsWith('auc')) setSelection(null); else if (t.startsWith('inv')) invertSel();
+      else { const x = +a.x || 0, y = +a.y || 0, w = Math.max(1, +a.largeur || 1), h = Math.max(1, +a.hauteur || 1); setSelection(shapeMask(c => t.startsWith('ell') ? c.ellipse(x + w / 2, y + h / 2, w / 2, h / 2, 0, 0, Math.PI * 2) : c.rect(Math.round(x), Math.round(y), Math.round(w), Math.round(h)))); }
+      return { ok: true, selection: sel ? sel.bbox : null };
+    }
+    case 'couleurs': { if (okHex(a.couleur2)) { color2 = okHex(a.couleur2); updateSwatches(); } if (okHex(a.couleur1)) setColor1(okHex(a.couleur1)); return { ok: true, couleur1: color1, couleur2: color2 }; }
+    case 'dessiner_forme': {
+      const l = edit(), col = okHex(a.couleur) || color1, w = +a.epaisseur > 0 ? +a.epaisseur : 6, f = String(a.forme || 'rectangle').toLowerCase();
+      clearEffect(); const c = effect.getContext('2d'); c.save(); c.strokeStyle = c.fillStyle = col; c.lineWidth = w; c.lineCap = 'round'; c.lineJoin = 'round';
+      const x = +a.x || 0, y = +a.y || 0;
+      if (f.startsWith('lig') || f.startsWith('fl')) {
+        const x2 = a.x2 !== undefined ? +a.x2 : x + (+a.largeur || 100), y2 = a.y2 !== undefined ? +a.y2 : y + (+a.hauteur || 0);
+        const len = Math.hypot(x2 - x, y2 - y) || 1, ux = (x2 - x) / len, uy = (y2 - y) / len, hl = f.startsWith('fl') ? Math.min(len * .9, w * 4) : 0;
+        c.beginPath(); c.moveTo(x, y); c.lineTo(x2 - ux * hl * .8, y2 - uy * hl * .8); c.stroke();
+        if (hl) { const hw = hl * .55; c.beginPath(); c.moveTo(x2, y2); c.lineTo(x2 - ux * hl - uy * hw, y2 - uy * hl + ux * hw); c.lineTo(x2 - ux * hl + uy * hw, y2 - uy * hl - ux * hw); c.closePath(); c.fill(); }
+      } else {
+        const ww = +a.largeur || 100, hh = +a.hauteur || 100; c.beginPath();
+        if (f.startsWith('ell')) c.ellipse(x + ww / 2, y + hh / 2, Math.abs(ww / 2), Math.abs(hh / 2), 0, 0, Math.PI * 2); else c.rect(x, y, ww, hh);
+        if (a.plein === false) c.stroke(); else c.fill();
+      }
+      c.restore(); commitEffect('source-over', a.opacite !== undefined ? clamp(+a.opacite, 0, 100) / 100 : 1); return { ok: true, calque: l.name };
+    }
+    case 'ecrire_texte': {
+      const l = edit(), keep = { font: opts.font, fSize: opts.fSize, bold: opts.bold, italic: opts.italic }, keepC = color1;
+      if (a.police) opts.font = String(a.police); if (+a.taille > 0) opts.fSize = clamp(+a.taille, 4, 5000); if (a.gras !== undefined) opts.bold = !!a.gras; if (a.italique !== undefined) opts.italic = !!a.italique;
+      const col = okHex(a.couleur); if (col) color1 = col;
+      try { if (GF_BY.has(opts.font)) await ensureFont(opts.font); drawText(l, String(a.texte || '').replace(/\\n/g, '\n'), +a.x || 0, +a.y || 0); }
+      finally { Object.assign(opts, keep); color1 = keepC; }
+      return { ok: true, calque: l.name };
+    }
+    case 'remplir_selection': { edit(); const col = okHex(a.couleur) || color1; clearEffect(); const c = effect.getContext('2d'); c.fillStyle = col; c.fillRect(0, 0, doc.w, doc.h); commitEffect('source-over', a.opacite !== undefined ? clamp(+a.opacite, 0, 100) / 100 : 1); return { ok: true }; }
+    case 'effacer_selection': { edit(); clearSelectionPixels(); return { ok: true }; }
+    case 'appliquer_filtre': { edit(); agFilter(String(a.filtre || '').trim(), a.reglages); return { ok: true }; }
+    case 'taille_image': { if (xf) commitTransform(); resizeImage(clamp(Math.round(+a.largeur), 1, 12000), clamp(Math.round(+a.hauteur), 1, 12000)); return { ok: true, taille: [doc.w, doc.h] }; }
+    case 'zone_de_travail': { if (xf) commitTransform(); const w = clamp(Math.round(+a.largeur), 1, 12000), h = clamp(Math.round(+a.hauteur), 1, 12000); changeCanvas(w, h, Math.round((w - doc.w) / 2), Math.round((h - doc.h) / 2)); return { ok: true, taille: [doc.w, doc.h] }; }
+    case 'tourner_symetrie': { if (xf) commitTransform(); const v = String(a.action); if (v.includes('horiz')) flipDoc('h'); else if (v.includes('vert')) flipDoc('v'); else rotateDoc(+v === -90 ? -90 : +v === 180 ? 180 : 90); return { ok: true, taille: [doc.w, doc.h] }; }
+    case 'recadrer': { if (xf) commitTransform(); const x = Math.round(+a.x), y = Math.round(+a.y), w = Math.max(1, Math.round(+a.largeur)), h = Math.max(1, Math.round(+a.hauteur)); changeCanvas(w, h, -x, -y); return { ok: true, taille: [doc.w, doc.h] }; }
+    case 'choisir_outil': { if (!TOOL_BY_ID[a.outil]) throw new Error('outil inconnu : ' + a.outil); setTool(a.outil); mcShowBtn('outil:' + a.outil); return { ok: true }; }
+  }
+  return { ok: false, erreur: 'fonction inconnue' };
+}
+let agAllowSession = false;
+async function agExec(call, msg) {
+  const n = call.name, a = call.args || {};
+  let desc; try { desc = agDescr(n, a); } catch (e) { desc = n; }
+  const act = { desc, state: 'wait' }; msg.acts.push(act); mcRenderLog(); mcStatus(AG_READ.includes(n) ? 'Je regarde ton image…' : 'Je retouche…');
+  if (iaCfg.perm === 'off' && !AG_READ.includes(n)) { act.state = 'no'; mcRenderLog(); return { ok: false, refuse: 'Lecture seule : explique plutôt les gestes à faire.' }; }
+  if (iaCfg.perm === 'ask' && !agAllowSession && !AG_READ.includes(n)) {
+    act.state = 'ask'; mcRenderLog(); mcHint(); const tw = Date.now();
+    const v = await new Promise(res => { act.answer = res; }); mcSt.paused += Date.now() - tw; mcSt.last = Date.now();
+    if (v === 'session') agAllowSession = true;
+    if (v === 'no') { act.state = 'no'; mcRenderLog(); return { ok: false, refuse: 'L\'utilisateur a refusé cette modification.' }; }
+  }
+  try { const r = await agRun(n, a); act.state = r.ok === false ? 'err' : 'ok'; if (r.ok === false) act.desc += ' — ' + (r.erreur || 'impossible'); mcRenderLog(); return r; }
+  catch (e) { act.state = 'err'; act.desc += ' — ' + e.message; mcRenderLog(); return { ok: false, erreur: e.message }; }
+}
+
+/* ---------- les fournisseurs : réponse au fil de l'eau + appels de fonctions ---------- */
+const iaThinkKO = {};
+function iaThink(gc) { const m = String(iaCfg.model || ''); if (iaThinkKO[m] || !/gemini|flash|pro/i.test(m)) return gc; return Object.assign({}, gc, { thinkingConfig: /gemini-[3-9]|latest/i.test(m) ? { thinkingLevel: 'low' } : { thinkingBudget: /pro/i.test(m) ? 512 : 256 } }); }
+async function iaGemFetch(body) {
+  const go = b => fetch('https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(iaCfg.model) + ':streamGenerateContent?alt=sse', { method: 'POST', signal: mcAbort ? mcAbort.signal : undefined, headers: { 'content-type': 'application/json', 'x-goog-api-key': iaCfg.key }, body: JSON.stringify(b) });
+  let res = await go(body);
+  if (res.status === 400 && body.generationConfig && body.generationConfig.thinkingConfig) { let t = ''; try { t = await res.clone().text(); } catch (e) {} if (/think/i.test(t)) { iaThinkKO[iaCfg.model] = true; const b2 = JSON.parse(JSON.stringify(body)); delete b2.generationConfig.thinkingConfig; res = await go(b2); } }
+  return res;
+}
+async function iaGemini(contents, sysTxt, tools, onDelta) {
+  if (!iaCfg.key) throw new Error('Aucune clé API : colle-la dans la bulle de MOMOtticelli.');
+  const body = { systemInstruction: { parts: [{ text: sysTxt }] }, contents, generationConfig: iaThink({ maxOutputTokens: 8192 }) };
+  if (tools && tools.length) body.tools = [{ functionDeclarations: tools }];
+  let res; try { res = await iaGemFetch(body); } catch (e) { if (e.name === 'AbortError') throw e; throw new Error('Pas de connexion au service (Internet coupé, ou réseau qui bloque l\'accès).'); }
+  if (!res.ok) { let b = null; try { b = await res.json(); } catch (e) {} throw new Error(iaErr(res.status, b)); }
+  if (!/étape/.test(mcSt.txt)) mcStatus('Je réfléchis…'); else mcSt.last = Date.now();
+  const parts = [], calls = []; let text = '';
+  const rd = res.body.getReader(), dec = new TextDecoder(); let buf = '';
+  for (;;) {
+    const { value, done } = await rd.read(); if (done) break;
+    buf += dec.decode(value, { stream: true }); let i; mcSt.last = Date.now();
+    while ((i = buf.indexOf('\n')) >= 0) {
+      const line = buf.slice(0, i).trim(); buf = buf.slice(i + 1);
+      if (!line.startsWith('data:')) continue; let j; try { j = JSON.parse(line.slice(5).trim()); } catch (e) { continue; }
+      (((((j.candidates || [])[0] || {}).content || {}).parts) || []).forEach(pt => { parts.push(pt); if (pt.functionCall) calls.push(pt.functionCall); else if (pt.text && !pt.thought) { text += pt.text; if (onDelta) onDelta(text); } });
+    }
+  }
+  if (!parts.length) throw new Error('Réponse vide du fournisseur.');
+  return { text, calls, parts };
+}
+function iaSchema(o) { if (Array.isArray(o)) return o.map(iaSchema); if (!o || typeof o !== 'object') return o; const r = {}; for (const k in o) r[k] = k === 'type' && typeof o[k] === 'string' ? o[k].toLowerCase() : iaSchema(o[k]); return r; }
+async function iaClaude(contents, sysTxt, tools, onDelta) {
+  if (!iaCfg.key) throw new Error('Aucune clé API : colle-la dans la bulle de MOMOtticelli.');
+  const messages = [];
+  contents.forEach(c => {
+    const role = c.role === 'model' ? 'assistant' : 'user', content = [];
+    (c.parts || []).forEach(p => {
+      if (p.functionCall) content.push({ type: 'tool_use', id: p.functionCall.id, name: p.functionCall.name, input: p.functionCall.args || {} });
+      else if (p.functionResponse) content.push({ type: 'tool_result', tool_use_id: p.functionResponse.id, content: JSON.stringify(p.functionResponse.response) });
+      else if (p.inlineData) content.push({ type: 'image', source: { type: 'base64', media_type: p.inlineData.mimeType, data: p.inlineData.data } });
+      else if (p.text) content.push({ type: 'text', text: p.text });
+    });
+    if (!content.length) return; const last = messages[messages.length - 1];
+    if (last && last.role === role) last.content.push(...content); else messages.push({ role, content });
+  });
+  const body = { model: iaCfg.model, max_tokens: 8000, stream: true, system: sysTxt, messages };
+  if (tools && tools.length) body.tools = tools.map(t => ({ name: t.name, description: t.description, input_schema: iaSchema(t.parameters) }));
+  let res;
+  try { res = await fetch('https://api.anthropic.com/v1/messages', { method: 'POST', signal: mcAbort ? mcAbort.signal : undefined, headers: { 'content-type': 'application/json', 'x-api-key': iaCfg.key, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' }, body: JSON.stringify(body) }); }
+  catch (e) { if (e.name === 'AbortError') throw e; throw new Error('Pas de connexion au service (Internet coupé, ou réseau qui bloque l\'accès).'); }
+  if (!res.ok) { let b = null; try { b = await res.json(); } catch (e) {} throw new Error(iaErr(res.status, b)); }
+  if (!/étape/.test(mcSt.txt)) mcStatus('Je réfléchis…'); else mcSt.last = Date.now();
+  const blocks = []; let text = '';
+  const rd = res.body.getReader(), dec = new TextDecoder(); let buf = '';
+  for (;;) {
+    const { value, done } = await rd.read(); if (done) break;
+    buf += dec.decode(value, { stream: true }); let i; mcSt.last = Date.now();
+    while ((i = buf.indexOf('\n')) >= 0) {
+      const line = buf.slice(0, i).trim(); buf = buf.slice(i + 1);
+      if (!line.startsWith('data:')) continue; let j; try { j = JSON.parse(line.slice(5).trim()); } catch (e) { continue; }
+      if (j.type === 'content_block_start') { blocks[j.index] = Object.assign({ json: '' }, j.content_block); if (j.content_block.type === 'tool_use') mcStatus('Je prépare une retouche…'); }
+      else if (j.type === 'content_block_delta') { const b = blocks[j.index]; if (!b) continue;
+        if (j.delta.type === 'text_delta') { b.text = (b.text || '') + j.delta.text; text += j.delta.text; if (onDelta) onDelta(text); }
+        else if (j.delta.type === 'input_json_delta') b.json += j.delta.partial_json; }
+      else if (j.type === 'error') throw new Error('Erreur du service : ' + ((j.error && j.error.message) || 'inconnue'));
+    }
+  }
+  const parts = [], calls = [];
+  blocks.forEach(b => { if (!b) return; if (b.type === 'text' && b.text) parts.push({ text: b.text }); else if (b.type === 'tool_use') { let args = b.input || {}; if (b.json) { try { args = JSON.parse(b.json); } catch (e) {} } const fc = { id: b.id, name: b.name, args }; parts.push({ functionCall: fc }); calls.push(fc); } });
+  if (!parts.length) throw new Error('Réponse vide du fournisseur.');
+  return { text, calls, parts };
+}
+
 /* ---------------- démarrage ---------------- */
 buildTools(); renderFavs();
 createDoc(S.newW, S.newH, S.newBg);
@@ -2714,7 +3353,7 @@ setTool(TOOL_BY_ID[localStorage.getItem('momoshop.tool')] ? localStorage.getItem
 window.addEventListener('pagehide', () => { try { localStorage.setItem('momoshop.tool', tool); } catch (e) {} });
 setColor1('#000000');
 setBackupInterval(S.backup); $('#stage').style.background = S.stageBg;
-updateUndoBtns();
+updateUndoBtns(); mcRefresh();
 if (S.backupPrompt) IDB.get('backup').then(b => { if (b) { lastBackup = b.time; updateBackupInfo(); toast(`Sauvegarde auto trouvée : « ${b.name} » (${new Date(b.time).toLocaleString('fr-FR')})`, { label: 'Restaurer', fn: restoreBackup }); } }).catch(() => {});
 </script>
 </body>
