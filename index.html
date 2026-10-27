@@ -137,7 +137,8 @@ aside.tools{width:144px;background:var(--g800);border-right:1px solid var(--g700
 #view{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
 #texthandle{position:absolute;z-index:6;width:22px;height:22px;margin:-26px 0 0 -2px;display:flex;align-items:center;justify-content:center;background:#fcd34d;color:#111;border-radius:5px;cursor:move;touch-action:none}
 #texthandle svg{width:15px;height:15px}
-#textedit{position:absolute;box-shadow:none;background:rgba(255,255,255,.04);border:1px dashed #fcd34d;outline:none;resize:none;overflow:hidden;padding:0;margin:0;white-space:pre;line-height:1.2;min-width:20px;z-index:5}
+#textedit.moving{cursor:move;user-select:none}
+#textedit{position:absolute;cursor:move;caret-color:auto;box-shadow:none;background:rgba(255,255,255,.04);border:1px dashed #fcd34d;outline:none;resize:none;overflow:hidden;padding:0;margin:0;white-space:pre;line-height:1.2;min-width:20px;z-index:5}
 #dropzone{position:absolute;inset:10px;border:3px dashed var(--amber);border-radius:12px;background:#0008;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:var(--amber);pointer-events:none;z-index:8}
 
 aside.panels{width:268px;background:var(--g800);border-left:1px solid var(--g700);display:flex;flex-direction:column;flex:none;min-height:0;z-index:10}
@@ -148,21 +149,35 @@ aside.panels{width:268px;background:var(--g800);border-left:1px solid var(--g700
 .panel.collapsed .ph .chev{transform:rotate(-90deg)}
 .pb{padding:9px 10px}
 #pn-layers{flex:1}
-#toolopts .to-name{display:flex;align-items:center;gap:8px;font-weight:700;color:#fff;margin:-1px 0 10px;font-size:13px}
-#toolopts .to-name svg{width:18px;height:18px}
+#toolopts{--tc:#60a5fa}
+#toolopts .to-name{display:flex;align-items:center;gap:9px;font-weight:800;color:#fff;margin:-2px 0 12px;font-size:14px;padding:6px 8px;border-radius:9px;background:color-mix(in srgb,var(--tc) 16%,#1f2937);border:1px solid color-mix(in srgb,var(--tc) 45%,transparent)}
+#toolopts .to-ic{display:flex;width:30px;height:30px;flex:none;border-radius:8px;align-items:center;justify-content:center;background:var(--tc);color:#111827}
+#toolopts .to-ic svg{width:19px;height:19px}
+#toolopts .to-t{flex:1;min-width:0}
+#toolopts .to-k{font:700 10.5px ui-monospace,monospace;padding:2px 6px;border-radius:5px;background:#111827;color:var(--tc);border:1px solid color-mix(in srgb,var(--tc) 50%,transparent)}
+#toolopts .otiles{display:grid;gap:6px}
+#toolopts .otile{display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 4px 6px;border-radius:9px;background:#1b2431;border:1.5px solid var(--g700);color:var(--g400);cursor:pointer;font-size:11px;line-height:1.15;text-align:center;transition:transform .12s,border-color .12s,background .12s;position:relative}
+#toolopts .otile svg{width:30px;height:30px;color:var(--g400)}
+#toolopts .otile:hover{border-color:color-mix(in srgb,var(--tc) 60%,var(--g600));color:var(--g200);transform:translateY(-1px)}
+#toolopts .otile.on{border-color:var(--tc);background:color-mix(in srgb,var(--tc) 18%,#1b2431);color:#fff;font-weight:700}
+#toolopts .otile.on svg{color:#fff}
+#toolopts .otile.tog i{position:absolute;top:4px;right:5px;font:700 9px system-ui;font-style:normal;text-transform:uppercase;padding:0 4px;border-radius:4px;background:var(--g700);color:var(--g400)}
+#toolopts .otile.tog.on i{background:var(--tc);color:#111827}
+#toolopts .otile.tog:not(.on) svg{opacity:.55}
+#toolopts .opv{display:block;width:100%;height:50px;border-radius:9px;border:1.5px solid color-mix(in srgb,var(--tc) 45%,var(--g700));background:#fff}
 #toolopts .orow{margin-bottom:9px}
 #toolopts .olab{display:flex;justify-content:space-between;align-items:center;color:var(--g400);font-size:12px;margin-bottom:3px;gap:8px}
 #toolopts .olab span:last-child{display:flex;align-items:center;gap:4px;color:var(--g500)}
-#toolopts input[type=range]{width:100%;accent-color:#3b82f6;margin:0}
+#toolopts input[type=range]{width:100%;accent-color:var(--tc);margin:0}
 #toolopts .num{width:54px;background:var(--g900);border:1px solid var(--g600);border-radius:4px;padding:2px 5px;text-align:right;color:var(--g200)}
 #toolopts select{width:100%;background:var(--g900);border:1px solid var(--g600);border-radius:4px;padding:4px 5px}
 #toolopts .seg{display:flex;border:1px solid var(--g600);border-radius:6px;overflow:hidden}
 #toolopts .seg button{flex:1;background:#222c3a;border:0;border-right:1px solid var(--g600);padding:5px 0;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--g300)}
 #toolopts .seg button:last-child{border-right:0}
-#toolopts .seg button.on{background:#3b82f6;color:#fff}
+#toolopts .seg button.on{background:var(--tc);color:#111827}
 #toolopts .seg button svg{width:17px;height:17px}
 #toolopts .ochk{display:flex;align-items:center;gap:7px;margin-bottom:8px;color:var(--g300);cursor:pointer}
-#toolopts .ochk input{accent-color:#3b82f6}
+#toolopts .ochk input{accent-color:var(--tc)}
 #toolopts .ohint{color:var(--g500);font-size:11.5px;line-height:1.45;margin-top:2px}
 #toolopts .obtn{display:block;width:100%;background:var(--g700);border:1px solid var(--g600);border-radius:5px;padding:5px 10px;cursor:pointer;margin-bottom:6px;text-align:center}
 #toolopts .obtn:hover{background:var(--g600)}
@@ -288,6 +303,36 @@ footer select{background:var(--g900);border:1px solid var(--g600);border-radius:
 .btn.primary{background:var(--brand);border-color:var(--brand2);color:#fff}
 .btn.primary:hover{background:var(--brand2)}
 .presets{display:flex;flex-wrap:wrap;gap:5px}
+.nf{display:flex;flex-direction:column;gap:12px;min-width:min(640px,86vw)}
+.nf-l{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--g500);margin-bottom:6px;font-weight:700}
+.nf-fmts{display:grid;grid-template-columns:repeat(auto-fill,minmax(98px,1fr));gap:7px}
+.nf-fmts button,.nf-seg button{background:#1b2431;border:1.5px solid var(--g700);border-radius:10px;color:var(--g400);cursor:pointer;transition:transform .12s,border-color .12s,background .12s}
+.nf-fmts button{display:flex;flex-direction:column;align-items:center;gap:1px;padding:8px 4px 7px}
+.nf-fmts button svg{width:40px;height:40px;color:var(--g500);margin-bottom:2px}
+.nf-fmts button b{color:var(--g200);font-size:13px}.nf-fmts button small{font-size:10.5px;color:var(--g500);text-align:center;line-height:1.2}
+.nf-fmts button:hover,.nf-seg button:hover:not(:disabled){border-color:#fb923c;transform:translateY(-1px)}
+.nf-fmts button.on,.nf-seg button.on{border-color:#f87171;background:color-mix(in srgb,#b91c1c 22%,#1b2431);color:#fff}
+.nf-fmts button.on svg{color:#f87171}.nf-fmts button.on b{color:#fff}
+.nf-row{display:flex;gap:14px;align-items:flex-end;flex-wrap:wrap}
+.nf-seg{display:flex;gap:6px;flex-wrap:wrap}
+.nf-seg button{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6px 12px;min-height:44px;font-size:12px;gap:1px}
+.nf-seg button svg{width:20px;height:20px}
+.nf-seg button small{font-size:10px;color:var(--g500)}.nf-seg button.on small{color:#fecaca}
+.nf-seg button:disabled{opacity:.35;cursor:default}
+.nf-res button{flex:1;min-width:110px}
+#nf-ori button{flex-direction:row;gap:6px}
+.nf-bg button{flex-direction:row;gap:7px;min-height:36px}
+.nf-bg i{width:16px;height:16px;border-radius:4px;border:1px solid var(--g500);display:inline-block}
+.nf-bg i.tr{background:repeating-conic-gradient(#cbd5e1 0 25%,#fff 0 50%) 0 0/8px 8px}
+.nf-free{font-size:12px;color:var(--g500);padding:12px 0}
+.nf-dims label,.nf-name{display:flex;flex-direction:column;gap:4px;font-size:11px;color:var(--g500);text-transform:uppercase;letter-spacing:.06em;font-weight:700;position:relative}
+.nf-dims input{width:110px;font-size:15px!important;padding:6px 30px 6px 9px!important}
+.nf-dims label span{position:absolute;right:9px;bottom:9px;text-transform:none;color:var(--g500);font-weight:400}
+.nf-swap{background:var(--g700);border:1px solid var(--g600);border-radius:7px;height:34px;width:34px;cursor:pointer;color:var(--g200);font-size:16px}
+.nf-swap:hover{background:var(--g600)}
+.nf-mp{flex:1;text-align:right;color:var(--g400);font-size:12.5px;padding-bottom:9px}.nf-mp b{color:#fff;font-size:15px}
+.nf-name{flex:1}.nf-name input{width:100%;font-size:14px!important;text-transform:none}
+.nf-ask{display:flex;gap:8px;align-items:center;font-size:12.5px;color:var(--g400);cursor:pointer}.nf-ask input{accent-color:var(--brand2)}
 .presets button{font-size:12px}
 .anchor{display:grid;grid-template-columns:repeat(3,26px);gap:3px}
 .anchor button{width:26px;height:26px;background:var(--g700);border:1px solid var(--g600);border-radius:3px;cursor:pointer}
@@ -417,8 +462,8 @@ footer select{background:var(--g900);border:1px solid var(--g600);border-radius:
   background:repeating-conic-gradient(from 0deg,rgba(255,246,200,.95) 0deg 5deg,transparent 5deg 30deg);
   -webkit-mask:radial-gradient(circle,#000 0%,#000 25%,transparent 70%);mask:radial-gradient(circle,#000 0%,#000 25%,transparent 70%);animation:ms-rays 5.9s linear both}
 #ms-splash .ms-ready{position:absolute;left:55.2%;top:53.9%;width:12%;aspect-ratio:1;margin:-6% 0 0 -6%;border-radius:50%;background:#ff4d4d;opacity:0;animation:ms-ready 5.9s linear both}
-@keyframes ms-m1{0%{opacity:0;transform:translate(218px,-188px) scale(.3)}12%{opacity:1;transform:translate(218px,-188px) scale(.42)}52%{transform:translate(218px,-188px) scale(.42);animation-timing-function:cubic-bezier(.6,0,.3,1)}88%{transform:translateY(12px) scale(1.02);animation-timing-function:ease-out}100%{opacity:1;transform:none}}
-@keyframes ms-m2{0%,8%{opacity:0;transform:translate(218px,188px) scale(.3)}22%{opacity:1;transform:translate(218px,188px) scale(.42)}52%{transform:translate(218px,188px) scale(.42);animation-timing-function:cubic-bezier(.6,0,.3,1)}88%{transform:translateY(-12px) scale(1.02);animation-timing-function:ease-out}100%{opacity:1;transform:none}}
+@keyframes ms-m1{0%{opacity:0;transform:translate(-347.5px,189px) scale(.3)}12%{opacity:1;transform:translate(-347.5px,189px) scale(.42)}50%{transform:translate(-347.5px,189px) scale(.42);animation-timing-function:cubic-bezier(.55,0,.3,1)}70%{transform:translate(0px,189px) scale(.42);animation-timing-function:cubic-bezier(.5,0,.3,1)}90%{transform:translate(0px,8px) scale(1.02);animation-timing-function:ease-out}100%{opacity:1;transform:none}}
+@keyframes ms-m2{0%,8%{opacity:0;transform:translate(406.5px,-189px) scale(.3)}22%{opacity:1;transform:translate(406.5px,-189px) scale(.42)}50%{transform:translate(406.5px,-189px) scale(.42);animation-timing-function:cubic-bezier(.55,0,.3,1)}70%{transform:translate(0px,-189px) scale(.42);animation-timing-function:cubic-bezier(.5,0,.3,1)}90%{transform:translate(0px,-8px) scale(1.02);animation-timing-function:ease-out}100%{opacity:1;transform:none}}
 @keyframes ms-o{0%{opacity:0;transform:scale(.5)}22%{opacity:1;transform:scale(1)}58%{opacity:1;transform:scale(1);animation-timing-function:cubic-bezier(.6,-.4,.7,.4)}85%,100%{opacity:0;transform:scale(0)}}
 @keyframes ms-up{0%{opacity:0;transform:translateY(55%)}60%{opacity:1}100%{opacity:1;transform:none}}
 @keyframes ms-cam-in{0%{opacity:0;transform:translateY(-60%) rotate(-14deg) scale(.7)}70%{opacity:1}100%{opacity:1;transform:none}}
@@ -462,8 +507,8 @@ footer select{background:var(--g900);border:1px solid var(--g600);border-radius:
         <path class="ms-m1" d="M7 8L424 587L838 8V835H700V438L424 825L145 438V835H7Z"/>
         <path class="ms-m2" d="M7 385L424 964L838 385V1213H700V815L424 1202L145 815V1213H7Z"/>
       </g>
-      <circle class="ms-o1" cx="640" cy="610" r="145" fill="none" stroke="#808080" stroke-width="58"/>
-      <circle class="ms-o2" cx="640" cy="1364" r="145" fill="none" stroke="#808080" stroke-width="58"/>
+      <circle class="ms-o1" cx="451.5" cy="610" r="145" fill="none" stroke="#808080" stroke-width="58"/>
+      <circle class="ms-o2" cx="1205.5" cy="610" r="145" fill="none" stroke="#808080" stroke-width="58"/>
     </svg>
     <div class="ms-cam"><img alt="" src="data:image/png;base64,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"><div class="ms-ready"></div><div class="ms-burst"><div class="ms-rays"></div><div class="ms-glow"></div></div></div>
   </div>
@@ -769,7 +814,7 @@ const saveOpts = () => { try { localStorage.setItem('momoshop.opts', JSON.string
 
 /* ---------------- paramètres de l'application ---------------- */
 const S_DEF = { splash: true, gridZoom: 12, checker: 'light', stageBg: '#2a2f38', wheel: 'zoom', history: 40,
-  newW: 1920, newH: 1080, newBg: '#ffffff', quality: 90, showGrid: false, showRulers: false, gridSize: 50, gridColor: '#3b82f6', backup: 5, confirmClose: true, backupPrompt: true };
+  newW: 1920, newH: 1080, newBg: '#ffffff', quality: 90, showGrid: false, showRulers: false, gridSize: 50, gridColor: '#3b82f6', backup: 5, confirmClose: true, backupPrompt: true, askFormat: true };
 let S = Object.assign({}, S_DEF);
 try { Object.assign(S, JSON.parse(localStorage.getItem('momoshop.settings') || '{}')); } catch (e) {}
 const saveSettings = () => { try { localStorage.setItem('momoshop.settings', JSON.stringify(S)); } catch (e) {} };
@@ -1365,6 +1410,15 @@ function startText(p) {
     const mv = ev => { textEdit.x = st.ox + (ev.clientX - st.sx) / cam.z; textEdit.y = st.oy + (ev.clientY - st.sy) / cam.z; styleTextEdit(); };
     const up = () => { hd.removeEventListener('pointermove', mv); hd.removeEventListener('pointerup', up); ta.focus(); };
     hd.addEventListener('pointermove', mv); hd.addEventListener('pointerup', up); });
+  // glisser directement sur le texte en édition le déplace (un simple clic place le curseur)
+  ta.addEventListener('pointerdown', e => {
+    if (e.button !== 0) return; const st = { sx: e.clientX, sy: e.clientY, ox: textEdit.x, oy: textEdit.y, on: false };
+    const mv = ev => { const dx = ev.clientX - st.sx, dy = ev.clientY - st.sy;
+      if (!st.on && Math.hypot(dx, dy) > 4) { st.on = true; ta.setPointerCapture(ev.pointerId); ta.classList.add('moving'); }
+      if (st.on) { ev.preventDefault(); const pos = ta.selectionEnd; ta.setSelectionRange(pos, pos); textEdit.x = st.ox + dx / cam.z; textEdit.y = st.oy + dy / cam.z; styleTextEdit(); } };
+    const up = () => { ta.removeEventListener('pointermove', mv); ta.removeEventListener('pointerup', up); ta.removeEventListener('pointercancel', up); ta.classList.remove('moving'); ta.focus(); };
+    ta.addEventListener('pointermove', mv); ta.addEventListener('pointerup', up); ta.addEventListener('pointercancel', up);
+  });
   stage.appendChild(ta); stage.appendChild(hd); textEdit = { ta, hd, x: p.x, y: p.y };
   styleTextEdit(); ta.focus(); setTimeout(() => ta.focus(), 0);
   ta.addEventListener('input', sizeTextEdit);
@@ -1487,10 +1541,10 @@ function commitTransform() {
   if (!xf) return; const out = renderXf(true), l = xf.l;
   pushPx(l); const c = l.canvas.getContext('2d'); c.clearRect(0, 0, l.canvas.width, l.canvas.height); c.drawImage(out, 0, 0);
   const m = mkCanvas(doc.w, doc.h), mc = m.getContext('2d'); drawFloating(mc, 0, 0, true); mc.globalCompositeOperation = 'source-in'; mc.fillStyle = '#fff'; mc.fillRect(0, 0, doc.w, doc.h);
-  xf = null; override = null; setSelection(m); afterPixelEdit(l); renderOptbar(); updateXfButtons();
+  const wasShape = xf.shape, prevSel = xf.oldSel; xf = null; override = null; if (wasShape) { sel = null; setSelection(prevSel ? prevSel.mask : null); } else setSelection(m); afterPixelEdit(l); renderOptbar(); updateXfButtons();
 }
 function cancelTransform() { if (!xf) return; sel = xf.oldSel; xf = null; override = null; req(true); renderOptbar(); updateXfButtons(); }
-function updateXfButtons() { $$('[data-xf]').forEach(b => b.classList.toggle('active', !!xf && (b.dataset.xf === 'distort' ? xf.mode === 'distort' : b.dataset.xf === 'mirror' ? xf.copy && xf.mode !== 'distort' : xf.mode === 'affine' && !xf.copy))); }
+function updateXfButtons() { $$('[data-xf]').forEach(b => b.classList.toggle('active', !!xf && !xf.shape && (b.dataset.xf === 'distort' ? xf.mode === 'distort' : b.dataset.xf === 'mirror' ? xf.copy && xf.mode !== 'distort' : xf.mode === 'affine' && !xf.copy))); }
 function xfHandles() { // poignées en coordonnées écran
   const S = p => ({ x: cam.x + p.x * cam.z, y: cam.y + p.y * cam.z });
   if (xf.mode === 'distort') return xf.quad.map((p, i) => ({ id: 'q' + i, ...S(p) }));
@@ -1511,6 +1565,7 @@ function xfPointerDown(e, p) {
   else if (h && h.id[0] === 'q') drag = { kind: 'xf', op: 'corner', i: +h.id[1], st };
   else if (h) drag = { kind: 'xf', op: 'scale', hx: h.hx, hy: h.hy, st };
   else if (xfInside(p)) drag = { kind: 'xf', op: 'move', p0: p, st };
+  else if (xf.shape) { commitTransform(); return SHAPE_TOOLS.includes(tool) ? 'pass' : undefined; }   // forme : validée, et le clic peut démarrer une nouvelle forme
   else { commitTransform(); setSelection(null); }   // clic à l'extérieur : l'objet reste où il est, la sélection se ferme
 }
 function xfPointerMove(e, p) {
@@ -1553,7 +1608,7 @@ function xfSpec() {
   const deg = ((xf.ang * 180 / Math.PI) % 360 + 540) % 360 - 180;
   const info = xf.mode === 'distort' ? 'Glisser un <b>coin</b> pour déformer (perspective), glisser à l\'intérieur pour déplacer.'
     : `Taille : <b style="color:var(--g200)">${Math.round(xf.w)} × ${Math.round(xf.h)} px</b> · Angle : <b style="color:var(--g200)">${deg.toFixed(1)}°</b><br>Coins et bords = étirer librement (<b>Maj</b> : garder les proportions) · poignée ronde = rotation (Maj : pas de 15°) · glisser à l\'intérieur = déplacer · <b>clic à l\'extérieur = valider</b>.`;
-  return [{ type: 'hint', text: (xf.paste ? '<b style="color:#f59e0b">Collé dans le calque actif</b> : place, étire ou tourne-le puis Entrée (ou double-clic). Échap annule le collage.<br>' : xf.copy ? '<b style="color:#f59e0b">Copie</b> : l\'original reste en place.<br>' : '') + info },
+  return [{ type: 'hint', text: (xf.shape ? '<b style="color:var(--tc)">Forme encore modifiable</b> : glisse-la pour la déplacer, tire les poignées pour l\'étirer, la poignée ronde du haut pour la tourner, ou passe en déformation. <b>Entrée</b>, double-clic ou clic à côté pour la poser ; <b>Échap</b> l\'efface.<br>' : xf.paste ? '<b style="color:#f59e0b">Collé dans le calque actif</b> : place, étire ou tourne-le puis Entrée (ou double-clic). Échap annule le collage.<br>' : xf.copy ? '<b style="color:#f59e0b">Copie</b> : l\'original reste en place.<br>' : '') + info },
     { type: 'btn', label: '↺ 90°', row: 1, fn: () => xfRotate(-90) }, { type: 'btn', label: '↻ 90°', row: 1, fn: () => xfRotate(90) }, { type: 'btn', label: '180°', row: 1, fn: () => xfRotate(180) },
     { type: 'sp' },
     { type: 'btn', label: 'Miroir ⇆', row: 1, fn: () => xfFlip('h') }, { type: 'btn', label: 'Miroir ⇅', row: 1, fn: () => xfFlip('v') },
@@ -1568,6 +1623,16 @@ function startFloat(img, x, y) {
   xf = { l, fl, base: cloneCanvas(l.canvas), mode: 'affine', copy: true, paste: true, oldSel: sel, cx: x + w / 2, cy: y + h / 2, w, h, ang: 0, fx: 1, fy: 1, quad: null };
   sel = null; renderXf(); renderOptbar(); updateXfButtons(); return true;
 }
+// une forme tracée reste un objet flottant : déplacer, étirer, tourner, déformer, puis Entrée / clic à côté pour l'aplatir
+function floatShape(a, alpha) {
+  override = null; if (!editable()) { req(true); return; }
+  const ef = maskedEffect(effect), W = doc.w, H = doc.h;
+  const d = ef.getContext('2d').getImageData(0, 0, W, H).data; let x0 = W, y0 = H, x1 = -1, y1 = -1;
+  for (let y = 0; y < H; y++) { const row = y * W * 4; for (let x = 0; x < W; x++) if (d[row + x * 4 + 3]) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; } }
+  if (x1 < 0) { req(true); return; }
+  const w = x1 - x0 + 1, h = y1 - y0 + 1, fl = mkCanvas(w, h), c = fl.getContext('2d'); c.globalAlpha = alpha; c.drawImage(ef, -x0, -y0);
+  const keep = sel; if (!startFloat(fl, x0, y0)) return; xf.shape = tool; xf.paste = false; xf.oldSel = keep; renderOptbar();
+}
 function cancelTransient() { cancelTransform(); cropRect = null; if (drag && drag.kind !== 'pan') drag = null; if (override && !filterPreviewActive) override = null; }
 
 /* ---------------- interactions souris ---------------- */
@@ -1579,7 +1644,7 @@ view.addEventListener('pointerdown', e => {
   if (e.button === 1 || spaceDown || tool === 'hand') { e.preventDefault(); drag = { kind: 'pan', sx: e.clientX, sy: e.clientY, cx: cam.x, cy: cam.y }; updateCursor(); return; }
   if (textEdit) { e.preventDefault(); drag = { kind: 'textmove', sx: e.clientX, sy: e.clientY, ox: textEdit.x, oy: textEdit.y }; return; }
   if (e.button !== 0) return;
-  if (xf) { xfPointerDown(e, p); return; }
+  if (xf && xfPointerDown(e, p) !== 'pass') return;
   // Alt avec un outil de peinture = pipette temporaire
   if (e.altKey && ['brush', 'pencil', 'bucket', 'gradient', 'rect', 'ellipse', 'line', 'arrow', 'polygon', 'text'].includes(tool)) { pickAt(p, false); return; }
   switch (tool) {
@@ -1676,7 +1741,7 @@ view.addEventListener('pointerup', e => {
     case 'move': if (!d.moved) { undoStack.pop(); updateUndoBtns(); } else markDirty(); break;
     case 'paint': commitEffect(d.op, d.alpha); break;
     case 'gradient': if (Math.hypot(d.b.x - d.a.x, d.b.y - d.a.y) < 1) { override = null; break; } commitEffect('source-over', opts.gOpacity / 100); break;
-    case 'shape': if (override) commitEffect('source-over', shapeAlpha()); break;
+    case 'shape': if (override) floatShape(d.a, shapeAlpha()); break;
     case 'smudge': override = null; smCarry = null; commitLayerResult(d.l, d.copy); break;
     case 'xf': renderOptbar(); break;
     case 'textmove': if (textEdit) setTimeout(() => textEdit && textEdit.ta.focus(), 0); break;
@@ -1766,6 +1831,7 @@ function updateSwatches() {
   $('#sw1').style.background = color1; $('#sw2').style.background = color2;
   $('#cprev').style.background = color1; if (document.activeElement !== $('#hex')) $('#hex').value = color1;
   const { r, g, b } = hexToRgb(color1); $('#rgbtxt').textContent = `${r} ${g} ${b}`;
+  clearTimeout(updateSwatches.t); updateSwatches.t = setTimeout(() => { if (tool === 'gradient' && !xf) renderOptbar(); else { const pv = document.querySelector('#toolopts .opv'); if (pv) drawToolPreview(pv); } }, 40);
 }
 function drawPicker() {
   const c = svC.getContext('2d'), W = svC.width, H = svC.height;
@@ -1823,9 +1889,9 @@ function cropToSelection() {
 function toggleView(k) { S[k] = !S[k]; saveSettings(); updateToggles(); req(); toast((k === 'showGrid' ? 'Grille ' : 'Règles ') + (S[k] ? 'affichées' : 'masquées') + '.'); }
 function updateToggles() { $$('[data-toggle]').forEach(b => b.classList.toggle('active', !!S[b.dataset.toggle])); }
 function setTool(id) {
-  closeFontPicker(); if (xf) commitTransform();
+  closeFontPicker(); if (xf && !['move', 'hand', 'zoom', 'zoomout'].includes(id)) commitTransform();
   if (id === 'crop' && sel && doc) { cropToSelection(); return; }
-  if (textEdit) commitText();
+  if (textEdit && !['text', 'move', 'hand', 'zoom', 'zoomout'].includes(id)) commitText();   // le texte reste en édition (déplaçable) avec Texte, Déplacer, Main et Loupe
   if (id !== 'crop') cropRect = null;
   else if (!cropRect && doc) cropRect = { x: 0, y: 0, w: doc.w, h: doc.h };
   tool = id; $$('.tool-btn').forEach(b => b.classList.toggle('active', b.dataset.tool === id));
@@ -1841,51 +1907,105 @@ const fromSlider = (o, t) => { if (!o.log) return +t; const v = o.min * Math.pow
 function seg(key, items) { return { type: 'seg', key, items }; }
 function selectOpt(label, key, items) { return { type: 'select', label, key, items }; }
 function check(label, key) { return { type: 'check', label, key }; }
+function tiles(label, key, items) { return { type: 'tiles', label, key, items }; }
+function toggles(items) { return { type: 'toggles', items }; }
+const TI = (inner, vb = 32) => `<svg viewBox="0 0 ${vb} ${vb}" fill="none" stroke-linecap="round" stroke-linejoin="round">${inner}</svg>`;
+function shapeD() {
+  if (tool === 'ellipse') return '<ellipse cx="16" cy="16" rx="12" ry="10"/>';
+  if (tool === 'polygon') { const n = clamp(opts.pgSides | 0, 3, 12), k = opts.pgStar ? n * 2 : n, pts = [];
+    for (let i = 0; i < k; i++) { const a = -Math.PI / 2 + i * Math.PI * 2 / k, r = opts.pgStar && i % 2 ? 12 * opts.pgInner / 100 : 12.5; pts.push((16 + r * Math.cos(a)).toFixed(1) + ',' + (16.5 + r * Math.sin(a)).toFixed(1)); }
+    return `<polygon points="${pts.join(' ')}"/>`; }
+  return '<rect x="5" y="7" width="22" height="18" rx="2"/>';
+}
+function styleTiles() {
+  const d = shapeD();
+  return tiles('Style', 'shMode', [
+    ['fill', TI(`<g fill="var(--tc)" stroke="none">${d}</g>`), 'Plein'],
+    ['stroke', TI(`<g stroke="var(--tc)" stroke-width="3">${d}</g>`), 'Contour'],
+    ['both', TI(`<g fill="var(--tc)" stroke="#fff" stroke-width="3">${d}</g>`), 'Plein + contour']]);
+}
+const SAMPLE_T = [['layer', TI('<path d="M4 18 16 24l12-6-12-6z" fill="var(--tc)" stroke="var(--tc)" stroke-width="2"/>'), 'Calque actif'], ['merged', TI('<g stroke-width="2"><path d="M4 12 16 18l12-6-12-6z" stroke="currentColor"/><path d="M4 17l12 6 12-6" stroke="currentColor"/><path d="M4 22l12 6 12-6" stroke="var(--tc)"/></g>'), 'Tous les calques']];
+const TG = {
+  contig: TI('<path d="M5 16c3-6 6-6 9 0s6 6 9 0" stroke="var(--tc)" stroke-width="3"/><circle cx="5" cy="16" r="2.5" fill="currentColor"/><circle cx="27" cy="16" r="2.5" fill="currentColor"/>'),
+  aligned: TI('<circle cx="9" cy="10" r="4" stroke="currentColor" stroke-width="2"/><circle cx="23" cy="22" r="4" stroke="var(--tc)" stroke-width="2.5"/><path d="M12 13l8 6" stroke="currentColor" stroke-width="2" stroke-dasharray="2 3"/>'),
+  bold: TI('<text x="16" y="23" text-anchor="middle" font-size="20" font-weight="900" font-family="Georgia,serif" fill="currentColor">B</text>'),
+  italic: TI('<text x="16" y="23" text-anchor="middle" font-size="21" font-style="italic" font-family="Georgia,serif" fill="currentColor">I</text>')
+};
 const SAMPLE = [['layer', 'Calque actif'], ['merged', 'Toutes les couches']];
 const SELMODE = { ...seg('selMode', [['new', IC.modeNew, 'Nouvelle sélection'], ['add', IC.modeAdd, 'Ajouter (Maj)'], ['sub', IC.modeSub, 'Soustraire (Alt)'], ['int', IC.modeInt, 'Intersection (Maj+Alt)']]), label: 'Mode de sélection' };
 const SELMODE_OLD = seg('selMode', [['new', IC.modeNew, 'Nouvelle sélection'], ['add', IC.modeAdd, 'Ajouter (Maj)'], ['sub', IC.modeSub, 'Soustraire (Alt)'], ['int', IC.modeInt, 'Intersection (Maj+Alt)']]);
+const SHHINT = () => ({ fill: 'Rempli avec la <b>couleur 1</b>', stroke: 'Contour en <b>couleur 1</b>', both: 'Rempli en <b>couleur 1</b>, contour en <b>couleur 2</b>' })[opts.shMode] || '';
+// aperçu vivant de l'outil (trait, forme, dégradé, texte) avec les réglages et les couleurs en cours
+function drawToolPreview(cv) {
+  const W = cv.width = cv.clientWidth * 2 || 460, H = cv.height = 100, c = cv.getContext('2d'); c.clearRect(0, 0, W, H);
+  const chk = () => { for (let y = 0; y < H; y += 10) for (let x = 0; x < W; x += 10) { c.fillStyle = ((x + y) / 10) % 2 ? '#e5e7eb' : '#fff'; c.fillRect(x, y, 10, 10); } };
+  const wave = (n = 60) => { const P = []; for (let i = 0; i <= n; i++) { const t = i / n; P.push([30 + t * (W - 60), H / 2 + Math.sin(t * Math.PI * 2) * H * .22]); } return P; };
+  const stroke = (size, hard, op, col, pix) => {
+    const r = Math.max(1, Math.min(size, 70) / 2) * (pix ? 1 : 1); c.save(); c.globalAlpha = op;
+    const g = mkCanvas(W, H), x = g.getContext('2d');
+    wave(90).forEach(([px, py]) => { if (pix) { x.fillStyle = col; x.fillRect(Math.round(px - r), Math.round(py - r), Math.ceil(r * 2), Math.ceil(r * 2)); return; }
+      const rg = x.createRadialGradient(px, py, 0, px, py, r); rg.addColorStop(0, col); rg.addColorStop(Math.min(.99, Math.max(.01, hard)), col); rg.addColorStop(1, col + '00'); x.fillStyle = rg; x.beginPath(); x.arc(px, py, r, 0, Math.PI * 2); x.fill(); });
+    c.drawImage(g, 0, 0); c.restore();
+  };
+  const hex = h => h.length === 7 ? h : '#000000';
+  switch (tool) {
+    case 'brush': chk(); stroke(opts.size, opts.hard / 100, opts.opacity / 100, hex(color1)); break;
+    case 'pencil': chk(); stroke(Math.max(2, opts.pSize * 2), 1, opts.pOpacity / 100, hex(color1), true); break;
+    case 'clone': chk(); stroke(opts.cSize, opts.cHard / 100, opts.cOpacity / 100, '#fb7185'); break;
+    case 'eraser': { c.fillStyle = hex(color1); c.fillRect(0, 0, W, H); const g = mkCanvas(W, H), x = g.getContext('2d'); for (let y = 0; y < H; y += 10) for (let xx = 0; xx < W; xx += 10) { x.fillStyle = ((xx + y) / 10) % 2 ? '#e5e7eb' : '#fff'; x.fillRect(xx, y, 10, 10); }
+      const m = mkCanvas(W, H), mc = m.getContext('2d'), r = Math.max(1, Math.min(opts.eSize, 70) / 2); wave(90).forEach(([px, py]) => { const rg = mc.createRadialGradient(px, py, 0, px, py, r); rg.addColorStop(0, '#000'); rg.addColorStop(Math.min(.99, Math.max(.01, opts.eHard / 100)), '#000'); rg.addColorStop(1, '#0000'); mc.fillStyle = rg; mc.beginPath(); mc.arc(px, py, r, 0, Math.PI * 2); mc.fill(); });
+      x.globalCompositeOperation = 'destination-in'; x.drawImage(m, 0, 0); c.globalAlpha = opts.eOpacity / 100; c.drawImage(g, 0, 0); break; }
+    case 'smudge': case 'blur': { const gr = c.createLinearGradient(0, 0, W, 0); gr.addColorStop(0, hex(color1)); gr.addColorStop(.5, '#f59e0b'); gr.addColorStop(1, hex(color2)); c.fillStyle = gr; c.fillRect(0, 0, W, H);
+      c.save(); c.beginPath(); wave(40).forEach(([px, py], i) => i ? c.lineTo(px, py) : c.moveTo(px, py)); c.lineWidth = Math.min(70, tool === 'blur' ? opts.blSize : opts.smSize); c.lineCap = 'round'; c.strokeStyle = 'rgba(255,255,255,.35)'; c.stroke(); c.restore(); break; }
+    case 'gradient': { chk(); const g = opts.gType === 'radial' ? c.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, W / 2) : c.createLinearGradient(0, 0, W, 0); g.addColorStop(0, hex(color1)); g.addColorStop(1, opts.gMode === 'tr' ? hex(color1) + '00' : hex(color2)); c.globalAlpha = opts.gOpacity / 100; c.fillStyle = g; c.fillRect(0, 0, W, H); break; }
+    case 'line': chk(); c.strokeStyle = hex(color1); c.lineWidth = Math.min(60, opts.lnWidth); c.lineCap = 'round'; c.globalAlpha = opts.lnOpacity / 100; c.beginPath(); c.moveTo(30, H - 25); c.lineTo(W - 30, 25); c.stroke(); break;
+    case 'text': { c.fillStyle = '#fff'; c.fillRect(0, 0, W, H); c.fillStyle = hex(color1); let fs = 56; c.font = `${opts.italic ? 'italic ' : ''}${opts.bold ? 'bold ' : ''}${fs}px "${opts.font}", sans-serif`; c.textBaseline = 'middle'; c.fillText('Abc Momo', 20, H / 2, W - 40); break; }
+  }
+}
 function optSpec() {
   switch (tool) {
-    case 'brush': return [range('Taille', 'size', 1, 500, 'px'), range('Dureté', 'hard', 0, 100, '%'), range('Opacité', 'opacity', 1, 100, '%'), { type: 'hint', text: '[ ] taille · Alt+clic = pipette · stylet : pression prise en compte' }];
-    case 'pencil': return [range('Taille', 'pSize', 1, 100, 'px'), range('Opacité', 'pOpacity', 1, 100, '%'), { type: 'hint', text: 'Pixels nets, sans lissage' }];
-    case 'eraser': return [range('Taille', 'eSize', 1, 500, 'px'), range('Dureté', 'eHard', 0, 100, '%'), range('Opacité', 'eOpacity', 1, 100, '%')];
-    case 'bucket': return [range('Tolérance', 'tol', 0, 255), check('Contigu', 'contig'), selectOpt('Échantillon', 'sample', SAMPLE), range('Opacité', 'bOpacity', 1, 100, '%')];
-    case 'gradient': return [selectOpt('Type', 'gType', [['linear', 'Linéaire'], ['radial', 'Radial']]), selectOpt('Couleurs', 'gMode', [['c2', 'Couleur 1 → couleur 2'], ['tr', 'Couleur 1 → transparent']]), range('Opacité', 'gOpacity', 1, 100, '%'), { type: 'hint', text: 'Glisser pour tracer' }];
+    case 'brush': return [{ type: 'preview' }, range('Taille', 'size', 1, 500, 'px'), range('Dureté', 'hard', 0, 100, '%'), range('Opacité', 'opacity', 1, 100, '%'), { type: 'hint', text: '[ ] taille · Alt+clic = pipette · stylet : pression prise en compte' }];
+    case 'pencil': return [{ type: 'preview' }, range('Taille', 'pSize', 1, 100, 'px'), range('Opacité', 'pOpacity', 1, 100, '%'), { type: 'hint', text: 'Pixels nets, sans lissage' }];
+    case 'eraser': return [{ type: 'preview' }, range('Taille', 'eSize', 1, 500, 'px'), range('Dureté', 'eHard', 0, 100, '%'), range('Opacité', 'eOpacity', 1, 100, '%')];
+    case 'bucket': return [range('Tolérance', 'tol', 0, 255), range('Opacité', 'bOpacity', 1, 100, '%'), tiles('Lire les couleurs sur', 'sample', SAMPLE_T), toggles([['contig', TG.contig, 'Zone contiguë']])];
+    case 'gradient': return [{ type: 'preview' }, tiles('Type', 'gType', [['linear', TI('<defs><linearGradient id="tg-l"><stop offset="0" stop-color="var(--tc)"/><stop offset="1" stop-color="var(--tc)" stop-opacity="0"/></linearGradient></defs><rect x="4" y="7" width="24" height="18" rx="3" fill="url(#tg-l)" stroke="currentColor" stroke-width="1.5"/>'), 'Linéaire'], ['radial', TI('<defs><radialGradient id="tg-r"><stop offset="0" stop-color="var(--tc)"/><stop offset="1" stop-color="var(--tc)" stop-opacity="0"/></radialGradient></defs><circle cx="16" cy="16" r="12" fill="url(#tg-r)" stroke="currentColor" stroke-width="1.5"/>'), 'Radial']]),
+      tiles('Couleurs', 'gMode', [['c2', TI(`<defs><linearGradient id="tg-c"><stop offset="0" stop-color="${color1}"/><stop offset="1" stop-color="${color2}"/></linearGradient></defs><rect x="3" y="9" width="26" height="14" rx="3" fill="url(#tg-c)" stroke="#9ca3af" stroke-width="1.2"/>`), '1 → 2'], ['tr', TI(`<defs><linearGradient id="tg-t"><stop offset="0" stop-color="${color1}"/><stop offset="1" stop-color="${color1}" stop-opacity="0"/></linearGradient><pattern id="tg-k" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="#fff"/><path d="M0 0h3v3H0zM3 3h3v3H3z" fill="#cbd5e1"/></pattern></defs><rect x="3" y="9" width="26" height="14" rx="3" fill="url(#tg-k)"/><rect x="3" y="9" width="26" height="14" rx="3" fill="url(#tg-t)" stroke="#9ca3af" stroke-width="1.2"/>`), '1 → transparent']]), range('Opacité', 'gOpacity', 1, 100, '%'), { type: 'hint', text: 'Glisser pour tracer' }];
     case 'picker': return [{ type: 'hint', text: 'Prend la couleur sur le <b>calque actif</b>.<br>Clic : couleur 1 · Alt+clic : couleur 2' }];
     case 'marquee': case 'ellsel': return [SELMODE, { type: 'hint', text: 'Maj = carré / cercle · clic simple = désélectionner · Ctrl+D' }];
     case 'lasso': return [SELMODE, { type: 'hint', text: 'Glisser pour entourer la zone' }];
-    case 'wand': return [SELMODE, range('Tolérance', 'wTol', 0, 255), check('Contigu', 'wContig'), selectOpt('Échantillon', 'wSample', SAMPLE)];
+    case 'wand': return [SELMODE, range('Tolérance', 'wTol', 0, 255), tiles('Lire les couleurs sur', 'wSample', SAMPLE_T), toggles([['wContig', TG.contig, 'Zone contiguë']])];
     case 'crop': {
       const r = cropRect ? normRect(cropRect) : null;
       return [{ type: 'hint', text: r ? `Cadre : <b style="color:var(--g200)">${Math.round(r.w)} × ${Math.round(r.h)} px</b>` : 'Aucun cadre' },
         { type: 'btn', label: 'Valider (Entrée)', cls: 'ok', row: 1, fn: applyCrop }, { type: 'btn', label: 'Annuler', row: 1, fn: () => { cropRect = null; renderOptbar(); req(); } },
         { type: 'btn', label: 'Cadre = toute l\'image', fn: () => { cropRect = { x: 0, y: 0, w: doc.w, h: doc.h }; renderOptbar(); req(); } },
         { type: 'hint', text: 'Tirer les poignées ou les bords pour ajuster, glisser dans le cadre pour le déplacer, tracer à l\'extérieur pour un nouveau cadre. Le cadre peut dépasser l\'image pour l\'agrandir.' }]; }
-    case 'text': return [{ type: 'font' }, range('Taille', 'fSize', 6, 400, 'px'), { type: 'presets', key: 'fSize', items: [12, 24, 48, 72, 120, 200, 400, 800] }, check('Gras', 'bold'), check('Italique', 'italic'),
-      textEdit ? { type: 'btn', label: 'Valider le texte (Entrée)', cls: 'ok', fn: commitText } : { type: 'hint', text: 'Clic sur l\'image pour écrire — le texte est écrit dans le calque actif' }, ...(textEdit ? [{ type: 'hint', text: '<b>En édition</b> jusqu\'à <b>Entrée</b> (Maj+Entrée = nouvelle ligne, Échap = annuler). Glisser sur l\'image ou la poignée jaune ✥ pour déplacer le texte.' }] : []), { type: 'hint', text: 'Taille sans limite : tape la valeur dans le champ (jusqu\'à 5000 px), molette sur le champ, ou Ctrl+molette pendant la saisie.' }];
-    case 'rect': case 'ellipse': return [selectOpt('Style', 'shMode', [['fill', 'Plein (couleur 1)'], ['stroke', 'Contour (couleur 1)'], ['both', 'Plein 1 + contour 2']]), range('Contour', 'shWidth', 1, 100, 'px'), range('Opacité', 'shOpacity', 1, 100, '%'), { type: 'hint', text: 'Maj = carré / cercle' }];
-    case 'line': return [range('Épaisseur', 'lnWidth', 1, 200, 'px'), range('Opacité', 'lnOpacity', 1, 100, '%'), { type: 'hint', text: 'Maj = angles de 45°' }];
-    case 'arrow': return [range('Épaisseur', 'arWidth', 1, 100, 'px'), range('Pointe (× épaisseur)', 'arHead', 2, 10), check('Double flèche', 'arDouble'), range('Opacité', 'arOpacity', 1, 100, '%'), { type: 'hint', text: 'Couleur 1 · glisser de la queue vers la pointe · Maj = angles de 45°' }];
-    case 'polygon': return [range('Nombre de côtés', 'pgSides', 3, 24), check('Étoile', 'pgStar'), ...(opts.pgStar ? [range('Creux de l\'étoile', 'pgInner', 10, 95, '%')] : []), selectOpt('Style', 'shMode', [['fill', 'Plein (couleur 1)'], ['stroke', 'Contour (couleur 1)'], ['both', 'Plein 1 + contour 2']]), range('Contour', 'shWidth', 1, 100, 'px'), range('Opacité', 'shOpacity', 1, 100, '%'), { type: 'hint', text: 'Glisser du centre vers un sommet · Maj = rotation par pas de 15°' }];
-    case 'smudge': return [range('Taille', 'smSize', 2, 300, 'px'), range('Dureté', 'smHard', 0, 100, '%'), range('Force', 'smStrength', 1, 100, '%'), { type: 'hint', text: 'Glisser pour étaler les couleurs du calque actif, comme avec le doigt sur de la peinture fraîche.' }];
-    case 'blur': return [selectOpt('Effet', 'blMode', [['blur', 'Flou'], ['sharpen', 'Netteté']]), range('Taille', 'blSize', 1, 500, 'px'), range('Dureté', 'blHard', 0, 100, '%'), range(opts.blMode === 'blur' ? 'Rayon du flou' : 'Intensité', 'blRadius', 1, 20), range('Force', 'blStrength', 1, 100, '%'), { type: 'hint', text: 'Peindre sur les zones à adoucir (ou à rendre plus nettes). Un seul passage par trait : repasser pour accentuer.' }];
+    case 'text': return [{ type: 'font' }, { type: 'preview' }, range('Taille', 'fSize', 6, 400, 'px'), { type: 'presets', key: 'fSize', items: [12, 24, 48, 72, 120, 200, 400, 800] }, toggles([['bold', TG.bold, 'Gras'], ['italic', TG.italic, 'Italique']]),
+      textEdit ? { type: 'btn', label: 'Valider le texte (Entrée)', cls: 'ok', fn: commitText } : { type: 'hint', text: 'Clic sur l\'image pour écrire — le texte est écrit dans le calque actif' }, ...(textEdit ? [{ type: 'hint', text: '<b>En édition</b> jusqu\'à <b>Entrée</b> (Maj+Entrée = nouvelle ligne, Échap = annuler). <b>Glisser le texte</b> (ou la poignée jaune ✥, ou ailleurs sur l\'image) pour le déplacer ; il reste modifiable avec les outils Déplacer, Main et Loupe.' }] : []), { type: 'hint', text: 'Taille sans limite : tape la valeur dans le champ (jusqu\'à 5000 px), molette sur le champ, ou Ctrl+molette pendant la saisie.' }];
+    case 'rect': case 'ellipse': return [styleTiles(), { type: 'hint', text: SHHINT() }, ...(opts.shMode !== 'fill' ? [range('Contour', 'shWidth', 1, 100, 'px')] : []), range('Opacité', 'shOpacity', 1, 100, '%'), { type: 'hint', text: 'Maj = carré / cercle' }];
+    case 'line': return [{ type: 'preview' }, range('Épaisseur', 'lnWidth', 1, 200, 'px'), range('Opacité', 'lnOpacity', 1, 100, '%'), { type: 'hint', text: 'Maj = angles de 45°' }];
+    case 'arrow': return [tiles('Pointes', 'arDouble', [[false, TI('<path d="M5 16h20M19 10l6 6-6 6" stroke="var(--tc)" stroke-width="3"/>'), 'Simple'], [true, TI('<path d="M7 16h18M19 10l6 6-6 6M13 10l-6 6 6 6" stroke="var(--tc)" stroke-width="3"/>'), 'Double']]), range('Épaisseur', 'arWidth', 1, 100, 'px'), range('Pointe (× épaisseur)', 'arHead', 2, 10), range('Opacité', 'arOpacity', 1, 100, '%'), { type: 'hint', text: 'Couleur 1 · glisser de la queue vers la pointe · Maj = angles de 45°' }];
+    case 'polygon': return [tiles('Forme', 'pgStar', [[false, TI('<polygon points="16,4 27,11 27,22 16,28 5,22 5,11" fill="var(--tc)"/>'), 'Polygone'], [true, TI('<polygon points="16,3 19.5,11.5 28.5,12 21.5,18 24,27 16,22 8,27 10.5,18 3.5,12 12.5,11.5" fill="var(--tc)"/>'), 'Étoile']]), range(opts.pgStar ? 'Nombre de branches' : 'Nombre de côtés', 'pgSides', 3, 24), ...(opts.pgStar ? [range('Creux de l\'étoile', 'pgInner', 10, 95, '%')] : []), styleTiles(), { type: 'hint', text: SHHINT() }, ...(opts.shMode !== 'fill' ? [range('Contour', 'shWidth', 1, 100, 'px')] : []), range('Opacité', 'shOpacity', 1, 100, '%'), { type: 'hint', text: 'Glisser du centre vers un sommet · Maj = rotation par pas de 15°' }];
+    case 'smudge': return [{ type: 'preview' }, range('Taille', 'smSize', 2, 300, 'px'), range('Dureté', 'smHard', 0, 100, '%'), range('Force', 'smStrength', 1, 100, '%'), { type: 'hint', text: 'Glisser pour étaler les couleurs du calque actif, comme avec le doigt sur de la peinture fraîche.' }];
+    case 'blur': return [tiles('Effet', 'blMode', [['blur', TI('<circle cx="16" cy="16" r="9" fill="var(--tc)" opacity=".35"/><circle cx="16" cy="16" r="6" fill="var(--tc)" opacity=".5"/><circle cx="16" cy="16" r="3.5" fill="var(--tc)"/>'), 'Flou'], ['sharpen', TI('<path d="M16 4 27 26H5z" fill="var(--tc)" stroke="#fff" stroke-width="1.5"/>'), 'Netteté']]), { type: 'preview' }, range('Taille', 'blSize', 1, 500, 'px'), range('Dureté', 'blHard', 0, 100, '%'), range(opts.blMode === 'blur' ? 'Rayon du flou' : 'Intensité', 'blRadius', 1, 20), range('Force', 'blStrength', 1, 100, '%'), { type: 'hint', text: 'Peindre sur les zones à adoucir (ou à rendre plus nettes). Un seul passage par trait : repasser pour accentuer.' }];
     case 'measure': {
       if (!measure) return [{ type: 'hint', text: 'Glisser d\'un point à un autre pour mesurer la distance et l\'angle · Maj = angles de 45°.<br><b>Redresser</b> : trace une ligne le long d\'un horizon ou d\'un mur penché, puis clique sur Redresser.' }];
       const m = measureInfo();
       return [{ type: 'hint', text: `<div style="font-size:13px;color:var(--g200);line-height:1.7">Longueur : <b>${m.len.toFixed(1)} px</b><br>ΔX : ${m.dx.toFixed(1)} · ΔY : ${(-m.dy).toFixed(1)}<br>Angle : <b>${m.ang.toFixed(2)}°</b></div>` },
         { type: 'btn', label: 'Redresser l\'image sur cette ligne', cls: 'ok', fn: straighten }, { type: 'btn', label: 'Effacer la mesure', fn: () => { measure = null; renderOptbar(); req(); } }]; }
     case 'move': return [{ type: 'hint', text: 'Glisser pour déplacer le calque actif' }, { type: 'btn', label: 'Recentrer le calque', fn: () => { const l = L(); pushDoc(); l.x = Math.round((doc.w - l.canvas.width) / 2); l.y = Math.round((doc.h - l.canvas.height) / 2); req(true); } }, { type: 'btn', label: 'Remettre à 0,0', fn: () => { const l = L(); pushDoc(); l.x = 0; l.y = 0; req(true); } }];
-    case 'clone': return [range('Taille', 'cSize', 1, 500, 'px'), range('Dureté', 'cHard', 0, 100, '%'), range('Opacité', 'cOpacity', 1, 100, '%'), check('Aligné', 'cAligned'), selectOpt('Échantillon', 'cSample', SAMPLE),
+    case 'clone': return [{ type: 'preview' }, range('Taille', 'cSize', 1, 500, 'px'), range('Dureté', 'cHard', 0, 100, '%'), range('Opacité', 'cOpacity', 1, 100, '%'), tiles('Copier depuis', 'cSample', SAMPLE_T), toggles([['cAligned', TG.aligned, 'Aligné']]),
       { type: 'hint', text: (cloneSrc ? `Source : <b style="color:var(--g200)">${Math.round(cloneSrc.x)}, ${Math.round(cloneSrc.y)}</b><br>` : '<b style="color:#fb7185">Pas encore de source.</b><br>') + '<b>Ctrl+clic</b> : choisir la source · <b>clic / glisser</b> : cloner. <b>Aligné</b> : le décalage source → pinceau est gardé d\'un trait à l\'autre ; décoché, chaque trait repart de la source.' }];
     case 'hand': case 'zoom': case 'zoomout': return [{ type: 'btn', label: 'Ajuster à l\'écran (Ctrl+0)', fn: fit }, { type: 'btn', label: '100 % (Ctrl+1)', fn: () => setZoom(1) }, { type: 'hint', text: tool === 'zoom' ? 'Clic : zoom avant · Alt+clic : zoom arrière' : tool === 'zoomout' ? 'Clic : zoom arrière · Alt+clic : zoom avant' : 'Glisser · aussi Espace ou clic-molette avec n\'importe quel outil' }];
   }
   return [];
 }
 function renderOptbar() {
-  const T = xf ? { c: xf.mode === 'distort' ? '#c084fc' : xf.copy ? '#f59e0b' : '#60a5fa', name: xf.mode === 'distort' ? 'Déformer la sélection' : xf.paste ? 'Collage (flottant)' : xf.copy ? 'Copie miroir' : 'Rotation / échelle', key: 'Entrée' } : TOOL_BY_ID[tool], box = $('#toolopts');
-  const ico = xf ? IC[xf.mode === 'distort' ? 'xdistort' : xf.copy ? 'xmirror' : 'xrotate'] : IC[tool];
-  box.innerHTML = `<div class="to-name"><span style="color:${T.c};display:flex">${ico}</span>${T.name} <span style="color:var(--g500);font-weight:400;font-size:11px">(${T.key})</span></div>`;
-  const live = () => { saveOpts(); req(); if (textEdit) styleTextEdit(); };
+  const T = xf && xf.shape ? { c: TOOL_BY_ID[xf.shape].c, name: TOOL_BY_ID[xf.shape].name + (xf.mode === 'distort' ? ' · déformation' : ' · modifiable'), key: 'Entrée' } : xf ? { c: xf.mode === 'distort' ? '#c084fc' : xf.copy ? '#f59e0b' : '#60a5fa', name: xf.mode === 'distort' ? 'Déformer la sélection' : xf.paste ? 'Collage (flottant)' : xf.copy ? 'Copie miroir' : 'Rotation / échelle', key: 'Entrée' } : TOOL_BY_ID[tool], box = $('#toolopts');
+  const ico = xf && xf.shape ? IC[xf.shape] : xf ? IC[xf.mode === 'distort' ? 'xdistort' : xf.copy ? 'xmirror' : 'xrotate'] : IC[tool];
+  box.style.setProperty('--tc', T.c);
+  box.innerHTML = `<div class="to-name"><span class="to-ic">${ico}</span><span class="to-t">${T.name}</span><kbd class="to-k">${T.key}</kbd></div>`;
+  const live = () => { saveOpts(); req(); if (textEdit) styleTextEdit(); const pv = box.querySelector('.opv'); if (pv) drawToolPreview(pv); };
   let btnRow = null;
   (xf ? xfSpec() : optSpec()).forEach(o => {
     if (o.type === 'sp') { btnRow = null; return; }
@@ -1911,6 +2031,20 @@ function renderOptbar() {
     } else if (o.type === 'check') {
       el = document.createElement('label'); el.className = 'ochk'; el.innerHTML = `<input type="checkbox"${opts[o.key] ? ' checked' : ''}> ${o.label}`;
       el.querySelector('input').onchange = ev => { opts[o.key] = ev.target.checked; live(); ev.target.blur(); if (o.key === 'pgStar') renderOptbar(); };
+    } else if (o.type === 'tiles') {
+      el = document.createElement('div'); el.className = 'orow';
+      el.innerHTML = `<div class="olab"><span>${o.label}</span></div>`;
+      const g = document.createElement('div'); g.className = 'otiles'; g.style.gridTemplateColumns = `repeat(${o.items.length},1fr)`;
+      o.items.forEach(([v, ic, t]) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'otile' + (opts[o.key] === v ? ' on' : ''); b.title = t; b.innerHTML = ic + `<span>${t}</span>`;
+        b.onclick = () => { opts[o.key] = v; saveOpts(); renderOptbar(); req(); }; g.appendChild(b); });
+      el.appendChild(g);
+    } else if (o.type === 'toggles') {
+      el = document.createElement('div'); el.className = 'orow otiles'; el.style.gridTemplateColumns = `repeat(${Math.max(2, o.items.length)},1fr)`;
+      o.items.forEach(([k, ic, t]) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'otile tog' + (opts[k] ? ' on' : ''); b.title = t + ' : ' + (opts[k] ? 'activé' : 'désactivé'); b.innerHTML = ic + `<span>${t}</span><i>${opts[k] ? 'oui' : 'non'}</i>`;
+        b.onclick = () => { opts[k] = !opts[k]; saveOpts(); renderOptbar(); if (textEdit) styleTextEdit(); req(); }; el.appendChild(b); });
+    } else if (o.type === 'preview') {
+      el = document.createElement('div'); el.className = 'orow'; el.innerHTML = '<canvas class="opv"></canvas>';
+      requestAnimationFrame(() => { const cv = el.querySelector('.opv'); if (cv && cv.isConnected) { if (tool === 'text') ensureFont(opts.font).then(() => cv.isConnected && drawToolPreview(cv)); drawToolPreview(cv); } });
     } else if (o.type === 'hint') { el = document.createElement('div'); el.className = 'ohint'; el.innerHTML = o.text; }
     else if (o.type === 'font') {
       el = document.createElement('div'); el.className = 'orow';
@@ -1921,7 +2055,7 @@ function renderOptbar() {
     }
     else if (o.type === 'presets') {
       el = document.createElement('div'); el.className = 'orow'; el.style.cssText = 'display:flex;flex-wrap:wrap;gap:4px;margin-top:-4px';
-      o.items.forEach(v => { const b = document.createElement('button'); b.className = 'mini'; b.textContent = v; b.style.cssText = 'padding:2px 6px;font-size:11px' + (opts[o.key] === v ? ';background:#3b82f6;border-color:#60a5fa;color:#fff' : '');
+      o.items.forEach(v => { const b = document.createElement('button'); b.className = 'mini'; b.textContent = v; b.style.cssText = 'padding:2px 6px;font-size:11px' + (opts[o.key] === v ? ';background:var(--tc);border-color:var(--tc);color:#111;font-weight:700' : '');
         b.onclick = () => { opts[o.key] = v; saveOpts(); renderOptbar(); if (textEdit) styleTextEdit(); }; el.appendChild(b); });
     }
     else if (o.type === 'btn') {
@@ -2488,18 +2622,63 @@ function toast(msg, btn) {
   clearTimeout(toastTimer); toastTimer = setTimeout(() => t.remove(), btn ? 12000 : 2800);
 }
 
-async function newDocDialog() {
-  if (dirty && !await confirmDlg('Le document actuel n\'est pas enregistré. Continuer ?')) return;
-  const P = [['HD 1920×1080', 1920, 1080], ['4K 3840×2160', 3840, 2160], ['Carré 1080', 1080, 1080], ['A4 150 dpi', 1240, 1754], ['A4 300 dpi', 2480, 3508], ['A3 300 dpi', 3508, 4961], ['Icône 512', 512, 512], ['800×600', 800, 600]];
-  const body = `<div class="row"><span>Nom</span><input type="text" id="n-name" value="Sans titre"></div>
-    <div class="presets">${P.map((p, i) => `<button class="mini" data-p="${i}">${p[0]}</button>`).join('')}</div>
-    <div class="row"><span>Largeur (px)</span><input type="number" id="n-w" value="${S.newW}" min="1" max="12000"></div>
-    <div class="row"><span>Hauteur (px)</span><input type="number" id="n-h" value="${S.newH}" min="1" max="12000"></div>
-    <div class="row"><span>Fond</span><select id="n-bg"><option value="#ffffff"${S.newBg === '#ffffff' ? ' selected' : ''}>Blanc</option><option value="transparent"${S.newBg === 'transparent' ? ' selected' : ''}>Transparent</option><option value="c1">Couleur 1</option><option value="c2">Couleur 2</option></select></div>`;
-  const r = await dialog({ title: 'Nouveau document', body, ok: 'Créer', onOpen: o => o.querySelectorAll('[data-p]').forEach(b => b.onclick = () => { const p = P[b.dataset.p]; o.querySelector('#n-w').value = p[1]; o.querySelector('#n-h').value = p[2]; }) });
+const NF_FMT = [
+  { id: 'sq', name: 'Carré', sub: '1:1 · réseaux', r: [1, 1] }, { id: '169', name: '16:9', sub: 'écran, vidéo', r: [16, 9] },
+  { id: '43', name: '4:3', sub: 'photo compacte', r: [4, 3] }, { id: '32', name: '3:2', sub: 'photo reflex', r: [3, 2] },
+  { id: '21', name: '2:1', sub: 'panorama, bannière', r: [2, 1] }, { id: 'a4', name: 'A4', sub: '21 × 29,7 cm', mm: [297, 210] },
+  { id: 'a3', name: 'A3', sub: '29,7 × 42 cm', mm: [420, 297] }, { id: 'p15', name: 'Photo 10×15', sub: 'tirage', mm: [150, 100] },
+  { id: 'free', name: 'Libre', sub: 'tes dimensions' }];
+const NF_RES_PX = [[720, 'Léger', 'web, mail'], [1080, 'HD', 'Full HD'], [1440, '2K', 'grand écran'], [2160, '4K', 'très détaillé']];
+const NF_RES_DPI = [[96, '96 dpi', 'écran'], [150, '150 dpi', 'brouillon'], [300, '300 dpi', 'impression']];
+async function newDocDialog(startup) {
+  if (!startup && dirty && !await confirmDlg('Le document actuel n\'est pas enregistré. Continuer ?')) return;
+  const st = { fmt: S.newFmt || '169', ori: S.newOri || 'land', res: S.newRes || 1080, dpi: S.newDpi || 300, w: S.newW, h: S.newH, bg: S.newBg === 'transparent' ? 'transparent' : S.newBg === '#ffffff' ? '#ffffff' : 'c1' };
+  if (!NF_FMT.some(f => f.id === st.fmt)) st.fmt = '169';
+  const F = () => NF_FMT.find(f => f.id === st.fmt);
+  const icon = f => { if (!f.r && !f.mm) return '<svg viewBox="0 0 40 40"><rect x="7" y="9" width="26" height="22" rx="2" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="4 3"/><path d="M14 20h12M20 14v12" stroke="currentColor" stroke-width="2"/></svg>';
+    let [a, b] = f.r || f.mm; if (st.ori === 'port' && a !== b) [a, b] = [b, a]; const k = 30 / Math.max(a, b), w = a * k, h = b * k;
+    return `<svg viewBox="0 0 40 40"><rect x="${(40 - w) / 2}" y="${(40 - h) / 2}" width="${w}" height="${h}" rx="2" fill="currentColor" fill-opacity=".22" stroke="currentColor" stroke-width="2"/>${f.mm ? `<path d="M${(40 - w) / 2 + 5} ${(40 - h) / 2 + 7}h${w - 10}M${(40 - w) / 2 + 5} ${(40 - h) / 2 + 12}h${w * .6}" stroke="currentColor" stroke-width="1.6" opacity=".7"/>` : ''}</svg>`; };
+  const calc = () => { const f = F(); if (f.id === 'free') return;
+    let w, h; if (f.r) { const [a, b] = f.r, sh = st.res; w = Math.round(sh * Math.max(a, b) / Math.min(a, b)); h = sh; if (a === b) w = h = sh; }
+    else { const [a, b] = f.mm; w = Math.round(a / 25.4 * st.dpi); h = Math.round(b / 25.4 * st.dpi); }
+    if (st.ori === 'port') [w, h] = [Math.min(w, h), Math.max(w, h)]; else [w, h] = [Math.max(w, h), Math.min(w, h)];
+    st.w = w; st.h = h; };
+  const body = `<div class="nf">
+    <div class="nf-l">Format</div><div class="nf-fmts" id="nf-fmts"></div>
+    <div class="nf-row"><div><div class="nf-l">Orientation</div><div class="nf-seg" id="nf-ori"><button type="button" data-o="land"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/></svg>Paysage</button><button type="button" data-o="port"><svg viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2"/></svg>Portrait</button></div></div></div>
+    <div><div class="nf-l" id="nf-resl">Résolution</div><div class="nf-seg nf-res" id="nf-res"></div></div>
+    <div class="nf-row nf-dims"><label>Largeur<input type="number" id="n-w" min="1" max="12000"><span>px</span></label><button type="button" class="nf-swap" id="nf-swap" title="Inverser largeur et hauteur">⇄</button><label>Hauteur<input type="number" id="n-h" min="1" max="12000"><span>px</span></label><div class="nf-mp" id="nf-mp"></div></div>
+    <div class="nf-row"><div style="flex:1"><div class="nf-l">Fond</div><div class="nf-seg nf-bg" id="nf-bg">
+      <button type="button" data-b="#ffffff"><i style="background:#fff"></i>Blanc</button><button type="button" data-b="transparent"><i class="tr"></i>Transparent</button><button type="button" data-b="c1"><i style="background:${color1}"></i>Couleur 1</button><button type="button" data-b="c2"><i style="background:${color2}"></i>Couleur 2</button></div></div></div>
+    <div class="nf-row"><label class="nf-name">Nom<input type="text" id="n-name" value="Sans titre"></label></div>
+    ${startup ? `<label class="nf-ask"><input type="checkbox" id="nf-ask" ${S.askFormat !== false ? 'checked' : ''}> Me proposer ce choix à chaque ouverture de MomoPIC</label>` : ''}</div>`;
+  const r = await dialog({ title: startup ? 'Bienvenue ! Quel format pour ton image ?' : 'Nouveau document', body, ok: 'Créer', cancel: startup ? 'Plus tard' : 'Annuler', alt: startup ? 'Ouvrir un fichier…' : undefined, wide: true, onOpen: o => {
+    const $o = q => o.querySelector(q), W = $o('#n-w'), H = $o('#n-h');
+    const paint = () => {
+      const f = F(); $o('#nf-fmts').innerHTML = NF_FMT.map(x => `<button type="button" data-f="${x.id}" class="${x.id === st.fmt ? 'on' : ''}">${icon(x)}<b>${x.name}</b><small>${x.sub}</small></button>`).join('');
+      $o('#nf-ori').querySelectorAll('button').forEach(b => { b.classList.toggle('on', b.dataset.o === st.ori); b.disabled = f.id === 'sq'; });
+      const paper = !!f.mm, R = paper ? NF_RES_DPI : NF_RES_PX, cur = paper ? st.dpi : st.res;
+      $o('#nf-resl').textContent = paper ? 'Résolution (points par pouce)' : 'Résolution (petit côté)';
+      $o('#nf-res').innerHTML = f.id === 'free' ? '<span class="nf-free">Tape tes dimensions ci-dessous</span>' : R.map(([v, t, d]) => `<button type="button" data-r="${v}" class="${v === cur ? 'on' : ''}" title="${d}"><b>${t}</b><small>${paper ? d : v + ' px · ' + d}</small></button>`).join('');
+      $o('#nf-bg').querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.b === st.bg));
+      W.value = st.w; H.value = st.h; const mp = st.w * st.h / 1e6;
+      $o('#nf-mp').innerHTML = `<b>${st.w} × ${st.h}</b> px · ${mp < 10 ? mp.toFixed(1).replace('.', ',') : Math.round(mp)} Mpx${f.mm ? ` · ${f.name} à ${st.dpi} dpi` : ''}`;
+    };
+    $o('#nf-fmts').onclick = e => { const b = e.target.closest('[data-f]'); if (!b) return; const was = F(); st.fmt = b.dataset.f; const f = F(); if (f.mm && !was.mm) st.ori = f.id === 'p15' ? 'land' : 'port'; calc(); paint(); };
+    $o('#nf-ori').onclick = e => { const b = e.target.closest('[data-o]'); if (!b || b.disabled) return; st.ori = b.dataset.o; if (st.fmt === 'free') { if ((st.ori === 'port') !== (st.h > st.w)) [st.w, st.h] = [st.h, st.w]; } else calc(); paint(); };
+    $o('#nf-res').onclick = e => { const b = e.target.closest('[data-r]'); if (!b) return; if (F().mm) st.dpi = +b.dataset.r; else st.res = +b.dataset.r; calc(); paint(); };
+    $o('#nf-bg').onclick = e => { const b = e.target.closest('[data-b]'); if (!b) return; st.bg = b.dataset.b; paint(); };
+    $o('#nf-swap').onclick = () => { [st.w, st.h] = [st.h, st.w]; st.ori = st.h > st.w ? 'port' : 'land'; if (st.fmt !== 'sq' && st.fmt !== 'free') calc(); paint(); };
+    const typed = () => { st.w = clamp(+W.value | 0, 1, 12000); st.h = clamp(+H.value | 0, 1, 12000); st.fmt = 'free'; st.ori = st.h > st.w ? 'port' : 'land'; const v = [W.value, H.value], ae = document.activeElement; paint(); W.value = v[0]; H.value = v[1]; ae && ae.focus(); };
+    W.oninput = typed; H.oninput = typed;
+    if (st.fmt !== 'free') calc(); paint();
+  } });
+  if (r === 'alt') { act('open'); return; }
   if (!r) return;
+  if (startup) S.askFormat = r.querySelector('#nf-ask').checked;
   const w = clamp(+r.querySelector('#n-w').value | 0, 1, 12000), h = clamp(+r.querySelector('#n-h').value | 0, 1, 12000);
-  let bg = r.querySelector('#n-bg').value; if (bg === 'c1') bg = color1; if (bg === 'c2') bg = color2;
+  let bg = st.bg; if (bg === 'c1') bg = color1; if (bg === 'c2') bg = color2;
+  Object.assign(S, { newFmt: st.fmt, newOri: st.ori, newRes: st.res, newDpi: st.dpi, newW: w, newH: h, newBg: st.bg === 'transparent' ? 'transparent' : st.bg === '#ffffff' ? '#ffffff' : S.newBg }); saveSettings();
   createDoc(w, h, bg, r.querySelector('#n-name').value.trim() || 'Sans titre'); saveTarget = { handle: null, fmt: 'mms' };
 }
 async function resizeDialog() {
@@ -2544,6 +2723,7 @@ async function settingsDialog() {
   </div>
   <div class="spane" data-p="a">
     ${chk('s-splash', S.splash, 'Animation du logo à l\'ouverture')}
+    ${chk('s-askfmt', S.askFormat !== false, 'Choisir le format de l\'image à l\'ouverture')}
     <div class="row"><span>Molette</span>${sel('s-wheel', [['zoom', 'Molette = zoom (Maj = défilement horizontal)'], ['scroll', 'Molette = défilement, Ctrl+molette = zoom (pavé tactile)']], S.wheel)}</div>
     <div class="row"><span>Damier (transparence)</span>${sel('s-checker', [['light', 'Clair'], ['mid', 'Moyen'], ['dark', 'Sombre']], S.checker)}</div>
     <div class="row"><span>Fond de travail</span><input type="color" id="s-stage" value="${S.stageBg}" style="width:60px;height:28px;background:none;border:0;flex:none"><button class="mini" id="s-stage-reset" type="button">Par défaut</button></div>
@@ -2580,7 +2760,7 @@ async function settingsDialog() {
   if (!r) return;
   const v = id => r.querySelector('#' + id);
   Object.assign(S, { backup: +v('s-backup').value, backupPrompt: v('s-bprompt').checked, history: +v('s-hist').value, confirmClose: v('s-close').checked,
-    splash: v('s-splash').checked, wheel: v('s-wheel').value, checker: v('s-checker').value, stageBg: v('s-stage').value, gridZoom: +v('s-grid').value, gridSize: clamp(+v('s-gsize').value || 50, 2, 2000), gridColor: v('s-gcol').value,
+    splash: v('s-splash').checked, askFormat: v('s-askfmt').checked, wheel: v('s-wheel').value, checker: v('s-checker').value, stageBg: v('s-stage').value, gridZoom: +v('s-grid').value, gridSize: clamp(+v('s-gsize').value || 50, 2, 2000), gridColor: v('s-gcol').value,
     newW: clamp(+v('s-nw').value | 0, 1, 12000), newH: clamp(+v('s-nh').value | 0, 1, 12000), newBg: v('s-nbg').value, quality: +v('s-q').value });
   saveSettings(); applySettings(); toast('Paramètres enregistrés.');
 }
@@ -2612,9 +2792,12 @@ const GUIDE = [
   ['start', '🚀', 'Bien démarrer', [[null, [
     GI('MomoPIC', 'Éditeur d\'images multicalques qui tourne dans le navigateur : rien n\'est envoyé sur Internet, tout reste sur ton poste. Il s\'utilise aussi comme une application installée (bouton vert <b>Installer l\'appli</b>).'),
     GI('L\'écran', 'En haut à gauche : annuler / rétablir, puis <b>+ Nouveau</b> et les menus <b>Image</b>, <b>Calques</b>, <b>Sélection</b>, <b>Filtres</b>. À droite : installation, plein écran, la <b>disquette</b> (ouvrir, enregistrer, enregistrer sous, backup auto), l\'<b>imprimante</b> (imprimer, ou sortir l\'image en PNG / JPEG / WEBP), le <b>Guide</b> et les <b>Paramètres</b>. À gauche : la palette d\'outils en sections repliables (SÉLECTION, PEINTURE avec les formes et le texte sous un trait, VUE, COULEURS) (clic sur un titre pour replier). À droite, trois volets repliables : <b>Outil en cours</b> (réglages de l\'outil actif), <b>Couleur</b> et <b>Calques</b>. En bas : position du curseur, taille du document, sélection, zoom.'),
-    GI('Ouverture', 'Une courte animation du logo s\'affiche : M O M O écrit à la verticale, les deux O s\'effacent et les deux M se superposent pour former le grand M, le crayon sort de derrière les M, dessine le contour du P, le colorie, puis se range à sa place de I ; pendant ce temps le C, qui est un appareil photo, arrive ; une fois le crayon rangé, il vise et prend la photo au flash. Un clic, une touche ou la molette la fait disparaître tout de suite. Elle se désactive dans Paramètres → Affichage.'),
+    GI('Ouverture', 'Une courte animation du logo s\'affiche : M O M O écrit à l\'horizontale, les deux O s\'effacent, les deux M glissent l\'un sur l\'autre puis se déploient pour former le grand M, le crayon sort de derrière les M, dessine le contour du P, le colorie, puis se range à sa place de I ; pendant ce temps le C, qui est un appareil photo, arrive ; une fois le crayon rangé, il vise et prend la photo au flash. Un clic, une touche ou la molette la fait disparaître tout de suite. Elle se désactive dans Paramètres → Affichage.'),
     GI('Premier essai', `Le pinceau ${K('B')} est actif : peins sur l\'image, ${K('Ctrl+Z')} pour annuler. Crée un calque ${K('Ctrl+Maj+N')} pour travailler sans toucher au fond.`)]]]],
   ['files', '💾', 'Fichiers & formats', [
+    ['Nouveau document', [GI('Choisir le format', `À l\'ouverture de MomoPIC (et avec <b>+ Nouveau</b> ${K('Ctrl+N')}), une fenêtre propose le <b>format</b> : carré, 16:9, 4:3, 3:2, panorama 2:1, A4, A3, photo 10×15 ou libre, en <b>paysage</b> ou <b>portrait</b>.`),
+      GI('La résolution', 'Pour les formats d\'écran, elle fixe le <b>petit côté</b> : Léger 720 px, HD 1080 px, 2K 1440 px, 4K 2160 px (16:9 en HD = 1920 × 1080). Pour le papier, elle se choisit en <b>dpi</b> : 96 (écran), 150 (brouillon), 300 (impression ; A4 = 2480 × 3508 px). Les dimensions se calculent toutes seules, et restent modifiables à la main.'),
+      GI('Fond et nom', 'Blanc, transparent, couleur 1 ou couleur 2. <b>Plus tard</b> garde la feuille par défaut ; <b>Ouvrir un fichier…</b> ouvre directement un .mms ou une image. La fenêtre d\'ouverture se désactive (case à cocher, ou Paramètres → Affichage).')]],
     ['Ouvrir', [GI('Ouvrir ' + K('Ctrl+O'), 'Menu de la <b>disquette</b>. Ouvre un document <b>.mms</b> (tous ses calques) ou une image <b>PNG, JPEG, WEBP, GIF, BMP</b> (un calque « Fond »).'),
       GI('Glisser-déposer', 'Une image déposée sur la zone de travail devient un <b>nouveau calque</b> centré ; un .mms déposé est <b>ouvert</b>. Si l\'image est plus grande que la feuille, MomoPIC propose d\'<b>agrandir la feuille</b> (contenu actuel centré), de <b>réduire l\'image</b> pour qu\'elle tienne, ou de l\'importer telle quelle. Même question pour Importer comme calque et pour un collage (Ctrl+V).'),
       GI('Importer comme calque', 'Menu <b>Calque → Importer une image comme calque…</b> : l\'image est centrée, rien n\'est rogné même si elle dépasse.')]],
@@ -2659,7 +2842,8 @@ const GUIDE = [
       GI('Favoris', '<b>Ajouter</b> mémorise la couleur 1. Clic : couleur 1, Alt+clic : couleur 2, clic droit : retirer.')]]]],
   ['shapes', '🔤', 'Formes & texte', [[null, [
     GI('Texte ' + K('T'), `Clic sur l\'image, tape le texte (${K('Maj+Entrée')} = nouvelle ligne). Le texte reste <b>en édition</b> jusqu\'à ${K('Entrée')} : pendant ce temps, glisser n\'importe où sur l\'image (ou sur la poignée jaune ✥) le <b>déplace</b>, et on peut changer police, taille, gras, couleur. Taille sans plafond : champ chiffré (jusqu\'à 5000 px), tailles rapides, molette sur le champ ou Ctrl+molette pendant la saisie. ${K('Entrée')} ou le bouton Valider l\'écrit <b>dans le calque actif</b> (aucun calque n\'est créé ; crée-en un avant si tu veux le texte à part). Police, taille, gras, italique dans le volet <b>Outil en cours</b>. Le choix de police propose les polices du système et <b>toutes les Google Fonts (environ 1 900)</b> : recherche par nom, filtres Sans serif / Serif / Fantaisie / Manuscrite / Chasse fixe, aperçu de chaque nom dans sa police, et les 8 dernières utilisées en tête. Une Google Font est téléchargée la première fois qu\'on l\'utilise (connexion nécessaire), puis gardée en cache par le navigateur. Le texte est ensuite dessiné dans l\'image : le fichier .mms ou PNG n\'a plus besoin de la police. ${K('Échap')} annule.`),
-    GI('Rectangle ' + K('R') + ' et ellipse ' + K('U'), `Plein, contour, ou plein couleur 1 + contour couleur 2. ${K('Maj')} : carré / cercle.`),
+    GI('Formes modifiables', `Un rectangle, une ellipse, une ligne, une flèche ou un polygone / étoile tout juste tracé reste un <b>objet flottant</b>, comme un texte en édition : glisse-le pour le déplacer, tire les poignées pour l\'étirer (${K('Maj')} garde les proportions), la poignée ronde du haut pour le tourner, ou passe en <b>déformation</b> (4 coins). Il est posé dans le calque avec ${K('Entrée')}, un double-clic, un clic à côté (qui peut lancer la forme suivante) ou en changeant d\'outil ; ${K('Échap')} l\'efface. Les outils Déplacer, Main et Loupe le laissent modifiable.`),
+    GI('Rectangle ' + K('R') + ' et ellipse ' + K('U'), `Trois boutons de <b>style</b> dans OUTIL EN COURS : <b>Plein</b> (couleur 1), <b>Contour</b> (couleur 1) ou <b>Plein + contour</b> (remplissage couleur 1, contour couleur 2). L\'épaisseur du contour n\'apparaît que s\'il y a un contour. ${K('Maj')} : carré / cercle.`),
     GI('Ligne ' + K('Y'), `Épaisseur et opacité réglables. ${K('Maj')} : angles de 45°.`),
     GI('Flèche ' + K('A'), `Glisser de la queue vers la pointe. Épaisseur, taille de la pointe, flèche double, opacité. ${K('Maj')} : angles de 45°. Pratique pour annoter une photo de chantier.`),
     GI('Polygone / étoile ' + K('P'), `Glisser du centre vers un sommet. Nombre de côtés (3 à 24), option étoile avec son creux, plein / contour comme le rectangle. ${K('Maj')} : rotation par pas de 15°.`)]]]],
@@ -2695,7 +2879,7 @@ const GUIDE = [
     GI('Pendant qu\'il travaille', 'Une pastille bleue tourne sur son béret ; un point rouge signale une réponse qui t\'attend. Le bouton rouge carré l\'arrête. L\'épingle garde la bulle ouverte quand tu reprends le dessin.')]]]],
   ['install', '📲', 'Installation & réglages', [[null, [
     GI('Installer l\'appli', 'Depuis GitHub Pages, le bouton vert <b>Installer l\'appli</b> lance l\'installation (Chrome, Edge). Si le navigateur ne la propose pas, le bouton explique comment faire à la main (menu du navigateur, ou « Sur l\'écran d\'accueil » sur iPhone). Installée, MomoPIC s\'ouvre dans sa propre fenêtre et s\'associe aux fichiers .mms.'),
-    GI('Paramètres ⚙', 'Cinq onglets : <b>Général</b> (backup auto, nombre d\'annulations, confirmation à la fermeture), <b>Affichage</b> (animation d\'ouverture, molette, damier, fond de travail, grille de pixels), <b>Documents &amp; enregistrement</b> (taille et fond du nouveau document, qualité JPEG / WEBP), <b>MOMOtticelli</b> (fournisseur, clé, modèle, permissions), <b>Réinitialiser</b>. Tout est mémorisé sur ce poste.'),
+    GI('Paramètres ⚙', 'Cinq onglets : <b>Général</b> (backup auto, nombre d\'annulations, confirmation à la fermeture), <b>Affichage</b> (animation d\'ouverture, choix du format à l\'ouverture, molette, damier, fond de travail, grille de pixels), <b>Documents &amp; enregistrement</b> (taille et fond du nouveau document, qualité JPEG / WEBP), <b>MOMOtticelli</b> (fournisseur, clé, modèle, permissions), <b>Réinitialiser</b>. Tout est mémorisé sur ce poste.'),
     GI('Mise à jour', `Après une mise en ligne, fais ${K('Ctrl+Maj+R')} pour recharger sans le cache.`)]]]],
 ];
 function buildGuide() {
@@ -2819,7 +3003,7 @@ stage.addEventListener('drop', e => { e.preventDefault(); dzCount = 0; $('#dropz
   const fs = [...e.dataTransfer.files]; const m = fs.find(isMms); if (m) return openAny(m, null); (async () => { for (const f of fs.filter(f => f.type.startsWith('image/'))) await importAsLayer(f); })(); });
 
 /* ---------------- ouverture par association de fichiers (appli installée) ---------------- */
-if ('launchQueue' in window) launchQueue.setConsumer(async p => { if (!p.files || !p.files.length) return; const h = p.files[0], f = await h.getFile(); openAny(f, h); });
+if ('launchQueue' in window) launchQueue.setConsumer(async p => { if (!p.files || !p.files.length) return; window.__launchFile = true; const h = p.files[0], f = await h.getFile(); openAny(f, h); });
 
 window.addEventListener('beforeunload', e => { if (dirty) { doBackup(false); if (S.confirmClose) { e.preventDefault(); e.returnValue = ''; } } });
 
@@ -3354,6 +3538,11 @@ window.addEventListener('pagehide', () => { try { localStorage.setItem('momoshop
 setColor1('#000000');
 setBackupInterval(S.backup); $('#stage').style.background = S.stageBg;
 updateUndoBtns(); mcRefresh();
+// au démarrage : choix du format (après l'animation du logo), sauf si un fichier est ouvert avec l'appli
+if (S.askFormat !== false) (function ask() {
+  if (document.getElementById('ms-splash')) return setTimeout(ask, 150);
+  setTimeout(() => { if (!window.__launchFile && !dirty && !document.querySelector('.ovl')) newDocDialog(true); }, 120);
+})();
 if (S.backupPrompt) IDB.get('backup').then(b => { if (b) { lastBackup = b.time; updateBackupInfo(); toast(`Sauvegarde auto trouvée : « ${b.name} » (${new Date(b.time).toLocaleString('fr-FR')})`, { label: 'Restaurer', fn: restoreBackup }); } }).catch(() => {});
 </script>
 </body>
