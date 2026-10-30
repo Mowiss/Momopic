@@ -159,6 +159,84 @@ aside.panels{width:268px;background:var(--g800);border-left:1px solid var(--g700
 #toolopts .to-t{flex:1;min-width:0}
 #toolopts .to-k{font:700 10.5px ui-monospace,monospace;padding:2px 6px;border-radius:5px;background:#111827;color:var(--tc);border:1px solid color-mix(in srgb,var(--tc) 50%,transparent)}
 #toolopts .otiles{display:grid;gap:6px}
+#pick-loupe{position:fixed;z-index:10000;width:122px;height:122px;transform:translate(-50%,-50%);pointer-events:none;display:none;border-radius:50%;box-shadow:0 6px 22px rgba(0,0,0,.5)}
+body.picking:not(.pk-ex),body.picking:not(.pk-ex) *{cursor:none!important}
+/* ===== réglages : boutons, curseurs, cases plus vivants ===== */
+#toolopts .obtn,.nbw .obtn{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;margin-bottom:6px;padding:8px 10px;border-radius:10px;cursor:pointer;font-weight:600;font-size:12.5px;color:var(--g200);
+  background:linear-gradient(180deg,color-mix(in srgb,var(--tc) 12%,#273244),color-mix(in srgb,var(--tc) 6%,#1b2431));border:1px solid color-mix(in srgb,var(--tc) 28%,var(--g700));
+  box-shadow:0 1px 0 rgba(255,255,255,.05) inset,0 2px 6px rgba(0,0,0,.25);transition:transform .12s,box-shadow .15s,border-color .15s,background .15s}
+#toolopts .obtn svg,.nbw .obtn svg{width:15px;height:15px;color:var(--tc);flex:none}
+#toolopts .obtn:hover,.nbw .obtn:hover{transform:translateY(-1px);border-color:var(--tc);color:#fff;box-shadow:0 0 0 3px color-mix(in srgb,var(--tc) 18%,transparent),0 4px 12px rgba(0,0,0,.3);background:linear-gradient(180deg,color-mix(in srgb,var(--tc) 22%,#2b3648),color-mix(in srgb,var(--tc) 12%,#1b2431))}
+#toolopts .obtn:active,.nbw .obtn:active{transform:translateY(0) scale(.98)}
+#toolopts .obtn.on{border-color:var(--tc);color:#fff;background:linear-gradient(180deg,color-mix(in srgb,var(--tc) 34%,#273244),color-mix(in srgb,var(--tc) 20%,#1b2431))}
+#toolopts .obtn.ok{background:linear-gradient(180deg,#10b981,#059669);border-color:#34d399;color:#fff;box-shadow:0 4px 14px rgba(16,185,129,.3)}
+#toolopts .obtn.ok svg{color:#fff}#toolopts .obtn.ok:hover{box-shadow:0 0 0 3px rgba(52,211,153,.25),0 6px 16px rgba(16,185,129,.35)}
+#toolopts .obtns{gap:6px}
+#toolopts .seg{gap:3px;padding:3px;border:1px solid var(--g700);border-radius:10px;background:#111827}
+#toolopts .seg button{border:0;border-radius:7px;background:none;color:var(--g400);padding:6px 0;transition:background .15s,color .15s}
+#toolopts .seg button:hover{background:#1f2937;color:var(--g200)}
+#toolopts .seg button.on{background:linear-gradient(180deg,var(--tc),color-mix(in srgb,var(--tc) 75%,#000));color:#111827;box-shadow:0 2px 8px color-mix(in srgb,var(--tc) 40%,transparent)}
+#toolopts .otile{background:linear-gradient(180deg,#222d3d,#1a2230);border-radius:11px;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+#toolopts .otile.on{background:linear-gradient(180deg,color-mix(in srgb,var(--tc) 30%,#222d3d),color-mix(in srgb,var(--tc) 14%,#1a2230));box-shadow:0 0 0 3px color-mix(in srgb,var(--tc) 16%,transparent),0 3px 10px rgba(0,0,0,.3)}
+#toolopts .num{border-radius:7px;background:#111827;border-color:var(--g700);padding:3px 6px;font-weight:600;color:#fff}
+#toolopts .num:focus{border-color:var(--tc);outline:0;box-shadow:0 0 0 3px color-mix(in srgb,var(--tc) 20%,transparent)}
+#toolopts select,#toolopts .el-text{border-radius:8px!important}
+/* curseurs : piste remplie à la couleur de l'outil + pastille */
+#toolopts input[type=range],.dlg input[type=range],.lprops input[type=range],.nbw input[type=range]{-webkit-appearance:none;appearance:none;height:22px;background:none;cursor:pointer;--p:50%}
+#toolopts input[type=range]::-webkit-slider-runnable-track,.dlg input[type=range]::-webkit-slider-runnable-track,.lprops input[type=range]::-webkit-slider-runnable-track,.nbw input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:6px;background:linear-gradient(90deg,var(--tc,var(--brand2)) 0 var(--p),#2b3546 var(--p) 100%)}
+#toolopts input[type=range]::-moz-range-track,.dlg input[type=range]::-moz-range-track,.lprops input[type=range]::-moz-range-track,.nbw input[type=range]::-moz-range-track{height:6px;border-radius:6px;background:#2b3546}
+#toolopts input[type=range]::-moz-range-progress,.dlg input[type=range]::-moz-range-progress,.lprops input[type=range]::-moz-range-progress,.nbw input[type=range]::-moz-range-progress{height:6px;border-radius:6px;background:var(--tc,var(--brand2))}
+#toolopts input[type=range]::-webkit-slider-thumb,.dlg input[type=range]::-webkit-slider-thumb,.lprops input[type=range]::-webkit-slider-thumb,.nbw input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;margin-top:-5px;border-radius:50%;background:#fff;border:3px solid var(--tc,var(--brand2));box-shadow:0 1px 4px rgba(0,0,0,.5);transition:transform .12s}
+#toolopts input[type=range]::-moz-range-thumb,.dlg input[type=range]::-moz-range-thumb,.lprops input[type=range]::-moz-range-thumb,.nbw input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;background:#fff;border:3px solid var(--tc,var(--brand2));box-shadow:0 1px 4px rgba(0,0,0,.5)}
+#toolopts input[type=range]:hover::-webkit-slider-thumb,.dlg input[type=range]:hover::-webkit-slider-thumb,.nbw input[type=range]:hover::-webkit-slider-thumb{transform:scale(1.18)}
+/* cases à cocher → interrupteurs */
+#toolopts .ochk input[type=checkbox],.dlg label.row input[type=checkbox]{-webkit-appearance:none;appearance:none;flex:none;width:32px;height:18px;border-radius:10px;background:#2b3546;border:1px solid var(--g600);position:relative;cursor:pointer;transition:background .15s,border-color .15s;margin:0}
+#toolopts .ochk input[type=checkbox]::after,.dlg label.row input[type=checkbox]::after{content:'';position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;background:#9ca3af;transition:transform .15s,background .15s}
+#toolopts .ochk input[type=checkbox]:checked,.dlg label.row input[type=checkbox]:checked{background:var(--tc,var(--brand2));border-color:var(--tc,var(--brand2))}
+#toolopts .ochk input[type=checkbox]:checked::after,.dlg label.row input[type=checkbox]:checked::after{transform:translateX(14px);background:#fff}
+
+.xfp{display:flex;flex-direction:column;gap:10px;margin:2px 0 6px}
+.xfp-sec{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--g500);margin-bottom:-4px}
+.xfp-mode{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:#111827;border:1px solid var(--g700);border-radius:10px;padding:3px}
+.xfp-mode button{display:flex;align-items:center;justify-content:center;gap:6px;padding:7px 4px;border:0;border-radius:7px;background:none;color:var(--g400);font-size:12px;font-weight:600;cursor:pointer}
+.xfp-mode button svg{width:16px;height:16px}
+.xfp-mode button.on{background:color-mix(in srgb,var(--tc) 22%,#1b2431);color:#fff;box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--tc) 60%,transparent)}
+.xfp-mode button:not(.on):hover{color:var(--g200);background:#1b2431}
+.xfp-rot{display:flex;gap:12px;align-items:center}
+.xfp-knob{width:92px;height:92px;flex:none;cursor:grab;touch-action:none;border-radius:50%}
+.xfp-knob.drag{cursor:grabbing}
+.xfp-rc{display:flex;flex-direction:column;gap:6px;flex:1;min-width:0}
+.xfp-num{display:flex;align-items:center;background:#111827;border:1px solid var(--g700);border-radius:8px;padding:0 9px}
+.xfp-num:focus-within{border-color:var(--tc)}
+.xfp-num input{flex:1;min-width:0;background:none!important;border:0!important;outline:0;color:#fff;font:600 16px/1 var(--mono,monospace);padding:7px 0!important;width:100%}
+.xfp-num span{color:var(--g500);font-size:12px;margin-left:4px}
+.xfp-num i{font-style:normal;color:var(--g500);font-size:10.5px;font-weight:700;margin-right:6px;text-transform:uppercase}
+.xfp-chips{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.xfp-chips button{display:flex;align-items:center;justify-content:center;gap:2px;padding:5px 0;border-radius:7px;border:1px solid var(--g700);background:#1b2431;color:var(--g300,#d1d5db);font-size:11px;font-weight:600;cursor:pointer}
+.xfp-chips button svg{width:14px;height:14px}
+.xfp-chips button:hover{border-color:var(--tc);color:#fff}
+.xfp-size{display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:center}
+.xfp-lock{width:30px;height:30px;border-radius:8px;border:1px solid var(--g700);background:#1b2431;color:var(--g500);cursor:pointer;display:grid;place-items:center}
+.xfp-lock svg{width:15px;height:15px}.xfp-lock.on{color:var(--tc);border-color:color-mix(in srgb,var(--tc) 60%,transparent)}
+.xfp-pc{display:flex;gap:4px}.xfp-pc button{flex:1;padding:5px 0;border-radius:7px;border:1px solid var(--g700);background:#1b2431;color:var(--g400);font-size:11px;font-weight:600;cursor:pointer}
+.xfp-pc button:hover{border-color:var(--tc);color:#fff}.xfp-pc button.on{border-color:var(--tc);color:#fff;background:color-mix(in srgb,var(--tc) 18%,#1b2431)}
+.xfp-flip{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.xfp-flip button{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px 6px;border-radius:10px;border:1.5px solid var(--g700);background:#1b2431;color:var(--g400);font-size:11.5px;font-weight:600;cursor:pointer;transition:transform .12s}
+.xfp-flip button svg{width:34px;height:24px}
+.xfp-r3{grid-template-columns:repeat(3,1fr)}.xfp-r3 button svg{width:24px;height:24px;color:var(--tc)}
+.xfp-flip button:hover{border-color:var(--tc);transform:translateY(-1px)}
+.xfp-flip button.on{border-color:var(--tc);background:color-mix(in srgb,var(--tc) 18%,#1b2431);color:#fff}
+.xfp-acts{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.xfp-acts button{padding:9px 6px;border-radius:9px;font-weight:700;font-size:12.5px;cursor:pointer;border:1px solid var(--g700);background:#1b2431;color:var(--g200)}
+.xfp-acts button.ok{background:#059669;border-color:#10b981;color:#fff}.xfp-acts button.ok:hover{background:#10b981}.xfp-acts button:not(.ok):hover{border-color:var(--g500)}
+.xfp-acts kbd{display:block;font-size:9.5px;opacity:.7;font-weight:500;margin-top:1px}
+
+.nbw{display:flex;flex-direction:column;align-items:center;gap:6px;margin:4px 0 8px}
+.nbw canvas{width:176px;height:176px;cursor:grab;touch-action:none;border-radius:50%}
+.nbw canvas.drag{cursor:grabbing}
+.nbw .nb-info{font:11px/1.4 var(--mono,monospace);color:var(--g400);text-align:center}
+.nbw .nb-info b{color:var(--g200);font-weight:600}
+.nbw .orow{width:100%}
 #toolopts .otile{display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 4px 6px;border-radius:9px;background:#1b2431;border:1.5px solid var(--g700);color:var(--g400);cursor:pointer;font-size:11px;line-height:1.15;text-align:center;transition:transform .12s,border-color .12s,background .12s;position:relative}
 #toolopts .otile svg{width:30px;height:30px;color:var(--g400)}
 #toolopts .otile:hover{border-color:color-mix(in srgb,var(--tc) 60%,var(--g600));color:var(--g200);transform:translateY(-1px)}
@@ -317,6 +395,8 @@ footer select{background:var(--g900);border:1px solid var(--g600);border-radius:
 .nf-fmts button:hover,.nf-seg button:hover:not(:disabled){border-color:#fb923c;transform:translateY(-1px)}
 .nf-fmts button.on,.nf-seg button.on{border-color:#f87171;background:color-mix(in srgb,#b91c1c 22%,#1b2431);color:#fff}
 .nf-fmts button.on svg{color:#f87171}.nf-fmts button.on b{color:#fff}
+.nf-fmts button.nf-lib{border-style:dashed;border-color:#0d9488;background:color-mix(in srgb,#0d9488 10%,#1b2431)}.nf-fmts button.nf-lib svg{color:#2dd4bf}
+.nf-fmts button.nf-lib:hover{border-color:#2dd4bf}.nf-fmts button.nf-lib.on{border-style:solid;border-color:#2dd4bf;background:color-mix(in srgb,#0d9488 28%,#1b2431)}.nf-fmts button.nf-lib.on svg{color:#5eead4}
 .nf-row{display:flex;gap:14px;align-items:flex-end;flex-wrap:wrap}
 .nf-seg{display:flex;gap:6px;flex-wrap:wrap}
 .nf-seg button{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6px 12px;min-height:44px;font-size:12px;gap:1px}
@@ -758,7 +838,41 @@ setTimeout(done,6000);
         <button data-act="flt:hsl">Teinte / Saturation…</button>
         <button data-act="flt:blur">Flou…</button>
         <button data-act="flt:threshold">Seuil…</button>
+        <button data-act="flt:presets">Préréglages photo (looks)…</button>
         <hr>
+        <div class="sub"><button><span class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.4 1.4M17.6 17.6 19 19M5 19l1.4-1.4M17.6 6.4 19 5"/></svg>Couleur &amp; lumière</span></button>
+          <div class="smenu">
+            <button data-act="flt:autolevels">Niveaux automatiques</button>
+            <button data-act="flt:levels">Niveaux…</button>
+            <button data-act="flt:expo">Exposition…</button>
+            <button data-act="flt:tones">Ombres / Hautes lumières…</button>
+            <button data-act="flt:temp">Balance des blancs…</button>
+            <button data-act="flt:vibrance">Vibrance…</button>
+            <button data-act="flt:duotone">Bichromie…</button>
+            <button data-act="flt:posterize">Postérisation…</button>
+          </div>
+        </div>
+        <div class="sub"><button><span class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3" fill="#60a5fa" fill-opacity=".5"/><path d="M3 12h4M17 12h4M5 7h3M16 17h3M5 17h3M16 7h3"/></svg>Flous</span></button>
+          <div class="smenu">
+            <button data-act="flt:motion">Flou de mouvement…</button>
+            <button data-act="flt:zoomblur">Flou radial (zoom)…</button>
+            <button data-act="flt:tiltshift">Effet miniature…</button>
+          </div>
+        </div>
+        <div class="sub"><button><span class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="#f472b6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21a9 9 0 1 1 9-9c0 2-1.5 3-3 3h-2a2 2 0 0 0-1 3.7c.6.4.4 2.3-3 2.3z"/><circle cx="7.5" cy="10.5" r="1" fill="#f472b6"/><circle cx="12" cy="7.5" r="1" fill="#f472b6"/><circle cx="16.5" cy="10.5" r="1" fill="#f472b6"/></svg>Artistique</span></button>
+          <div class="smenu">
+            <button data-act="flt:oil">Peinture à l'huile…</button>
+            <button data-act="flt:sketch">Croquis au crayon…</button>
+            <button data-act="flt:cartoon">Bande dessinée…</button>
+            <button data-act="flt:halftone">Trame (demi-teinte)…</button>
+            <button data-act="flt:edges">Contours / néon…</button>
+            <button data-act="flt:emboss">Estampage…</button>
+            <button data-act="flt:grain">Grain / bruit…</button>
+            <button data-act="flt:chroma">Aberration chromatique…</button>
+            <button data-act="flt:glitch">Glitch…</button>
+            <button data-act="flt:solarize">Solarisation</button>
+          </div>
+        </div>
         <div class="sub"><button><span class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6c4-3 12 3 16 0M4 12c4-3 12 3 16 0M4 18c4-3 12 3 16 0"/></svg>Déformer</span></button>
           <div class="smenu">
             <button data-act="flt:bulge"><span class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5" fill="#60a5fa" fill-opacity=".35"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2"/></svg>Bosse…</span></button>
@@ -939,6 +1053,8 @@ const IC = {
   smudge: SV('<path d="M9 11V5a2 2 0 0 1 4 0v6"/><path d="M13 10.5V9a2 2 0 0 1 4 0v3"/><path d="M17 11.5a2 2 0 0 1 4 0V15a7 7 0 0 1-7 7h-1.5a7 7 0 0 1-5.6-2.8L4.3 16a2 2 0 0 1 3.2-2.4L9 15.5"/>'),
   blur: SV('<path d="M12 2.7s-6.5 6.8-6.5 11.3a6.5 6.5 0 0 0 13 0C18.5 9.5 12 2.7 12 2.7z" fill="currentColor" fill-opacity=".25"/><path d="M9 14.5a3 3 0 0 0 3 3"/>'),
   arrow: SV('<path d="M4 20 19 5"/><path d="M10 5h9v9"/>'),
+  pen: SV('<path d="M12 19 19 12l3 3-7 7z"/><path d="m18 13-1.5-7.5L2 2l3.5 14.5L13 18z"/><path d="m2 2 7.6 7.6"/><circle cx="11" cy="11" r="2"/>'),
+  path: SV('<path d="M4 18C6 8 10 6 12 12s6 4 8-6"/><rect x="2.5" y="16.5" width="3" height="3" fill="currentColor"/><rect x="18.5" y="4.5" width="3" height="3" fill="currentColor"/>'),
   polygon: SV('<path d="m12 2.5 2.9 6 6.6.8-4.9 4.6 1.3 6.5L12 17.2l-5.9 3.2 1.3-6.5-4.9-4.6 6.6-.8z" fill="currentColor" fill-opacity=".25"/>'),
   measure: SV('<path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.4 2.4 0 0 1 0-3.4l2.6-2.6a2.4 2.4 0 0 1 3.4 0z"/><path d="m14.5 12.5 2-2M11.5 9.5l2-2M8.5 6.5l2-2M17.5 15.5l2-2"/>'),
   xmirror: SV('<path d="M12 2v20" stroke-dasharray="2.5 2.5"/><path d="M9 6 3 18h6z" fill="currentColor" fill-opacity=".3"/><path d="m15 6 6 12h-6z"/>'),
@@ -968,7 +1084,7 @@ const TOOLS = [
     { id: 'bucket', name: 'Pot de peinture', key: 'G', c: '#22d3ee' }, { id: 'gradient', name: 'Dégradé', key: 'Q', c: '#2dd4bf' }, { id: 'picker', name: 'Pipette', key: 'I', c: '#a3e635' }, { id: 'clone', name: 'Tampon de duplication', key: 'S', c: '#fb7185' }, { id: 'smudge', name: 'Doigt (étaler)', key: 'F', c: '#fdba74' }, { id: 'blur', name: 'Flou / Netteté', key: 'K', c: '#67e8f9' },
     { sep: true },
     { id: 'text', name: 'Texte', key: 'T', c: '#fcd34d' }, { id: 'rect', name: 'Rectangle', key: 'R', c: '#fcd34d' }, { id: 'ellipse', name: 'Ellipse', key: 'U', c: '#fcd34d' },
-    { id: 'line', name: 'Ligne', key: 'Y', c: '#fcd34d' }, { id: 'arrow', name: 'Flèche', key: 'A', c: '#fcd34d' }, { id: 'polygon', name: 'Polygone / étoile', key: 'P', c: '#fcd34d' } ] },
+    { id: 'line', name: 'Ligne', key: 'Y', c: '#fcd34d' }, { id: 'arrow', name: 'Flèche', key: 'A', c: '#fcd34d' }, { id: 'polygon', name: 'Polygone / étoile', key: 'Maj+P', c: '#fcd34d' }, { id: 'pen', name: 'Plume (tracé de Bézier)', key: 'P', c: '#38bdf8' } ] },
   { id: 'view', group: 'Vue', items: [ { id: 'hand', name: 'Main (Espace)', key: 'H', c: '#4ade80' }, { id: 'zoom', name: 'Loupe + (zoom avant)', key: 'Z', c: '#4ade80' }, { id: 'zoomout', name: 'Loupe − (zoom arrière)', key: 'Maj+Z', c: '#4ade80' }, { id: 'measure', name: 'Mesure (distance, angle)', key: 'J', c: '#4ade80' } ] },
 ];
 const TOOL_BY_ID = {}; TOOLS.forEach(g => g.items.forEach(t => { if (!t.sep) TOOL_BY_ID[t.id] = t; }));
@@ -982,7 +1098,7 @@ const OPT_DEFAULTS = {
   size: 20, hard: 80, opacity: 100, pSize: 2, pOpacity: 100, cSize: 40, cHard: 60, cOpacity: 100, cAligned: true, cSample: 'layer', smSize: 30, smHard: 50, smStrength: 60, blSize: 40, blHard: 50, blRadius: 4, blMode: 'blur', blStrength: 100, arWidth: 6, arHead: 4, arDouble: false, arOpacity: 100, pgSides: 6, pgStar: false, pgInner: 50, eSize: 30, eHard: 80, eOpacity: 100,
   tol: 32, contig: true, sample: 'layer', bOpacity: 100, wTol: 32, wContig: true, wSample: 'merged',
   gType: 'linear', gMode: 'c2', gOpacity: 100, font: 'Arial', fSize: 48, bold: false, italic: false,
-  tAlign: 'left', tLs: 0, tLh: 1.25, shMode: 'fill', shWidth: 4, shOpacity: 100, lnWidth: 4, lnOpacity: 100, selMode: 'new', pkSample: 'merged'
+  tAlign: 'left', tLs: 0, tLh: 1.25, shMode: 'fill', shWidth: 4, penWidth: 4, shOpacity: 100, lnWidth: 4, lnOpacity: 100, selMode: 'new', pkSample: 'merged'
 };
 let opts = Object.assign({}, OPT_DEFAULTS);
 try { Object.assign(opts, JSON.parse(localStorage.getItem('momoshop.opts') || '{}')); } catch (e) {}
@@ -1014,7 +1130,7 @@ const L = () => doc.layers[doc.active];
    'px'  : pixels d'un canvas (copie avant)  — les modifs de pixels se font en place
    'doc' : structure du document (liste des calques, propriétés, taille) — les opérations
            structurelles ne modifient jamais un canvas existant : elles en créent de nouveaux. */
-const cpL = l => ({ ...l, data: l.data ? JSON.parse(JSON.stringify(l.data)) : l.data, tf: l.tf ? { ...l.tf, q: l.tf.q && l.tf.q.map(a => [...a]) } : l.tf, fx: l.fx ? JSON.parse(JSON.stringify(l.fx)) : l.fx });
+const cpL = l => ({ ...l, data: l.data ? JSON.parse(JSON.stringify(l.data)) : l.data, tf: l.tf ? { ...l.tf, q: l.tf.q && l.tf.q.map(a => [...a]), nb: l.tf.nb && { ...l.tf.nb } } : l.tf, fx: l.fx ? JSON.parse(JSON.stringify(l.fx)) : l.fx });
 function snapshotDoc() { syncPage(); return { w: doc.w, h: doc.h, page: doc.page, pages: doc.pages.map(p => ({ ...p, layers: p.layers.map(cpL) })) }; }
 function restoreDoc(s) { doc.w = s.w; doc.h = s.h; doc.pages = s.pages.map(p => ({ ...p, layers: p.layers.map(cpL) })); doc.page = clamp(s.page, 0, doc.pages.length - 1); doc.layers = doc.pages[doc.page].layers; doc.active = clamp(doc.pages[doc.page].active, 0, doc.layers.length - 1); }
 function pushHist(entry) { undoStack.push(entry); while (undoStack.length > S.history) undoStack.shift(); redoStack = []; markDirty(); updateUndoBtns(); }
@@ -1128,7 +1244,7 @@ function draw() {
   // sélection (fourmis)
   if (sel && !xf) drawAnts(c, sel.segs);
   if (xf) drawXf(c);
-  drawElSel(c);
+  drawElSel(c); drawPen(c);
   syncTextBar();
   // aperçus d'outils
   if (drag && drag.kind === 'marquee') drawShapeOutline(c, drag.shape, drag.rect);
@@ -1161,6 +1277,7 @@ function draw() {
     if (r < 5) { c.beginPath(); c.moveTo(mouse.sx - 7, mouse.sy); c.lineTo(mouse.sx + 7, mouse.sy); c.moveTo(mouse.sx, mouse.sy - 7); c.lineTo(mouse.sx, mouse.sy + 7); c.stroke(); }
     c.restore();
   }
+
 }
 const RULER = 20;
 function drawRulers(c, W, H) {
@@ -1250,7 +1367,7 @@ function setZoom(z, ax = stage.clientWidth / 2, ay = stage.clientHeight / 2) {
 function toDoc(e) {
   const r = view.getBoundingClientRect(); let sx = e.clientX - r.left, sy = e.clientY - r.top;
   if (cam.rot) { const W = r.width / 2, H = r.height / 2, q = rotV(sx - W, sy - H, -cam.rot); sx = q.x + W; sy = q.y + H; }
-  return { x: (sx - cam.x) / cam.z, y: (sy - cam.y) / cam.z, sx, sy };
+  return { x: (sx - cam.x) / cam.z, y: (sy - cam.y) / cam.z, sx, sy, rx: e.clientX - r.left, ry: e.clientY - r.top };
 }
 // point « vue » (repère de la caméra) → point écran réel dans la zone de travail
 function viewToScreen(x, y) { if (!cam.rot) return { x, y }; const W = stage.clientWidth / 2, H = stage.clientHeight / 2, q = rotV(x - W, y - H, cam.rot); return { x: q.x + W, y: q.y + H }; }
@@ -1506,13 +1623,75 @@ function wandAt(p, mode) {
 }
 function pickAt(p, secondary) {
   const x = Math.floor(p.x), y = Math.floor(p.y); if (x < 0 || y < 0 || x >= doc.w || y >= doc.h) return;
-  let d;
-  if (true) {   // la pipette lit toujours le calque actif
-   const l = L(); const lx = x - l.x, ly = y - l.y; if (lx < 0 || ly < 0 || lx >= l.canvas.width || ly >= l.canvas.height) return; d = l.canvas.getContext('2d').getImageData(lx, ly, 1, 1).data; }
-  else d = comp.getContext('2d').getImageData(x, y, 1, 1).data;
+  if (needComp) { composite(comp, true); needComp = false; }
+  const d = comp.getContext('2d', { willReadFrequently: true }).getImageData(x, y, 1, 1).data;   // tous les éléments visibles de la page
   if (d[3] === 0) return;
   const hex = rgbToHex(d[0], d[1], d[2]); if (secondary) { color2 = hex; updateSwatches(); } else setColor1(hex);
 }
+// pipette sur tout l'écran (même hors de MomoPIC) : API EyeDropper du navigateur (Chrome, Edge, Opera)
+async function screenPick(secondary) {
+  if (!window.EyeDropper) return toast('Ce navigateur ne sait pas prendre une couleur hors de la page (essaie Chrome ou Edge).');
+  try { const r = await new EyeDropper().open(), hex = r.sRGBHex.length === 7 ? r.sRGBHex : (m => m ? rgbToHex(+m[1], +m[2], +m[3]) : '#000000')(r.sRGBHex.match(/(\d+)\D+(\d+)\D+(\d+)/));
+    if (secondary) { color2 = hex; updateSwatches(); } else setColor1(hex); toast('Couleur prise : ' + hex.toUpperCase()); }
+  catch (e) { /* Échap : annulé */ }
+}
+/* ---------- pipette universelle : la page, les palettes de MomoPIC, et (bouton) tout l'écran ----------
+   tant que la pipette est active, une loupe ronde centrée sur le curseur montre les pixels visés ; un clic n'importe où
+   dans MomoPIC prend la couleur (Alt : couleur 2), sauf sur les outils, les menus et les boutons du panneau. */
+const PK = { prev: 'brush', hex: null, swallow: false, down: false };
+const PK_N = 11, PK_D = 112;
+function pkLoupe() {
+  let c = $('#pick-loupe'); if (c) return c;
+  c = document.createElement('canvas'); c.id = 'pick-loupe'; const k = Math.max(2, DPR()); c.width = c.height = Math.round((PK_D + 10) * k); c._k = k; document.body.appendChild(c); return c;
+}
+const pkExempt = t => !t || !!t.closest('.tool-btn, header, .menu, .ovl, #toolopts .obtn, #toolopts .to-name, #pick-loupe, .tbar, [data-nopick]');
+const pkHex = (r, g, b) => rgbToHex(r, g, b);
+function pkCss(col) { const m = /rgba?\(([^)]+)\)/.exec(col || ''); if (!m) return null; const v = m[1].split(/[ ,/]+/).filter(Boolean).map(parseFloat); return (v[3] ?? 1) > .05 ? v : null; }
+// échantillon autour du point (cx, cy) de l'écran : { src, sx, sy } (région PK_N × PK_N d'un canvas) ou { solid }
+function pkSample(cx, cy) {
+  const t = document.elementFromPoint(cx, cy), h = PK_N >> 1; if (!t) return null;
+  if (t === view && doc) {
+    const p = toDoc({ clientX: cx, clientY: cy }), px = Math.floor(p.x), py = Math.floor(p.y);
+    if (px >= 0 && py >= 0 && px < doc.w && py < doc.h) { if (needComp) { composite(comp, true); needComp = false; } const d = comp.getContext('2d', { willReadFrequently: true }).getImageData(px, py, 1, 1).data;
+      if (d[3]) return { src: comp, sx: px - h, sy: py - h, hex: pkHex(d[0], d[1], d[2]) }; }
+  }
+  let cv = t.tagName === 'CANVAS' ? t : null, sc = 1;
+  if (!cv && t.tagName === 'IMG' && t.complete && t.naturalWidth) { cv = t._pk || (t._pk = (() => { const c = mkCanvas(t.naturalWidth, t.naturalHeight); try { c.getContext('2d').drawImage(t, 0, 0); } catch (e) {} return c; })()); }
+  if (cv) { try { const r = t.getBoundingClientRect(), x = Math.floor((cx - r.left) * cv.width / r.width), y = Math.floor((cy - r.top) * cv.height / r.height), d = cv.getContext('2d', { willReadFrequently: true }).getImageData(x, y, 1, 1).data;
+      if (d[3]) return { src: cv, sx: x - h, sy: y - h, hex: pkHex(d[0], d[1], d[2]) }; } catch (e) {} }
+  for (let e = t; e && e !== document.documentElement; e = e.parentElement) {
+    const cs = getComputedStyle(e), v = (e instanceof SVGElement && e.tagName !== 'svg' ? pkCss(cs.fill) || pkCss(cs.stroke) : null) || pkCss(cs.backgroundColor);
+    if (v) return { solid: `rgb(${v[0]},${v[1]},${v[2]})`, hex: pkHex(v[0], v[1], v[2]) };
+  }
+  return { solid: '#111827', hex: '#111827' };
+}
+function pkDraw(cx, cy) {
+  const c = pkLoupe(), x = c.getContext('2d'), k = c._k, S = c.width, D = PK_D * k, o = 5 * k, cell = D / PK_N, h = PK_N >> 1, smp = pkSample(cx, cy);
+  c.style.left = cx + 'px'; c.style.top = cy + 'px'; c.style.display = 'block'; PK.hex = smp && smp.hex;
+  x.clearRect(0, 0, S, S); x.save(); x.beginPath(); x.arc(S / 2, S / 2, D / 2, 0, 7); x.clip();
+  x.fillStyle = '#9ca3af'; x.fillRect(o, o, D, D); x.fillStyle = '#e5e7eb'; for (let j = 0; j < PK_N; j++) for (let i = 0; i < PK_N; i++) if ((i + j) % 2) x.fillRect(o + i * cell, o + j * cell, cell, cell);
+  if (smp && smp.src) { x.imageSmoothingEnabled = false; x.drawImage(smp.src, smp.sx, smp.sy, PK_N, PK_N, o, o, D, D); } else if (smp) { x.fillStyle = smp.solid; x.fillRect(o, o, D, D); }
+  x.strokeStyle = 'rgba(0,0,0,.14)'; x.lineWidth = 1; x.beginPath(); for (let i = 1; i < PK_N; i++) { x.moveTo(o + i * cell, o); x.lineTo(o + i * cell, o + D); x.moveTo(o, o + i * cell); x.lineTo(o + D, o + i * cell); } x.stroke();
+  x.restore();
+  x.lineWidth = 2 * k; x.strokeStyle = '#000'; x.strokeRect(o + h * cell, o + h * cell, cell, cell); x.lineWidth = 1 * k; x.strokeStyle = '#fff'; x.strokeRect(o + h * cell + 1.5 * k, o + h * cell + 1.5 * k, cell - 3 * k, cell - 3 * k);
+  x.lineWidth = 4 * k; x.strokeStyle = PK.hex || '#6b7280'; x.beginPath(); x.arc(S / 2, S / 2, D / 2 + 1.5 * k, 0, 7); x.stroke();
+  x.lineWidth = 1 * k; x.strokeStyle = 'rgba(0,0,0,.6)'; x.beginPath(); x.arc(S / 2, S / 2, D / 2 + 4 * k, 0, 7); x.stroke();
+}
+const pkHide = () => { const c = $('#pick-loupe'); if (c) c.style.display = 'none'; };
+const pkOn = () => tool === 'picker' && !!doc && !document.querySelector('.ovl');
+function pkTake(alt) { if (!PK.hex) return; if (alt) { color2 = PK.hex; updateSwatches(); } else setColor1(PK.hex); }
+document.addEventListener('pointermove', e => {
+  if (!pkOn()) return pkHide(); const ex = pkExempt(e.target); document.body.classList.toggle('pk-ex', ex);
+  if (ex) return pkHide(); pkDraw(e.clientX, e.clientY); if (PK.down) pkTake(e.altKey);
+}, true);
+document.addEventListener('pointerdown', e => {
+  if (!pkOn() || e.button !== 0 || pkExempt(e.target)) return;
+  e.preventDefault(); e.stopPropagation(); pkDraw(e.clientX, e.clientY); pkTake(e.altKey); PK.down = true; PK.swallow = true;
+}, true);
+document.addEventListener('pointerup', e => { if (PK.down) { PK.down = false; e.stopPropagation(); } }, true);
+['mousedown', 'click', 'dblclick'].forEach(t => document.addEventListener(t, e => { if (PK.swallow && pkOn() && !pkExempt(e.target)) { e.preventDefault(); e.stopPropagation(); if (t === 'click') PK.swallow = false; } }, true));
+document.addEventListener('pointerleave', pkHide); window.addEventListener('blur', pkHide);
+document.documentElement.addEventListener('mouseleave', pkHide);
 
 /* ---------------- texte ---------------- */
 let textEdit = null;
@@ -1637,6 +1816,115 @@ function trimLayer(l) {
   for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) if (d[(y * W + x) * 4 + 3]) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
   if (x1 < 0) return; const c = mkCanvas(x1 - x0 + 1, y1 - y0 + 1); c.getContext('2d').drawImage(l.canvas, -x0, -y0); l.canvas = c; l.x += x0; l.y += y0;
 }
+/* ---------- navball : on fait rouler une boule pour donner la perspective ----------
+   la boule porte le plan de l'image : glisser = l'incliner (gauche/droite, haut/bas), couronne = la tourner à plat */
+const NB_MAX = 80 * Math.PI / 180;
+const nbF = (st, D) => D * (5 - 4.4 * (st.t ?? 55) / 100);   // distance focale : force de la perspective
+function nbProject(pts, st, f) {
+  const cy = Math.cos(st.yaw), sy = Math.sin(st.yaw), cp = Math.cos(st.pitch), sp = Math.sin(st.pitch), cr = Math.cos(st.roll), sr = Math.sin(st.roll);
+  return pts.map(({ x, y }) => { const x0 = x * cr - y * sr, y0 = x * sr + y * cr, Y = y0 * cp, Z1 = y0 * sp, X = x0 * cy + Z1 * sy, Z = -x0 * sy + Z1 * cy, k = f / Math.max(f * .12, f - Z); return { x: X * k, y: Y * k }; });
+}
+const nbMid = P => P.reduce((a, p) => ({ x: a.x + p.x / P.length, y: a.y + p.y / P.length }), { x: 0, y: 0 });
+const nbDeg = v => Math.round(v * 180 / Math.PI);
+const NB_ASIN = (() => { const t = new Float32Array(2049); for (let i = 0; i <= 2048; i++) t[i] = Math.asin(i / 1024 - 1) * 180 / Math.PI; return t; })();
+function nbGeo(S) {   // pixels du disque : direction de vue, ombrage, bord adouci (calculés une seule fois)
+  const c = S / 2, R = S * .4, n = [], vx = [], vy = [], vz = [], sh = [], ed = [];
+  for (let py = 0; py < S; py++) for (let px = 0; px < S; px++) { const x = (px + .5 - c) / R, y = (py + .5 - c) / R, r2 = x * x + y * y; if (r2 > 1) continue;
+    const z = Math.sqrt(1 - r2); n.push(py * S + px); vx.push(x); vy.push(y); vz.push(z); sh.push(.35 + .65 * z); ed.push(clamp((1 - Math.sqrt(r2)) * R, 0, 1)); }
+  return { S, R, idx: Int32Array.from(n), vx: Float32Array.from(vx), vy: Float32Array.from(vy), vz: Float32Array.from(vz), sh: Float32Array.from(sh), ed: Float32Array.from(ed) };
+}
+function drawNavball(cv, st) {
+  const S = cv.width, x = cv.getContext('2d'), c = S / 2, R = S * .4, u = S / 176, acc = hexToRgb(cv._acc || '#c084fc');
+  const G = cv._g && cv._g.S === S ? cv._g : (cv._g = nbGeo(S)), id = cv._id && cv._id.width === S ? cv._id : (cv._id = x.createImageData(S, S)), px32 = new Uint32Array(id.data.buffer);
+  px32.fill(0);
+  const cy = Math.cos(st.yaw), sy = Math.sin(st.yaw), cp = Math.cos(st.pitch), sp = Math.sin(st.pitch), cr = Math.cos(st.roll), sr = Math.sin(st.roll), D2R = Math.PI / 180, aa = 1 / (R * D2R);
+  const { idx, vx: VX, vy: VY, vz: VZ, sh: SH, ed: ED } = G, N = idx.length;
+  for (let k = 0; k < N; k++) {
+    const vx = VX[k], vy = VY[k], vz = VZ[k], x1 = vx * cy - vz * sy, z1 = vx * sy + vz * cy, y2 = vy * cp + z1 * sp, z2 = -vy * sp + z1 * cp, x3 = x1 * cr + y2 * sr, y3 = -x1 * sr + y2 * cr;
+    const lat = NB_ASIN[((clamp(-y3, -1, 1) + 1) * 1024) | 0], lon = Math.atan2(x3, z2) / D2R, cl = Math.cos(lat * D2R);
+    // sphère de verre sombre, légèrement teintée par la couleur de l'outil
+    const s = SH[k]; let r = 22 + 18 * s + acc.r * .06, g = 28 + 20 * s + acc.g * .06, b = 40 + 26 * s + acc.b * .08;
+    // maillage fin tous les 30°, équateur et méridien central dans la couleur de l'outil
+    const dLat = Math.abs(lat - Math.round(lat / 30) * 30) / aa, dLon = Math.abs(lon - Math.round(lon / 30) * 30) * cl / aa;
+    const w = clamp(1.1 - Math.min(dLat, dLon), 0, 1) * .22 * (.4 + .6 * vz);
+    if (w) { r += (255 - r) * w; g += (255 - g) * w; b += (255 - b) * w; }
+    const e = clamp(1.6 - Math.abs(lat) / aa, 0, 1), m = Math.abs(lon) < 90 ? clamp(1.6 - Math.abs(lon) * cl / aa, 0, 1) : 0, ax = Math.max(e, m) * (.45 + .55 * vz);
+    if (ax) { r += (acc.r - r) * ax; g += (acc.g - g) * ax; b += (acc.b - b) * ax; }
+    px32[idx[k]] = ((ED[k] * 255) << 24 | b << 16 | g << 8 | r) >>> 0;
+  }
+  x.clearRect(0, 0, S, S);
+  // halo doux autour de la sphère
+  const hg = x.createRadialGradient(c, c, R * .9, c, c, R * 1.25); hg.addColorStop(0, `rgba(${acc.r},${acc.g},${acc.b},.22)`); hg.addColorStop(1, `rgba(${acc.r},${acc.g},${acc.b},0)`);
+  x.fillStyle = hg; x.beginPath(); x.arc(c, c, R * 1.25, 0, 7); x.fill();
+  const tb = cv._tb && cv._tb.width === S ? cv._tb : (cv._tb = mkCanvas(S, S)); tb.getContext('2d').putImageData(id, 0, 0); x.drawImage(tb, 0, 0);
+  // la « page » : petite carte qui montre l'orientation donnée à l'image
+  const asp = cv._asp || 1.4, cw = asp >= 1 ? R * .62 : R * .62 * asp, ch = asp >= 1 ? R * .62 / asp : R * .62;
+  const P = nbProject([{ x: -cw, y: -ch }, { x: cw, y: -ch }, { x: cw, y: ch }, { x: -cw, y: ch }], st, R * 2.6).map(p => ({ x: c + p.x, y: c + p.y }));
+  const face = Math.cos(st.yaw) * Math.cos(st.pitch);
+  x.save(); x.shadowColor = 'rgba(0,0,0,.45)'; x.shadowBlur = 10 * u; x.shadowOffsetY = 3 * u;
+  x.beginPath(); P.forEach((p, i) => i ? x.lineTo(p.x, p.y) : x.moveTo(p.x, p.y)); x.closePath();
+  const cg = x.createLinearGradient(P[0].x, P[0].y, P[2].x, P[2].y); cg.addColorStop(0, `rgba(255,255,255,${.9 * (.55 + .45 * face)})`); cg.addColorStop(1, `rgba(${acc.r},${acc.g},${acc.b},${.85 * (.55 + .45 * face)})`);
+  x.fillStyle = cg; x.fill(); x.restore();
+  x.lineWidth = 1.6 * u; x.strokeStyle = '#fff'; x.lineJoin = 'round'; x.beginPath(); P.forEach((p, i) => i ? x.lineTo(p.x, p.y) : x.moveTo(p.x, p.y)); x.closePath(); x.stroke();
+  // petit paysage dans la carte (repère haut / bas)
+  const H = homography(P), pt = (uu, vv) => H(uu, vv); x.fillStyle = `rgba(${acc.r * .5 | 0},${acc.g * .5 | 0},${acc.b * .5 | 0},.75)`; x.beginPath();
+  [[.12, .82], [.38, .45], [.55, .65], [.7, .38], [.9, .82]].forEach(([uu, vv], i) => { const q = pt(uu, vv); i ? x.lineTo(q.x, q.y) : x.moveTo(q.x, q.y); }); x.closePath(); x.fill();
+  const sun = pt(.75, .22), sun2 = pt(.81, .22); x.fillStyle = '#fde68a'; x.beginPath(); x.arc(sun.x, sun.y, Math.max(1.5 * u, Math.hypot(sun2.x - sun.x, sun2.y - sun.y)), 0, 7); x.fill();
+  // reflet
+  const g = x.createRadialGradient(c - R * .45, c - R * .55, 0, c - R * .45, c - R * .55, R * .9); g.addColorStop(0, 'rgba(255,255,255,.18)'); g.addColorStop(1, 'rgba(255,255,255,0)');
+  x.fillStyle = g; x.beginPath(); x.arc(c, c, R, 0, 7); x.fill();
+  // anneau de rotation à plat : fin, discret, avec sa poignée
+  x.strokeStyle = 'rgba(255,255,255,.14)'; x.lineWidth = 6 * u; x.beginPath(); x.arc(c, c, R + 10 * u, 0, 7); x.stroke();
+  x.strokeStyle = `rgba(${acc.r},${acc.g},${acc.b},.9)`; x.lineWidth = 6 * u; x.lineCap = 'round'; const a0 = -Math.PI / 2;
+  if (Math.abs(st.roll) > .01) { x.beginPath(); x.arc(c, c, R + 10 * u, Math.min(a0, a0 + st.roll), Math.max(a0, a0 + st.roll)); x.stroke(); }
+  const hx = c + Math.cos(a0 + st.roll) * (R + 10 * u), hy = c + Math.sin(a0 + st.roll) * (R + 10 * u);
+  x.fillStyle = '#fff'; x.shadowColor = 'rgba(0,0,0,.5)'; x.shadowBlur = 4 * u; x.beginPath(); x.arc(hx, hy, 6.5 * u, 0, 7); x.fill(); x.shadowBlur = 0;
+  x.fillStyle = `rgb(${acc.r},${acc.g},${acc.b})`; x.beginPath(); x.arc(hx, hy, 3.5 * u, 0, 7); x.fill();
+}
+// st = { yaw, pitch, roll, t } ; h = { start(), change(), end() }
+function navballWidget(st, h) {
+  const wrap = document.createElement('div'); wrap.className = 'nbw';
+  const pr = clamp(devicePixelRatio || 1, 2, 3); wrap.innerHTML = `<canvas width="${176 * pr}" height="${176 * pr}" title="Glisser la boule : incliner (perspective) · couronne : tourner à plat · double-clic : remettre à plat · Maj : par pas de 5°"></canvas>
+    <div class="nb-info"></div>
+    <div class="orow"><div class="olab"><span>Force de la perspective</span><span class="nb-tv"></span></div><input type="range" min="0" max="100" value="${st.t ?? 55}"></div>
+    <div class="obtns" style="width:100%"><button type="button" class="obtn" data-nb0><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 0 2.5-5.8L4 8.5"/><path d="M4 3v5.5h5.5"/></svg>Remettre à plat</button></div>`;
+  const cv = wrap.querySelector('canvas'), info = wrap.querySelector('.nb-info'), rg = wrap.querySelector('input'), tv = wrap.querySelector('.nb-tv');
+  cv._acc = h.acc || '#c084fc'; cv._asp = h.asp || 1.4;
+  const show = () => { drawNavball(cv, st); info.innerHTML = `↔ <b>${nbDeg(st.yaw)}°</b> &nbsp; ↕ <b>${nbDeg(st.pitch)}°</b> &nbsp; ⟳ <b>${nbDeg(st.roll)}°</b>`; tv.textContent = (st.t ?? 55) + ' %'; };
+  let dr = null;
+  cv.addEventListener('pointerdown', e => { e.preventDefault(); const r = cv.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2, dist = Math.hypot(e.clientX - cx, e.clientY - cy);
+    dr = { ring: dist > r.width * .4 + 2, x: e.clientX, y: e.clientY, a: Math.atan2(e.clientY - cy, e.clientX - cx), cx, cy, R: r.width * .4, s0: { ...st } };
+    cv.setPointerCapture(e.pointerId); cv.classList.add('drag'); h.start(); });
+  let raf = 0; const flush = () => { raf = 0; show(); h.change(); };
+  cv.addEventListener('pointermove', e => { if (!dr) return; const snap = v => e.shiftKey ? Math.round(v / (5 * Math.PI / 180)) * 5 * Math.PI / 180 : v;
+    if (dr.ring) { const a = Math.atan2(e.clientY - dr.cy, e.clientX - dr.cx); let r = dr.s0.roll + a - dr.a; r = Math.atan2(Math.sin(r), Math.cos(r)); st.roll = snap(r); }
+    else { st.yaw = snap(clamp(dr.s0.yaw + (e.clientX - dr.x) / dr.R, -NB_MAX, NB_MAX)); st.pitch = snap(clamp(dr.s0.pitch - (e.clientY - dr.y) / dr.R, -NB_MAX, NB_MAX)); }
+    if (!raf) raf = requestAnimationFrame(flush); });
+  const up = () => { if (!dr) return; if (raf) { cancelAnimationFrame(raf); flush(); } dr = null; cv.classList.remove('drag'); h.end(); };
+  cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);
+  const reset = () => { h.start(); st.yaw = st.pitch = st.roll = 0; show(); h.change(); h.end(); };
+  cv.addEventListener('dblclick', reset); wrap.querySelector('[data-nb0]').onclick = reset;
+  rg.addEventListener('pointerdown', () => h.start()); rg.oninput = () => { st.t = +rg.value; if (!raf) raf = requestAnimationFrame(flush); }; rg.onchange = () => h.end();
+  show(); return wrap;
+}
+// navball sur une sélection / un calque en déformation
+function xfNavball() {
+  const st = xf.nb || (xf.nb = { yaw: 0, pitch: 0, roll: 0, t: 55 }); let base, T, f;
+  return navballWidget(st, {
+    start: () => { if (!xf) return; base = xfCorners().map(p => ({ x: p.x - xf.cx, y: p.y - xf.cy })); f = nbF(st, Math.max(xf.w, xf.h)); const m = nbMid(xf.quad), q = nbMid(nbProject(base, st, f)); T = { x: m.x - q.x, y: m.y - q.y }; },
+    change: () => { if (!xf || !base) return; f = nbF(st, Math.max(xf.w, xf.h)); xf.quad = nbProject(base, st, f).map(p => ({ x: p.x + T.x, y: p.y + T.y })); renderXf(); },
+    end: () => {}, acc: '#c084fc', asp: xf.w / xf.h });
+}
+// navball sur un texte / une forme (déformation non destructive, tf.q)
+function elNavball(l) {
+  const t = ensureTf(l), st = t.nb || (t.nb = { yaw: 0, pitch: 0, roll: 0, t: 55 }); let base, T, pushed = false;
+  return navballWidget(st, {
+    start: () => { const b = box(l); if (!pushed) { pushDoc(); pushed = true; } if (!t.q) t.q = [[0, 0], [1, 0], [1, 1], [0, 1]]; elQuad = true;
+      base = [[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([u, v]) => ({ x: u * b.w / 2, y: v * b.h / 2 }));
+      const m = nbMid(t.q.map(([u, v]) => ({ x: (u - .5) * b.w, y: (v - .5) * b.h }))), q = nbMid(nbProject(base, st, nbF(st, Math.max(b.w, b.h)))); T = { x: m.x - q.x, y: m.y - q.y }; },
+    change: () => { if (!base) return; const b = box(l); t.q = nbProject(base, st, nbF(st, Math.max(b.w, b.h))).map(p => [(p.x + T.x) / b.w + .5, (p.y + T.y) / b.h + .5]); markDirty(); req(true); },
+    end: () => { pushed = false; updateThumb(l); renderPagesThumb(); }, acc: l.kind === 'text' ? '#fcd34d' : '#f59e0b', asp: box(l).w / Math.max(1, box(l).h) });
+}
 function startTransform(mode, o = {}) {
   if (textEdit) commitText(); if (!editable()) return false;
   const l0 = L(), lb = { x: Math.max(0, Math.floor(l0.x)), y: Math.max(0, Math.floor(l0.y)) }; lb.w = Math.min(doc.w, Math.ceil(l0.x + l0.canvas.width)) - lb.x; lb.h = Math.min(doc.h, Math.ceil(l0.y + l0.canvas.height)) - lb.y;
@@ -1647,7 +1935,7 @@ function startTransform(mode, o = {}) {
   const base = cloneCanvas(l.canvas), bc = base.getContext('2d');
   if (!o.copy) { if (sel) { bc.globalCompositeOperation = 'destination-out'; bc.drawImage(sel.mask, -l.x, -l.y); } else bc.clearRect(0, 0, base.width, base.height); }
   xf = { l, fl, base, mode: 'affine', copy: !!o.copy, oldSel: sel, cx: b.x + b.w / 2, cy: b.y + b.h / 2, w: b.w, h: b.h, ang: (o.rot || 0) * Math.PI / 180, fx: o.flip === 'h' ? -1 : 1, fy: o.flip === 'v' ? -1 : 1, quad: null };
-  if (o.copy) { if (o.flip === 'h') xf.cx += b.w; else xf.cy += b.h; }
+  if (o.copy) { xf.c0 = { x: xf.cx, y: xf.cy }; xf.mAxis = o.flip === 'v' ? 'v' : 'h'; xf.mPt = false; if (o.flip === 'h') xf.cx += b.w; else xf.cy += b.h; }
   xf.trim = grown && !l.bg;
   if (mode === 'distort') toDistort();
   renderXf(); renderOptbar(); updateXfButtons(); return true;
@@ -1686,13 +1974,27 @@ function drawQuad(ctx, img, q, n) {
 }
 function drawFloating(ctx, ox, oy, fine) {
   ctx.save(); ctx.imageSmoothingQuality = 'high';
-  if (xf.mode === 'distort') drawQuad(ctx, xf.fl, xf.quad.map(p => ({ x: p.x - ox, y: p.y - oy })), fine ? 28 : 12);
-  else { ctx.translate(xf.cx - ox, xf.cy - oy); ctx.rotate(xf.ang); ctx.scale(xf.fx * xf.w / xf.fl.width, xf.fy * xf.h / xf.fl.height); ctx.drawImage(xf.fl, -xf.fl.width / 2, -xf.fl.height / 2); }
+  const src = fine ? xf.fl : xfLo();
+  if (xf.mode === 'distort') drawQuad(ctx, src, xf.quad.map(p => ({ x: p.x - ox, y: p.y - oy })), fine ? 28 : 10);
+  else { ctx.translate(xf.cx - ox, xf.cy - oy); ctx.rotate(xf.ang); ctx.scale(xf.fx * xf.w / src.width, xf.fy * xf.h / src.height); ctx.drawImage(src, -src.width / 2, -src.height / 2); }
   ctx.restore();
 }
 function renderXf(fine) {
-  const out = cloneCanvas(xf.base); drawFloating(out.getContext('2d'), xf.l.x, xf.l.y, fine);
+  let out;
+  if (fine) out = cloneCanvas(xf.base);
+  else {   // aperçu : on réutilise le même canvas au lieu d'en créer un à chaque mouvement
+    out = xf._out && xf._out.width === xf.base.width && xf._out.height === xf.base.height ? xf._out : (xf._out = mkCanvas(xf.base.width, xf.base.height));
+    const c = out.getContext('2d'); c.clearRect(0, 0, out.width, out.height); c.drawImage(xf.base, 0, 0);
+  }
+  drawFloating(out.getContext('2d'), xf.l.x, xf.l.y, fine);
   override = { layer: xf.l, canvas: out }; req(true); return out;
+}
+// copie réduite de l'image transformée, à la résolution de l'écran : l'aperçu reste fluide sur les grosses images
+function xfLo() {
+  const fl = xf.fl, lim = clamp(Math.round(Math.max(xf.w, xf.h) * cam.z * (devicePixelRatio || 1) * 1.15), 256, 1600), k = Math.min(1, lim / Math.max(fl.width, fl.height));
+  if (k >= .95) return fl;
+  if (!xf._lo || xf._loSrc !== fl || Math.abs(xf._loK - k) > .25 * xf._loK) { const c = mkCanvas(Math.round(fl.width * k), Math.round(fl.height * k)), x = c.getContext('2d'); x.imageSmoothingQuality = 'high'; x.drawImage(fl, 0, 0, c.width, c.height); xf._lo = c; xf._loSrc = fl; xf._loK = k; }
+  return xf._lo;
 }
 function commitTransform() {
   if (!xf) return; const out = renderXf(true), l = xf.l;
@@ -1762,17 +2064,77 @@ function xfFlip(dir) {
   else if (dir === 'h') xf.fx *= -1; else xf.fy *= -1;
   renderXf(); renderOptbar();
 }
+
+/* ---------- panneau moderne : rotation / échelle, copie miroir, déformation ---------- */
+const XI = {
+  free: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="14" height="14" rx="1.5" stroke-dasharray="3 2"/><path d="M19 5l2-2M3 21l2-2M16 2h5v5M8 22H3v-5"/></svg>',
+  dist: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6 20 3l-2 18-14-3z"/><circle cx="4" cy="6" r="1.4" fill="currentColor"/><circle cx="20" cy="3" r="1.4" fill="currentColor"/><circle cx="18" cy="21" r="1.4" fill="currentColor"/><circle cx="4" cy="18" r="1.4" fill="currentColor"/></svg>',
+  ccw: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 0 2.5-5.8L4 8.5"/><path d="M4 3v5.5h5.5"/></svg>',
+  cw: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.5-5.8L20 8.5"/><path d="M20 3v5.5h-5.5"/></svg>',
+  lock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 7a3 3 0 0 1 6 0v2M9 17a3 3 0 0 0 6 0v-2M12 10v4"/></svg>',
+  unlock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6a3 3 0 0 1 6 0v1M9 18a3 3 0 0 0 6 0v-1"/></svg>',
+  fh: '<svg viewBox="0 0 34 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M14 4 3 20h11z" fill="currentColor" fill-opacity=".35"/><path d="M20 4l11 16H20z" stroke-dasharray="2.5 2"/><path d="M17 1v22" stroke-width="1.2" stroke-dasharray="2 2" opacity=".7"/></svg>',
+  fv: '<svg viewBox="0 0 34 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M9 10.5 17 2l8 8.5z" fill="currentColor" fill-opacity=".35"/><path d="M9 13.5 17 22l8-8.5z" stroke-dasharray="2.5 2"/><path d="M4 12h26" stroke-width="1.2" stroke-dasharray="2 2" opacity=".7"/></svg>' };
+const xfDeg = () => Math.round((((xf.ang * 180 / Math.PI) % 360 + 540) % 360 - 180) * 10) / 10;
+function xfKnobSvg(deg) {
+  let t = ''; for (let a = 0; a < 360; a += 15) { const big = a % 90 === 0, r1 = big ? 37 : 39.5, rr = (a - 90) * Math.PI / 180;
+    t += `<line x1="${46 + Math.cos(rr) * r1}" y1="${46 + Math.sin(rr) * r1}" x2="${46 + Math.cos(rr) * 43}" y2="${46 + Math.sin(rr) * 43}" stroke="${big ? '#9ca3af' : '#4b5563'}" stroke-width="${big ? 2 : 1.2}" stroke-linecap="round"/>`; }
+  const arc = deg ? (() => { const a0 = -Math.PI / 2, a1 = a0 + deg * Math.PI / 180, r = 33, la = Math.abs(deg) > 180 ? 1 : 0, sw = deg > 0 ? 1 : 0;
+    return `<path d="M${46 + Math.cos(a0) * r} ${46 + Math.sin(a0) * r} A${r} ${r} 0 ${la} ${sw} ${46 + Math.cos(a1) * r} ${46 + Math.sin(a1) * r}" stroke="var(--tc)" stroke-width="3" fill="none" stroke-linecap="round" opacity=".85"/>`; })() : '';
+  return `<svg viewBox="0 0 92 92"><defs><radialGradient id="xk" cx="40%" cy="35%"><stop offset="0" stop-color="#374151"/><stop offset="1" stop-color="#111827"/></radialGradient></defs>
+    <circle cx="46" cy="46" r="45" fill="#0b1220" stroke="#374151"/>${t}<circle cx="46" cy="46" r="29" fill="url(#xk)" stroke="#4b5563"/>${arc}
+    <g transform="rotate(${deg} 46 46)"><line x1="46" y1="46" x2="46" y2="19" stroke="var(--tc)" stroke-width="3.2" stroke-linecap="round"/><circle cx="46" cy="16" r="4.2" fill="var(--tc)" stroke="#0b1220" stroke-width="1.5"/></g>
+    <circle cx="46" cy="46" r="4" fill="#e5e7eb"/></svg>`;
+}
+function xfAffinePanel() {
+  const el = document.createElement('div'); el.className = 'xfp'; if (xf.lockR === undefined) xf.lockR = true;
+  const pc = () => Math.round(Math.abs(xf.w) / xf.fl.width * 1000) / 10;
+  el.innerHTML = `<div class="xfp-mode"><button type="button" class="on" title="Rotation, taille, miroir">${XI.free}Transformer</button><button type="button" data-dist title="Perspective : 4 coins et navball">${XI.dist}Déformer</button></div>
+    <div class="xfp-sec">Rotation</div>
+    <div class="xfp-flip xfp-r3"><button type="button" data-r="-90" title="90° à gauche">${XI.ccw}<span>90° gauche</span></button><button type="button" data-r="90" title="90° à droite">${XI.cw}<span>90° droite</span></button><button type="button" data-r="180" title="Demi-tour"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13a8 8 0 0 0 16 0"/><path d="M20 13a8 8 0 0 0-14.5-4.6"/><path d="M5 4v5h5"/></svg><span>180°</span></button></div>
+    <div class="xfp-acts"><button type="button" class="ok" data-ok>Valider<kbd>Entrée</kbd></button><button type="button" data-no>Annuler<kbd>Échap</kbd></button></div>`;
+  const $e = q => el.querySelector(q);
+  let raf = 0; const redraw = () => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; renderXf(); }); };
+  const sync = () => {};
+  const setAng = d => { xf.ang = Math.atan2(Math.sin(d * Math.PI / 180), Math.cos(d * Math.PI / 180)); sync(); redraw(); };
+  el.querySelectorAll('[data-r]').forEach(b => b.onclick = () => setAng(xfDeg() + +b.dataset.r));
+  $e('[data-dist]').onclick = () => { toDistort(); renderXf(); renderOptbar(); updateXfButtons(); };
+  $e('[data-ok]').onclick = commitTransform; $e('[data-no]').onclick = cancelTransform;
+  sync(); return el;
+}
+// copie miroir : juste l'axe (horizontal / vertical) et le type de symétrie (axiale / par point)
+function xfMirrorApply() {
+  const h = xf.mAxis === 'h'; xf.ang = 0;
+  xf.fx = h || xf.mPt ? -1 : 1; xf.fy = !h || xf.mPt ? -1 : 1;
+  xf.cx = xf.c0.x + (h ? xf.w : 0); xf.cy = xf.c0.y + (h ? 0 : xf.h); renderXf();
+}
+function xfMirrorPanel() {
+  const el = document.createElement('div'); el.className = 'xfp';
+  el.innerHTML = `<div class="xfp-flip"><button type="button" data-ax="h">${XI.fh}<span>Copie horizontale</span></button><button type="button" data-ax="v">${XI.fv}<span>Copie verticale</span></button></div>
+    <div class="xfp-mode"><button type="button" data-pt="0" title="Reflet comme dans un miroir">${'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18" stroke-dasharray="2 2"/><path d="M9 7 4 17h5zM15 7l5 10h-5z"/></svg>'}Axiale</button><button type="button" data-pt="1" title="Demi-tour autour d'un point">${'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1.8" fill="currentColor"/><path d="M10 9 5 4v6zM14 15l5 5v-6z"/></svg>'}Par point</button></div>
+    <div class="xfp-acts"><button type="button" class="ok" data-ok>Valider<kbd>Entrée</kbd></button><button type="button" data-no>Annuler<kbd>Échap</kbd></button></div>`;
+  const sync = () => { el.querySelectorAll('[data-ax]').forEach(b => b.classList.toggle('on', b.dataset.ax === xf.mAxis)); el.querySelectorAll('[data-pt]').forEach(b => b.classList.toggle('on', (b.dataset.pt === '1') === !!xf.mPt)); };
+  el.querySelectorAll('[data-ax]').forEach(b => b.onclick = () => { xf.mAxis = b.dataset.ax; sync(); xfMirrorApply(); });
+  el.querySelectorAll('[data-pt]').forEach(b => b.onclick = () => { xf.mPt = b.dataset.pt === '1'; sync(); xfMirrorApply(); });
+  el.querySelector('[data-ok]').onclick = commitTransform; el.querySelector('[data-no]').onclick = cancelTransform;
+  sync(); return el;
+}
+function xfDistortFoot() {
+  const el = document.createElement('div'); el.className = 'xfp';
+  el.innerHTML = `<div class="xfp-mode"><button type="button" data-aff title="Rotation, taille, miroir">${XI.free}Transformer</button><button type="button" class="on">${XI.dist}Déformer</button></div>`;
+  el.querySelector('[data-aff]').onclick = () => { xf.mode = 'affine'; xf.quad = null; xf.nb = null; renderXf(); renderOptbar(); updateXfButtons(); };
+  return el;
+}
+function xfDistortActs() {
+  const el = document.createElement('div'); el.className = 'xfp';
+  el.innerHTML = `<div class="xfp-acts"><button type="button" class="ok" data-ok>Valider<kbd>Entrée</kbd></button><button type="button" data-no>Annuler<kbd>Échap</kbd></button></div>`;
+  el.querySelector('[data-ok]').onclick = commitTransform; el.querySelector('[data-no]').onclick = cancelTransform; return el;
+}
 function xfSpec() {
-  const deg = ((xf.ang * 180 / Math.PI) % 360 + 540) % 360 - 180;
-  const info = xf.mode === 'distort' ? 'Glisser un <b>coin</b> pour déformer (perspective), glisser à l\'intérieur pour déplacer.'
-    : `Taille : <b style="color:var(--g200)">${Math.round(xf.w)} × ${Math.round(xf.h)} px</b> · Angle : <b style="color:var(--g200)">${deg.toFixed(1)}°</b><br>Coins et bords = étirer librement (<b>Maj</b> : garder les proportions) · poignée ronde = rotation (Maj : pas de 15°) · glisser à l\'intérieur = déplacer · <b>clic à l\'extérieur = valider</b>.`;
-  return [{ type: 'hint', text: (xf.shape ? '<b style="color:var(--tc)">Forme encore modifiable</b> : glisse-la pour la déplacer, tire les poignées pour l\'étirer, la poignée ronde du haut pour la tourner, ou passe en déformation. <b>Entrée</b>, double-clic ou clic à côté pour la poser ; <b>Échap</b> l\'efface.<br>' : xf.paste ? '<b style="color:#f59e0b">Collé dans le calque actif</b> : place, étire ou tourne-le puis Entrée (ou double-clic). Échap annule le collage.<br>' : xf.copy ? '<b style="color:#f59e0b">Copie</b> : l\'original reste en place.<br>' : '') + info },
-    { type: 'btn', label: '↺ 90°', row: 1, fn: () => xfRotate(-90) }, { type: 'btn', label: '↻ 90°', row: 1, fn: () => xfRotate(90) }, { type: 'btn', label: '180°', row: 1, fn: () => xfRotate(180) },
-    { type: 'sp' },
-    { type: 'btn', label: 'Miroir ⇆', row: 1, fn: () => xfFlip('h') }, { type: 'btn', label: 'Miroir ⇅', row: 1, fn: () => xfFlip('v') },
-    { type: 'sp' },
-    xf.mode === 'distort' ? { type: 'btn', label: 'Revenir à rotation / échelle', fn: () => { xf.mode = 'affine'; xf.quad = null; renderXf(); renderOptbar(); updateXfButtons(); } } : { type: 'btn', label: 'Passer en déformation (4 coins)', fn: () => { toDistort(); renderXf(); renderOptbar(); updateXfButtons(); } },
-    { type: 'btn', label: 'Valider (Entrée)', cls: 'ok', row: 1, fn: commitTransform }, { type: 'btn', label: 'Annuler (Échap)', row: 1, fn: cancelTransform }];
+  const head = xf.shape ? '<b style="color:var(--tc)">Forme encore modifiable</b> : Entrée, double-clic ou clic à côté pour la poser ; Échap l\'efface.' : xf.paste ? '<b style="color:#f59e0b">Collé</b> : place-le puis Entrée. Échap annule le collage.' : xf.copy ? '<b style="color:#f59e0b">Copie miroir</b> : l\'original reste en place.' : '';
+  if (xf.mode === 'distort') return [{ type: 'custom', el: xfDistortFoot }, { type: 'hint', text: (head ? head + '<br>' : '') + 'Fais <b>rouler la boule</b> pour la perspective (la couronne tourne à plat), ou tire un <b>coin</b> à la main.' }, { type: 'custom', el: xfNavball }, { type: 'custom', el: xfDistortActs }];
+  if (xf.copy && xf.c0 && !xf.paste && !xf.shape) return [{ type: 'custom', el: xfMirrorPanel }, { type: 'hint', text: 'L\'original reste en place ; glisse la copie pour la décaler.' }];
+  return [...(head ? [{ type: 'hint', text: head }] : []), { type: 'custom', el: xfAffinePanel }, { type: 'hint', text: 'Sur l\'image : rond = tourner librement, poignées = étirer, intérieur = déplacer, clic à côté = valider.' }];
 }
 // colle une image dans le calque actif comme sélection flottante (poignées de transformation)
 function startFloat(img, x, y) {
@@ -1806,7 +2168,7 @@ let elQuad = false;                 // déformation (perspective) d'un texte / d
 let elGuides = null;                // repères magnétiques affichés pendant un déplacement
 const isVec = l => l.kind === 'text' || l.kind === 'shape';
 const isLine = l => l.kind === 'shape' && (l.data.type === 'line' || l.data.type === 'arrow');
-const EL_TOOLS = ['move', 'text', 'rect', 'ellipse', 'line', 'arrow', 'polygon'];
+const EL_TOOLS = ['move', 'text', 'rect', 'ellipse', 'line', 'arrow', 'polygon', 'pen'];
 function box(l) { const t = l.tf; return { x: l.x, y: l.y, w: t ? t.w : l.canvas.width, h: t ? t.h : l.canvas.height, rot: t ? t.rot || 0 : 0, fx: t ? t.fx || 1 : 1, fy: t ? t.fy || 1 : 1 }; }
 function ensureTf(l) { if (!l.tf) l.tf = { w: l.canvas.width, h: l.canvas.height, rot: 0, fx: 1, fy: 1 }; return l.tf; }
 function drawLayer(c, l, src = l.canvas) {
@@ -1950,7 +2312,7 @@ function newTextEl(x, y, text = '') {
 const textName = d => (d.text.replace(/\s+/g, ' ').trim().slice(0, 28) || 'Texte');
 
 /* ---------- formes vivantes ---------- */
-const SHAPE_NAMES = { rect: 'Rectangle', ellipse: 'Ellipse', polygon: 'Polygone', star: 'Étoile', line: 'Ligne', arrow: 'Flèche' };
+const SHAPE_NAMES = { rect: 'Rectangle', ellipse: 'Ellipse', polygon: 'Polygone', star: 'Étoile', line: 'Ligne', arrow: 'Flèche', path: 'Tracé' };
 function polyPoints(d) {
   const n = clamp(d.sides | 0, 3, 40), k = d.type === 'star' ? n * 2 : n, P = [];
   for (let i = 0; i < k; i++) { const a = -Math.PI / 2 + i * Math.PI * 2 / k, r = d.type === 'star' && i % 2 ? (d.inner || 50) / 100 : 1; P.push([r * Math.cos(a), r * Math.sin(a)]); }
@@ -1974,6 +2336,7 @@ function renderShape(l) {
     x.beginPath();
     if (d.type === 'ellipse') x.ellipse(W / 2, H / 2, Math.max(.5, W / 2 - i), Math.max(.5, H / 2 - i), 0, 0, Math.PI * 2);
     else if (d.type === 'rect') { const r = Math.min(d.radius || 0, (W - sw) / 2, (H - sw) / 2); x.roundRect ? x.roundRect(i, i, W - sw, H - sw, Math.max(0, r)) : x.rect(i, i, W - sw, H - sw); }
+    else if (d.type === 'path') tracePath(x, d.pts.map(p => ({ x: p.x * W, y: p.y * H, ix: p.ix * W, iy: p.iy * H, ox: p.ox * W, oy: p.oy * H })), d.closed);
     else polyPoints(d).forEach(([u, v], k) => { const X = i + u * (W - sw), Y = i + v * (H - sw); k ? x.lineTo(X, Y) : x.moveTo(X, Y); }), x.closePath();
     if (d.fill) { x.fillStyle = d.fill; x.fill(); }
     if (sw) { x.strokeStyle = d.stroke; x.lineWidth = sw; x.stroke(); }
@@ -2003,7 +2366,7 @@ function applyFx(l) {
 function rerender(l, anchor) { if (l.kind === 'text') renderText(l, anchor); else if (l.kind === 'shape') renderShape(l); }
 
 /* ---------- sélection d'éléments : clic, poignées, déplacements ---------- */
-const elActive = () => picked && doc && L() && !xf && EL_TOOLS.includes(tool);
+const elActive = () => picked && doc && L() && !xf && !pathEdit && EL_TOOLS.includes(tool);
 function topElementAt(p) {
   for (let i = doc.layers.length - 1; i >= 0; i--) {
     const l = doc.layers[i]; if (!l.visible || l.bg) continue;
@@ -2129,6 +2492,135 @@ function drawElSel(c) {
   c.restore();
 }
 // création d'une forme vivante au relâchement de l'outil
+/* ---------------- outil Plume : tracés de Bézier qui restent vectoriels ----------------
+   création : clic = point anguleux · cliquer-glisser = point courbe (poignées symétriques, Alt : casser la symétrie)
+   clic sur le 1er point = fermer · Entrée / double-clic = terminer ouvert · Retour arrière = retirer le dernier point · Échap = terminer
+   édition (double-clic sur un tracé, ou bouton « Modifier les points ») : glisser points et poignées, clic sur le trait = ajouter un point,
+   Alt+clic sur un point = anguleux ↔ courbe, Suppr = retirer le point, Entrée / Échap = terminer */
+let pen = null, pathEdit = null;
+const PEN_R = 8;
+const isPath = l => l && l.kind === 'shape' && l.data && l.data.type === 'path';
+function bez(a, b, c, d, t) { const u = 1 - t; return u * u * u * a + 3 * u * u * t * b + 3 * u * t * t * c + t * t * t * d; }
+function pathSegs(P, closed) { const n = P.length, s = []; for (let i = 0; i < n - 1 + (closed ? 1 : 0); i++) s.push([P[i], P[(i + 1) % n]]); return s; }
+function pathSamples(P, closed, k = 24) { const o = []; for (const [a, b] of pathSegs(P, closed)) for (let j = 0; j <= k; j++) { const t = j / k; o.push({ x: bez(a.x, a.ox, b.ix, b.x, t), y: bez(a.y, a.oy, b.iy, b.y, t), t }); } if (P.length === 1) o.push({ x: P[0].x, y: P[0].y }); return o; }
+function tracePath(x, P, closed) {
+  if (!P.length) return; x.moveTo(P[0].x, P[0].y);
+  for (const [a, b] of pathSegs(P, closed)) x.bezierCurveTo(a.ox, a.oy, b.ix, b.iy, b.x, b.y);
+  if (closed) x.closePath();
+}
+// points du tracé en pixels locaux de l'élément (et retour)
+function pathLocal(l) { const W = l.tf.w, H = l.tf.h; return l.data.pts.map(p => ({ x: p.x * W, y: p.y * H, ix: p.ix * W, iy: p.iy * H, ox: p.ox * W, oy: p.oy * H })); }
+function pathStore(l, P) { const W = l.tf.w, H = l.tf.h; l.data.pts = P.map(p => ({ x: p.x / W, y: p.y / H, ix: p.ix / W, iy: p.iy / H, ox: p.ox / W, oy: p.oy / H })); }
+const pathPad = d => (d.stroke ? Math.max(0, d.sw || 0) : 0) / 2 + 3;
+// recadre la boîte de l'élément sur le tracé (la position à l'écran ne bouge pas)
+function pathRefit(l) {
+  const P = pathLocal(l), S = pathSamples(P, l.data.closed), pad = pathPad(l.data);
+  const x0 = Math.min(...S.map(p => p.x)) - pad, y0 = Math.min(...S.map(p => p.y)) - pad, x1 = Math.max(...S.map(p => p.x)) + pad, y1 = Math.max(...S.map(p => p.y)) + pad;
+  const C = localToWorld(l, (x0 + x1) / 2, (y0 + y1) / 2), t = l.tf; t.w = Math.max(2, x1 - x0); t.h = Math.max(2, y1 - y0); setCenter(l, C);
+  pathStore(l, P.map(p => ({ x: p.x - x0, y: p.y - y0, ix: p.ix - x0, iy: p.iy - y0, ox: p.ox - x0, oy: p.oy - y0 })));
+  rerender(l, 'c');
+}
+function penFinish(closed) {
+  const P = pen && pen.pts; pen = null; drag = null;
+  if (!P || P.length < 2) { req(); renderOptbar(); return; }
+  const l = newShapeEl('rect', 0, 0, 10, 10); l.data.type = 'path'; l.data.closed = !!closed; l.name = SHAPE_NAMES.path;
+  if (!closed) { l.data.fill = null; l.data.stroke = color1; l.data.sw = Math.max(1, opts.penWidth || 4); }
+  else if (opts.shMode === 'fill') { l.data.stroke = null; } else if (!l.data.sw) l.data.sw = opts.penWidth || 4;
+  const S = pathSamples(P, closed), pad = pathPad(l.data), x0 = Math.min(...S.map(p => p.x)) - pad, y0 = Math.min(...S.map(p => p.y)) - pad;
+  l.tf = { w: Math.max(2, Math.max(...S.map(p => p.x)) + pad - x0), h: Math.max(2, Math.max(...S.map(p => p.y)) + pad - y0), rot: 0, fx: 1, fy: 1 }; l.x = x0; l.y = y0;
+  pathStore(l, P.map(p => ({ x: p.x - x0, y: p.y - y0, ix: p.ix - x0, iy: p.iy - y0, ox: p.ox - x0, oy: p.oy - y0 })));
+  renderShape(l); pushDoc(); insertLayer(l); picked = true; renderLayers(); renderOptbar(); req(true); renderPagesThumb();
+}
+function penCancel() { pen = null; drag = null; req(); renderOptbar(); }
+function startPathEdit(l) { if (!isPath(l) || l.locked) return; if (pen) penFinish(false); pathEdit = { l, sel: -1 }; picked = true; renderOptbar(); req(); toast('Points du tracé : glisse les points et les poignées · clic sur le trait = ajouter · Alt+clic = anguleux / courbe · Suppr = retirer · Entrée = terminer.'); }
+function endPathEdit() { if (!pathEdit) return; const l = pathEdit.l; pathEdit = null; if (doc.layers.includes(l)) { pathRefit(l); afterVec(l); } renderOptbar(); req(); }
+// points du tracé édité en coordonnées document
+const peW = (l, x, y) => localToWorld(l, x, y);
+function peHit(sx, sy) {
+  const { l, sel } = pathEdit, P = pathLocal(l), S = q => S2(peW(l, q.x, q.y)), near = (q) => Math.hypot(q.x - sx, q.y - sy) <= PEN_R;
+  if (sel >= 0 && P[sel]) { const p = P[sel]; if (near(S({ x: p.ox, y: p.oy })) && (p.ox !== p.x || p.oy !== p.y)) return { k: 'out', i: sel }; if (near(S({ x: p.ix, y: p.iy })) && (p.ix !== p.x || p.iy !== p.y)) return { k: 'in', i: sel }; }
+  for (let i = 0; i < P.length; i++) if (near(S(P[i]))) return { k: 'pt', i };
+  // sur le trait : position (segment, t)
+  let best = null; pathSegs(P, l.data.closed).forEach(([a, b], si) => { for (let j = 1; j < 40; j++) { const t = j / 40, q = S({ x: bez(a.x, a.ox, b.ix, b.x, t), y: bez(a.y, a.oy, b.iy, b.y, t) }), d = Math.hypot(q.x - sx, q.y - sy); if (d < 7 && (!best || d < best.d)) best = { k: 'seg', i: si, t, d }; } });
+  return best;
+}
+// coupe un segment (de Casteljau) pour y insérer un point
+function peInsert(l, si, t) {
+  const P = pathLocal(l), n = P.length, a = P[si], b = P[(si + 1) % n], L = (u, v) => ({ x: u.x + (v.x - u.x) * t, y: u.y + (v.y - u.y) * t });
+  const p0 = { x: a.x, y: a.y }, p1 = { x: a.ox, y: a.oy }, p2 = { x: b.ix, y: b.iy }, p3 = { x: b.x, y: b.y }, q0 = L(p0, p1), q1 = L(p1, p2), q2 = L(p2, p3), r0 = L(q0, q1), r1 = L(q1, q2), m = L(r0, r1);
+  a.ox = q0.x; a.oy = q0.y; b.ix = q2.x; b.iy = q2.y; P.splice(si + 1, 0, { x: m.x, y: m.y, ix: r0.x, iy: r0.y, ox: r1.x, oy: r1.y });
+  pathStore(l, P); return si + 1;
+}
+function peToggle(l, i) {
+  const P = pathLocal(l), p = P[i], n = P.length, corner = p.ix === p.x && p.iy === p.y && p.ox === p.x && p.oy === p.y;
+  if (!corner) { p.ix = p.ox = p.x; p.iy = p.oy = p.y; }
+  else { const a = P[(i - 1 + n) % n], b = P[(i + 1) % n], dx = b.x - a.x, dy = b.y - a.y, L = Math.hypot(dx, dy) || 1, k = Math.min(Math.hypot(p.x - a.x, p.y - a.y), Math.hypot(b.x - p.x, b.y - p.y)) / 3;
+    p.ix = p.x - dx / L * k; p.iy = p.y - dy / L * k; p.ox = p.x + dx / L * k; p.oy = p.y + dy / L * k; }
+  pathStore(l, P);
+}
+// pointeur : retourne true si l'événement a été traité
+function penDown(e, p) {
+  if (pathEdit) {
+    const l = pathEdit.l, h = peHit(p.sx, p.sy);
+    if (!h) { endPathEdit(); if (tool !== 'pen') return true; }
+    else { pushDoc();
+    if (h.k === 'seg') { pathEdit.sel = peInsert(l, h.i, h.t); pathRefit(l); req(true); drag = { kind: 'pedit', k: 'pt', i: pathEdit.sel }; return true; }
+    if (h.k === 'pt' && e.altKey) { peToggle(l, h.i); pathEdit.sel = h.i; pathRefit(l); req(true); return true; }
+    pathEdit.sel = h.i; drag = { kind: 'pedit', k: h.k, i: h.i }; req(); return true; }
+  }
+  if (tool !== 'pen') return false;
+  if (!pen && elActive() && isPath(L())) { const i = topElementAt(p); if (i === doc.active) { startPathEdit(L()); return true; } }
+  if (!pen) { unpick(); pen = { pts: [] }; }
+  const P = pen.pts;
+  if (P.length >= 2 && Math.hypot(S2(P[0]).x - p.sx, S2(P[0]).y - p.sy) <= PEN_R) { penFinish(true); return true; }
+  P.push({ x: p.x, y: p.y, ix: p.x, iy: p.y, ox: p.x, oy: p.y }); drag = { kind: 'pen', i: P.length - 1 }; renderOptbar(); req(); return true;
+}
+function penDragMove(p, e) {
+  if (drag.kind === 'pen') { const a = pen.pts[drag.i]; a.ox = p.x; a.oy = p.y; if (!e.altKey) { a.ix = 2 * a.x - p.x; a.iy = 2 * a.y - p.y; } req(); return; }
+  const l = pathEdit.l, P = pathLocal(l), q = worldToLocal(l, p), a = P[drag.i];
+  if (drag.k === 'pt') { const dx = q.x - a.x, dy = q.y - a.y; a.x += dx; a.y += dy; a.ix += dx; a.iy += dy; a.ox += dx; a.oy += dy; }
+  else { const k = drag.k, o = k === 'out' ? 'in' : 'out'; a[k === 'out' ? 'ox' : 'ix'] = q.x; a[k === 'out' ? 'oy' : 'iy'] = q.y;
+    if (!e.altKey) { const ox = o === 'out' ? 'ox' : 'ix', oy = o === 'out' ? 'oy' : 'iy', L0 = Math.hypot(a[ox] - a.x, a[oy] - a.y), dx = a.x - q.x, dy = a.y - q.y, L1 = Math.hypot(dx, dy) || 1;
+      if (L0 > .01) { a[ox] = a.x + dx / L1 * L0; a[oy] = a.y + dy / L1 * L0; } } }
+  pathStore(l, P); pathRefit(l); req(true);
+}
+function penKey(e) {
+  if (pathEdit) {
+    if (e.key === 'Enter' || e.key === 'Escape') { e.preventDefault(); endPathEdit(); return true; }
+    if ((e.key === 'Delete' || e.key === 'Backspace') && pathEdit.sel >= 0) { e.preventDefault(); const l = pathEdit.l, P = pathLocal(l); if (P.length <= 2) { toast('Un tracé garde au moins 2 points.'); return true; }
+      pushDoc(); P.splice(pathEdit.sel, 1); pathStore(l, P); pathEdit.sel = -1; pathRefit(l); req(true); return true; }
+    return false;
+  }
+  if (!pen) return false;
+  if (e.key === 'Enter' || e.key === 'Escape') { e.preventDefault(); penFinish(false); return true; }
+  if (e.key === 'Backspace' || e.key === 'Delete') { e.preventDefault(); pen.pts.pop(); if (!pen.pts.length) penCancel(); else req(); return true; }
+  return false;
+}
+// dessin : tracé en cours (avec l'élastique jusqu'au curseur) et points de l'édition
+function drawPen(c) {
+  const ac = '#38bdf8';
+  const dot = (q, on, sq = true) => { c.beginPath(); sq ? c.rect(q.x - 4.5, q.y - 4.5, 9, 9) : c.arc(q.x, q.y, 4, 0, 7); c.fillStyle = on ? ac : '#fff'; c.fill(); c.lineWidth = 1.5; c.strokeStyle = on ? '#fff' : ac; c.stroke(); };
+  const handles = (a, S) => { const A = S(a); [[a.ix, a.iy], [a.ox, a.oy]].forEach(([x, y]) => { if (x === a.x && y === a.y) return; const H = S({ x, y }); c.beginPath(); c.moveTo(A.x, A.y); c.lineTo(H.x, H.y); c.strokeStyle = ac; c.lineWidth = 1; c.stroke(); dot(H, false, false); }); };
+  if (pen && pen.pts.length) {
+    const P = pen.pts.map(p => ({ x: S2(p).x, y: S2(p).y, ix: S2({ x: p.ix, y: p.iy }).x, iy: S2({ x: p.ix, y: p.iy }).y, ox: S2({ x: p.ox, y: p.oy }).x, oy: S2({ x: p.ox, y: p.oy }).y }));
+    c.save(); c.beginPath(); tracePath(c, P, false);
+    if (!drag && mouse.in) { const a = P[P.length - 1], m = S2(mouse); c.bezierCurveTo(a.ox, a.oy, m.x, m.y, m.x, m.y); }
+    c.strokeStyle = 'rgba(0,0,0,.5)'; c.lineWidth = 3; c.stroke(); c.strokeStyle = color1; c.lineWidth = 1.6; c.stroke();
+    const close = P.length >= 2 && mouse.in && Math.hypot(P[0].x - S2(mouse).x, P[0].y - S2(mouse).y) <= PEN_R;
+    P.forEach((q, i) => dot(q, i === P.length - 1 || (i === 0 && close)));
+    handles(pen.pts[pen.pts.length - 1], S2);
+    if (close) { c.beginPath(); c.arc(P[0].x, P[0].y, 9, 0, 7); c.strokeStyle = ac; c.lineWidth = 2; c.stroke(); }
+    c.restore();
+  }
+  if (pathEdit && doc.layers.includes(pathEdit.l)) {
+    const l = pathEdit.l, P = pathLocal(l), S = q => S2(peW(l, q.x, q.y));
+    c.save(); c.beginPath(); tracePath(c, P.map(p => { const a = S(p), i = S({ x: p.ix, y: p.iy }), o = S({ x: p.ox, y: p.oy }); return { x: a.x, y: a.y, ix: i.x, iy: i.y, ox: o.x, oy: o.y }; }), l.data.closed);
+    c.strokeStyle = ac; c.lineWidth = 1.2; c.stroke();
+    if (pathEdit.sel >= 0 && P[pathEdit.sel]) handles(P[pathEdit.sel], S);
+    P.forEach((p, i) => dot(S(p), i === pathEdit.sel));
+    c.restore();
+  }
+}
 function createShapeFromDrag(a, b, shift) {
   override = null; clearEffect();
   let el;
@@ -2253,7 +2745,7 @@ function elSet(fn, refresh) {
   elHist(); fn(l); markDirty(); req(true); updateThumb(l); renderPagesThumbSoon(); if (textEdit && textEdit.el === l) styleTextEdit();
   if (refresh === true || refresh?.panel) renderOptbar(); else elFields();
 }
-function setData(patch, refresh) { elSet(l => { l.data = { ...l.data, ...patch }; rerender(l); if (l.kind === 'text' && l.autoName) l.name = textName(l.data); if (patch.font) ensureFont(patch.font).then(() => { rerender(l); req(true); }); }, refresh); }
+function setData(patch, refresh) { elSet(l => { l.data = { ...l.data, ...patch }; if (isPath(l) && ('sw' in patch || 'stroke' in patch)) pathRefit(l); rerender(l); if (l.kind === 'text' && l.autoName) l.name = textName(l.data); if (patch.font) ensureFont(patch.font).then(() => { rerender(l); req(true); }); }, refresh); }
 const EIC = {
   front: '<path d="M4 15h7v5H4zM8 4h12v11H8z" fill="currentColor" fill-opacity=".35"/><path d="M8 4h12v11H8z"/>', fwd: '<path d="M12 19V5M6 11l6-6 6 6"/>', back: '<path d="M12 5v14M6 13l6 6 6-6"/>',
   bottom: '<path d="M8 4h12v11H8z"/><path d="M4 9h7v11H4z" fill="currentColor" fill-opacity=".35"/>',
@@ -2296,7 +2788,8 @@ function renderElPanel(bx) {
   }
   if (l.kind === 'shape') {
     const T = [['rect', '<rect x="5" y="8" width="22" height="16" rx="2" fill="var(--tc)"/>'], ['ellipse', '<ellipse cx="16" cy="16" rx="11" ry="9" fill="var(--tc)"/>'], ['polygon', '<polygon points="16,4 27,11 27,22 16,28 5,22 5,11" fill="var(--tc)"/>'], ['star', '<polygon points="16,3 19.5,11.5 28.5,12 21.5,18 24,27 16,22 8,27 10.5,18 3.5,12 12.5,11.5" fill="var(--tc)"/>'], ['line', '<path d="M5 24 27 8" stroke="var(--tc)" stroke-width="3"/>'], ['arrow', '<path d="M5 24 25 9M18 8h8v8" stroke="var(--tc)" stroke-width="3"/>']];
-    h += `<div class="el-sec">Forme</div><div class="otiles el-row3">${T.map(([k, s]) => `<button type="button" class="otile${d.type === k ? ' on' : ''}" data-stype="${k}">${TI(s)}<span>${SHAPE_NAMES[k]}</span></button>`).join('')}</div>`;
+    if (d.type === 'path') h += `<div class="el-sec">Tracé</div><button type="button" class="obtn${pathEdit && pathEdit.l === l ? ' on' : ''}" data-pedit>${pathEdit && pathEdit.l === l ? 'Terminer la retouche (Entrée)' : 'Modifier les points'}</button><label class="ochk"><input type="checkbox" data-pclose${d.closed ? ' checked' : ''}> Tracé fermé</label>`;
+    else h += `<div class="el-sec">Forme</div><div class="otiles el-row3">${T.map(([k, s]) => `<button type="button" class="otile${d.type === k ? ' on' : ''}" data-stype="${k}">${TI(s)}<span>${SHAPE_NAMES[k]}</span></button>`).join('')}</div>`;
     if (!line) h += colRow('Remplissage', 'fill', d.fill, true, d.fill0);
     h += colRow(line ? 'Couleur' : 'Contour', 'stroke', d.stroke, !line, d.stroke0);
     if (line || d.stroke) h += rngF(line ? 'Épaisseur' : 'Épaisseur du contour', 'sw', d.sw, line ? 1 : 0, 200, 'px', .5);
@@ -2307,7 +2800,7 @@ function renderElPanel(bx) {
     h += `<label class="ochk"><input type="checkbox" data-dash${d.dash ? ' checked' : ''}> Trait en pointillés</label>`;
   }
   if (vec) h += `<div class="el-sec">Effets</div>${(l.fx || []).map((f, i) => `<div class="el-fx"><span>${esc((ADJUST[f.name] || {}).title || FILTER_NAMES[f.name] || f.name)}</span>${ADJUST[f.name] ? `<button type="button" data-fxe="${i}" title="Régler">${ei('opts', 15)}</button>` : ''}<button type="button" data-fxd="${i}" title="Retirer l'effet">×</button></div>`).join('')}
-      <button type="button" class="obtn" data-flt>+ Ajouter un effet (ombre, flou, lueur…)</button>${l.tf && l.tf.q ? `<button type="button" class="obtn" data-unq>Annuler la déformation</button>` : `<button type="button" class="obtn" data-q>Déformer (perspective)</button>`}
+      <button type="button" class="obtn" data-flt>+ Ajouter un effet (ombre, flou, lueur…)</button>${l.tf && l.tf.q ? `<button type="button" class="obtn" data-unq>Annuler la déformation</button>` : `<button type="button" class="obtn" data-q>Déformer (perspective)</button>`}${elQuad || (l.tf && l.tf.q) ? '<div class="el-sec">Perspective</div><div data-nbslot></div>' : ''}
       <div class="ohint">Effets et déformation restent modifiables : le ${l.kind === 'text' ? 'texte' : 'tracé'} n'est jamais converti en pixels.</div>`;
   if (!vec && !l.bg) h += `<div class="el-sec">Image</div><div class="obtns"><button class="obtn" data-flt>Filtres et réglages…</button>${l.tf ? '<button class="obtn" data-native>Taille d\'origine</button>' : ''}</div>
       <div class="obtns"><button class="obtn bgr-btn" data-cut title="Retire le fond automatiquement (IA dans le navigateur, rien n'est envoyé)">✂ Détourer (IA)</button><button class="obtn" data-cutc title="Retire un fond uni qui touche les bords (blanc, vert, ciel…), sans IA, hors ligne">Fond uni</button></div>
@@ -2371,6 +2864,8 @@ function wireElPanel(bx, l) {
   });
   qa('[data-dbl]').forEach(b => b.onclick = () => setData({ double: b.dataset.dbl === '1' }, true));
   const dash = q('[data-dash]'); if (dash) dash.onchange = () => setData({ dash: dash.checked });
+  const pe = q('[data-pedit]'); if (pe) pe.onclick = () => pathEdit && pathEdit.l === l ? endPathEdit() : startPathEdit(l);
+  const pc = q('[data-pclose]'); if (pc) pc.onchange = () => { pushDoc(); l.data.closed = pc.checked; if (pc.checked && !l.data.fill && opts.shMode !== 'stroke') l.data.fill = color1; pathRefit(l); afterVec(l); };
   const aw = q('[data-autow]'); if (aw) aw.onclick = () => setData({ width: 0, ...(l.data.align === 'justify' ? { align: 'left' } : {}) }, true);
   const ah = q('[data-autoh]'); if (ah) ah.onclick = () => setData({ height: 0 }, true);
   const ratio = q('[data-ratio]'); if (ratio) ratio.onchange = () => { S.elRatio = ratio.checked; saveSettings(); };
@@ -2378,7 +2873,8 @@ function wireElPanel(bx, l) {
   const fl = q('[data-flt]'); if (fl) fl.onclick = () => { const m = document.getElementById('m-filters'); closeMenus(); m.classList.remove('hidden'); };
   qa('[data-fxd]').forEach(b => b.onclick = () => { pushDoc(); l.fx = l.fx.filter((f, i) => i !== +b.dataset.fxd); rerender(l, 'c'); afterVec(l); });
   qa('[data-fxe]').forEach(b => b.onclick = () => runFilterVec(l.fx[+b.dataset.fxe].name, +b.dataset.fxe));
-  const uq = q('[data-unq]'); if (uq) uq.onclick = () => { pushDoc(); delete l.tf.q; elQuad = false; afterVec(l); };
+  const uq = q('[data-unq]'); if (uq) uq.onclick = () => { pushDoc(); delete l.tf.q; delete l.tf.nb; elQuad = false; afterVec(l); };
+  const nbs = q('[data-nbslot]'); if (nbs) { nbs.appendChild(elNavball(l)); if (elQuad) requestAnimationFrame(() => nbs.scrollIntoView({ block: 'nearest' })); }
   const dq = q('[data-q]'); if (dq) dq.onclick = () => vecXf('distort');
   const cut = q('[data-cut]'); if (cut) cut.onclick = () => autoCutout();
   const cutc = q('[data-cutc]'); if (cutc) cutc.onclick = () => colorCutout();
@@ -2598,6 +3094,7 @@ view.addEventListener('pointerdown', e => {
   if (textEdit) { const h = elHit(p); if (h && h.id !== 'move') { startElDrag(h, p, e); return; } commitText(); if (tool === 'text') return; }
   if (e.button !== 0) return;
   if (xf && xfPointerDown(e, p) !== 'pass') return;
+  if ((tool === 'pen' || pathEdit) && penDown(e, p)) return;
   // éléments : sélection, poignées, textes et formes vivants
   if (tool === 'move') {
     if (elActive()) { const h = elHit(p); if (h) { startElDrag(h, p, e); return; } }
@@ -2661,8 +3158,10 @@ view.addEventListener('pointerdown', e => {
 });
 view.addEventListener('pointermove', e => {
   if (!doc) return;
-  const p = toDoc(e); mouse = { sx: p.sx, sy: p.sy, x: p.x, y: p.y, in: true };
+  const p = toDoc(e); mouse = { sx: p.sx, sy: p.sy, x: p.x, y: p.y, rx: p.rx, ry: p.ry, in: true };
   $('#st-pos').textContent = `${Math.floor(p.x)}, ${Math.floor(p.y)}`;
+  if (drag && (drag.kind === 'pen' || drag.kind === 'pedit')) { penDragMove(p, e); return; }
+  if (!drag && ((tool === 'pen' && pen) || pathEdit)) req();
   if (!drag && !xf && elActive()) { const h = elHit(p); view.style.cursor = !h ? (tool === 'move' ? 'default' : tool === 'text' ? 'text' : 'crosshair') : h.id === 'move' ? 'move' : h.id === 'rot' ? 'grab' : 'pointer'; if (tool === 'move') req(); return; }
   if (!drag && tool === 'move') { view.style.cursor = topElementAt(p) >= 0 ? 'move' : 'default'; req(); }
   if (!drag && xf) { const h = xfHandles().find(h => Math.hypot(h.x - p.sx, h.y - p.sy) <= 8); view.style.cursor = h ? (h.id === 'rot' ? 'grab' : 'crosshair') : xfInside(p) ? 'move' : 'default'; return; }
@@ -2713,6 +3212,8 @@ view.addEventListener('pointerup', e => {
     case 'paint': commitEffect(d.op, d.alpha); break;
     case 'gradient': if (Math.hypot(d.b.x - d.a.x, d.b.y - d.a.y) < 1) { override = null; break; } commitEffect('source-over', opts.gOpacity / 100); break;
     case 'shape': createShapeFromDrag(d.a, d.b, d.shift); break;
+    case 'pen': req(); break;
+    case 'pedit': markDirty(); updateThumb(pathEdit ? pathEdit.l : L()); break;
     case 'el': elDragEnd(d); break;
     case 'tbox': {
       const r = normRect({ x: d.a.x, y: d.a.y, w: d.b.x - d.a.x, h: d.b.y - d.a.y }), big = r.w * cam.z > 14 && r.h * cam.z > 10;
@@ -2727,7 +3228,10 @@ view.addEventListener('pointerup', e => {
   req(true);
 });
 view.addEventListener('pointerleave', () => { mouse.in = false; req(); });
-view.addEventListener('dblclick', e => { if (!xf && (tool === 'move' || tool === 'text' || SHAPE_TOOLS.includes(tool))) { const i = topElementAt(toDoc(e)); if (i >= 0 && doc.layers[i].kind === 'text' && !doc.layers[i].locked) { startTextEdit(doc.layers[i], false); return; } } if (xf) { const p = toDoc(e); if (xfInside(p)) commitTransform(); return; } if (tool === 'crop' && cropRect && cropHit(toDoc(e).sx, toDoc(e).sy) === 'in') applyCrop(); });
+view.addEventListener('dblclick', e => {
+  if (tool === 'pen' && pen) { const P = pen.pts; if (P.length >= 2 && Math.hypot(P[P.length - 1].x - P[P.length - 2].x, P[P.length - 1].y - P[P.length - 2].y) * cam.z < 6) P.pop(); penFinish(false); return; }
+  if (!xf && !pathEdit && (tool === 'move' || tool === 'pen')) { const i = topElementAt(toDoc(e)); if (i >= 0 && isPath(doc.layers[i])) { pick(i); startPathEdit(doc.layers[i]); return; } }
+  if (!xf && (tool === 'move' || tool === 'text' || SHAPE_TOOLS.includes(tool))) { const i = topElementAt(toDoc(e)); if (i >= 0 && doc.layers[i].kind === 'text' && !doc.layers[i].locked) { startTextEdit(doc.layers[i], false); return; } } if (xf) { const p = toDoc(e); if (xfInside(p)) commitTransform(); return; } if (tool === 'crop' && cropRect && cropHit(toDoc(e).sx, toDoc(e).sy) === 'in') applyCrop(); });
 view.addEventListener('wheel', e => {
   e.preventDefault(); if (!doc) return; const p = toDoc(e);
   const zoom = S.wheel === 'zoom' ? (e.ctrlKey || !e.shiftKey) : e.ctrlKey;
@@ -2739,7 +3243,7 @@ function updateCursor() {
   let c = 'crosshair';
   if (spaceDown || tool === 'hand') c = drag && drag.kind === 'pan' ? 'grabbing' : 'grab';
   else if (tool === 'move') c = 'move'; else if (tool === 'zoom') c = 'zoom-in'; else if (tool === 'zoomout') c = 'zoom-out'; else if (tool === 'text') c = 'text';
-  else if (PAINT_TOOLS.includes(tool)) c = 'none';
+  else if (PAINT_TOOLS.includes(tool) || tool === 'picker') c = 'none';
   view.style.cursor = c;
 }
 new ResizeObserver(() => req()).observe(stage);
@@ -2764,8 +3268,10 @@ document.addEventListener('keydown', e => {
   if (e.key === 'F1') { e.preventDefault(); openGuide(); return; }
   if (e.key === ' ') { if (!spaceDown) { spaceDown = true; updateCursor(); } e.preventDefault(); return; }
   if (elQuad && (e.key === 'Enter' || e.key === 'Escape')) { elQuad = false; renderOptbar(); req(); return; }
+  if (penKey(e)) return;
   if (xf && e.key === 'Enter') { commitTransform(); return; }
   if (xf && e.key === 'Escape') { cancelTransform(); return; }
+  if (tool === 'picker' && e.key === 'Escape') { setTool(PK.prev || 'brush'); return; }
   if (e.key === 'Enter' && cropRect) { applyCrop(); return; }
   if (e.key === 'Escape') { const menuOpen = $$('.menu:not(.hidden)').length; closeMenus(); if (menuOpen) return; if (cropRect) { cropRect = null; renderOptbar(); req(); } else if (sel) setSelection(null); else if (picked) unpick(); return; }
   if (e.key === 'Delete' || e.key === 'Backspace') { e.preventDefault(); if (elActive() && !sel) { deleteEl(); return; } act(e.altKey ? 'fill' : 'clear'); return; }
@@ -2785,6 +3291,7 @@ document.addEventListener('keydown', e => {
   if (k === 'x') { [color1, color2] = [color2, color1]; setColor1(color1); return; }
   if (k === 'd') { color2 = '#ffffff'; setColor1('#000000'); return; }
   if (k === 'z' && e.shiftKey) { setTool('zoomout'); return; }
+  if (k === 'p' && e.shiftKey) { setTool('polygon'); return; }
   for (const id in TOOL_BY_ID) if (TOOL_BY_ID[id].key.toLowerCase() === k) { setTool(id); return; }
 });
 document.addEventListener('keyup', e => { if (e.key === ' ') { spaceDown = false; updateCursor(); } });
@@ -2872,7 +3379,9 @@ function setTool(id) {
   if (textEdit && !['text', 'move', 'hand', 'zoom', 'zoomout'].includes(id)) commitText();   // le texte reste en édition (déplaçable) avec Texte, Déplacer, Main et Loupe
   if (id !== 'crop') cropRect = null;
   else if (!cropRect && doc) cropRect = { x: 0, y: 0, w: doc.w, h: doc.h };
-  tool = id; $$('.tool-btn').forEach(b => b.classList.toggle('active', b.dataset.tool === id));
+  if (id === 'picker' && tool !== 'picker') PK.prev = tool;
+  if (pen && id !== 'pen') penFinish(false); if (pathEdit && !['move', 'pen', 'hand', 'zoom', 'zoomout'].includes(id)) endPathEdit();
+  tool = id; $$('.tool-btn').forEach(b => b.classList.toggle('active', b.dataset.tool === id)); document.body.classList.toggle('picking', id === 'picker'); if (id !== 'picker') pkHide();
   renderOptbar(); updateCursor(); req();
 }
 
@@ -2948,7 +3457,9 @@ function optSpec() {
     case 'bucket': return [range('Tolérance', 'tol', 0, 255), range('Opacité', 'bOpacity', 1, 100, '%'), tiles('Lire les couleurs sur', 'sample', SAMPLE_T), toggles([['contig', TG.contig, 'Zone contiguë']])];
     case 'gradient': return [{ type: 'preview' }, tiles('Type', 'gType', [['linear', TI('<defs><linearGradient id="tg-l"><stop offset="0" stop-color="var(--tc)"/><stop offset="1" stop-color="var(--tc)" stop-opacity="0"/></linearGradient></defs><rect x="4" y="7" width="24" height="18" rx="3" fill="url(#tg-l)" stroke="currentColor" stroke-width="1.5"/>'), 'Linéaire'], ['radial', TI('<defs><radialGradient id="tg-r"><stop offset="0" stop-color="var(--tc)"/><stop offset="1" stop-color="var(--tc)" stop-opacity="0"/></radialGradient></defs><circle cx="16" cy="16" r="12" fill="url(#tg-r)" stroke="currentColor" stroke-width="1.5"/>'), 'Radial']]),
       tiles('Couleurs', 'gMode', [['c2', TI(`<defs><linearGradient id="tg-c"><stop offset="0" stop-color="${color1}"/><stop offset="1" stop-color="${color2}"/></linearGradient></defs><rect x="3" y="9" width="26" height="14" rx="3" fill="url(#tg-c)" stroke="#9ca3af" stroke-width="1.2"/>`), '1 → 2'], ['tr', TI(`<defs><linearGradient id="tg-t"><stop offset="0" stop-color="${color1}"/><stop offset="1" stop-color="${color1}" stop-opacity="0"/></linearGradient><pattern id="tg-k" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="#fff"/><path d="M0 0h3v3H0zM3 3h3v3H3z" fill="#cbd5e1"/></pattern></defs><rect x="3" y="9" width="26" height="14" rx="3" fill="url(#tg-k)"/><rect x="3" y="9" width="26" height="14" rx="3" fill="url(#tg-t)" stroke="#9ca3af" stroke-width="1.2"/>`), '1 → transparent']]), range('Opacité', 'gOpacity', 1, 100, '%'), { type: 'hint', text: 'Glisser pour tracer' }];
-    case 'picker': return [{ type: 'hint', text: 'Prend la couleur sur le <b>calque actif</b>.<br>Clic : couleur 1 · Alt+clic : couleur 2' }];
+    case 'picker': return [{ type: 'hint', text: 'Prend la couleur de <b>tout ce qui est visible</b> : la page (textes, formes, images) mais aussi les palettes de MomoPIC (nuancier, favoris, galerie…). La loupe montre les pixels visés.<br>Clic : couleur 1 · Alt+clic : couleur 2' },
+      { type: 'btn', cls: 'ok', label: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 22 1-1h3l9-9"/><path d="M3 21v-3l9-9"/><path d="m15 6 3.4-3.4a2.1 2.1 0 1 1 3 3L18 9l.4.4a2.1 2.1 0 1 1-3 3l-3.8-3.8a2.1 2.1 0 1 1 3-3l.4.4z"/></svg>Prendre une couleur n\'importe où sur l\'écran', fn: () => screenPick(false) },
+      { type: 'hint', text: window.EyeDropper ? 'Même hors de MomoPIC : autre fenêtre, site, bureau… Échap pour annuler. Échap : revenir à l\'outil d\'avant.' : 'Prise de couleur hors de la page : disponible sous Chrome et Edge seulement.' }];
     case 'marquee': case 'ellsel': return [SELMODE, { type: 'hint', text: 'Maj = carré / cercle · clic simple = désélectionner · Ctrl+D' }];
     case 'lasso': return [SELMODE, { type: 'hint', text: 'Glisser pour entourer la zone' }];
     case 'wand': return [SELMODE, range('Tolérance', 'wTol', 0, 255), tiles('Lire les couleurs sur', 'wSample', SAMPLE_T), toggles([['wContig', TG.contig, 'Zone contiguë']])];
@@ -2964,6 +3475,9 @@ function optSpec() {
     case 'rect': case 'ellipse': return [styleTiles(), { type: 'hint', text: SHHINT() }, ...(opts.shMode !== 'fill' ? [range('Contour', 'shWidth', 1, 100, 'px')] : []), range('Opacité', 'shOpacity', 1, 100, '%'), { type: 'hint', text: 'Maj = carré / cercle' }];
     case 'line': return [{ type: 'preview' }, range('Épaisseur', 'lnWidth', 1, 200, 'px'), range('Opacité', 'lnOpacity', 1, 100, '%'), { type: 'hint', text: 'Maj = angles de 45°' }];
     case 'arrow': return [tiles('Pointes', 'arDouble', [[false, TI('<path d="M5 16h20M19 10l6 6-6 6" stroke="var(--tc)" stroke-width="3"/>'), 'Simple'], [true, TI('<path d="M7 16h18M19 10l6 6-6 6M13 10l-6 6 6 6" stroke="var(--tc)" stroke-width="3"/>'), 'Double']]), range('Épaisseur', 'arWidth', 1, 100, 'px'), range('Pointe (× épaisseur)', 'arHead', 2, 10), range('Opacité', 'arOpacity', 1, 100, '%'), { type: 'hint', text: 'Couleur 1 · glisser de la queue vers la pointe · Maj = angles de 45°' }];
+    case 'pen': return [{ type: 'hint', text: pen ? `<b style="color:var(--tc)">Tracé en cours : ${pen.pts.length} point${pen.pts.length > 1 ? 's' : ''}</b><br>Clic sur le 1er point = fermer · Entrée ou double-clic = terminer · Retour arrière = retirer le dernier point.` : 'Clic = point anguleux · <b>cliquer-glisser</b> = point courbe (Alt : poignées indépendantes). Clic sur le 1er point pour fermer la forme, Entrée ou double-clic pour laisser le tracé ouvert.' },
+      styleTiles(), { type: 'hint', text: 'Le remplissage s\'applique aux tracés fermés ; un tracé ouvert est un trait.' }, range('Épaisseur du trait', 'penWidth', 1, 100, 'px'), range('Opacité', 'shOpacity', 1, 100, '%'),
+      { type: 'hint', text: 'Pour retoucher un tracé : <b>double-clic</b> dessus (points, poignées, ajout d\'un point sur le trait, Alt+clic = anguleux / courbe).' }];
     case 'polygon': return [tiles('Forme', 'pgStar', [[false, TI('<polygon points="16,4 27,11 27,22 16,28 5,22 5,11" fill="var(--tc)"/>'), 'Polygone'], [true, TI('<polygon points="16,3 19.5,11.5 28.5,12 21.5,18 24,27 16,22 8,27 10.5,18 3.5,12 12.5,11.5" fill="var(--tc)"/>'), 'Étoile']]), range(opts.pgStar ? 'Nombre de branches' : 'Nombre de côtés', 'pgSides', 3, 24), ...(opts.pgStar ? [range('Creux de l\'étoile', 'pgInner', 10, 95, '%')] : []), styleTiles(), { type: 'hint', text: SHHINT() }, ...(opts.shMode !== 'fill' ? [range('Contour', 'shWidth', 1, 100, 'px')] : []), range('Opacité', 'shOpacity', 1, 100, '%'), { type: 'hint', text: 'Glisser du centre vers un sommet · Maj = rotation par pas de 15°' }];
     case 'smudge': return [{ type: 'preview' }, range('Taille', 'smSize', 2, 300, 'px'), range('Dureté', 'smHard', 0, 100, '%'), range('Force', 'smStrength', 1, 100, '%'), { type: 'hint', text: 'Glisser pour étaler les couleurs du calque actif, comme avec le doigt sur de la peinture fraîche.' }];
     case 'blur': return [tiles('Effet', 'blMode', [['blur', TI('<circle cx="16" cy="16" r="9" fill="var(--tc)" opacity=".35"/><circle cx="16" cy="16" r="6" fill="var(--tc)" opacity=".5"/><circle cx="16" cy="16" r="3.5" fill="var(--tc)"/>'), 'Flou'], ['sharpen', TI('<path d="M16 4 27 26H5z" fill="var(--tc)" stroke="#fff" stroke-width="1.5"/>'), 'Netteté']]), { type: 'preview' }, range('Taille', 'blSize', 1, 500, 'px'), range('Dureté', 'blHard', 0, 100, '%'), range(opts.blMode === 'blur' ? 'Rayon du flou' : 'Intensité', 'blRadius', 1, 20), range('Force', 'blStrength', 1, 100, '%'), { type: 'hint', text: 'Peindre sur les zones à adoucir (ou à rendre plus nettes). Un seul passage par trait : repasser pour accentuer.' }];
@@ -2972,7 +3486,7 @@ function optSpec() {
       const m = measureInfo();
       return [{ type: 'hint', text: `<div style="font-size:13px;color:var(--g200);line-height:1.7">Longueur : <b>${m.len.toFixed(1)} px</b><br>ΔX : ${m.dx.toFixed(1)} · ΔY : ${(-m.dy).toFixed(1)}<br>Angle : <b>${m.ang.toFixed(2)}°</b></div>` },
         { type: 'btn', label: 'Redresser l\'image sur cette ligne', cls: 'ok', fn: straighten }, { type: 'btn', label: 'Effacer la mesure', fn: () => { measure = null; renderOptbar(); req(); } }]; }
-    case 'move': return [{ type: 'hint', text: 'Glisser pour déplacer le calque actif' }, { type: 'btn', label: 'Recentrer le calque', fn: () => { const l = L(); pushDoc(); l.x = Math.round((doc.w - l.canvas.width) / 2); l.y = Math.round((doc.h - l.canvas.height) / 2); req(true); } }, { type: 'btn', label: 'Remettre à 0,0', fn: () => { const l = L(); pushDoc(); l.x = 0; l.y = 0; req(true); } }];
+    case 'move': return [{ type: 'hint', text: 'Clique un élément (texte, forme, image…) pour le sélectionner : ses réglages s\'affichent ici. Glisser pour le déplacer.' }];
     case 'clone': return [{ type: 'preview' }, range('Taille', 'cSize', 1, 500, 'px'), range('Dureté', 'cHard', 0, 100, '%'), range('Opacité', 'cOpacity', 1, 100, '%'), tiles('Copier depuis', 'cSample', SAMPLE_T), toggles([['cAligned', TG.aligned, 'Aligné']]),
       { type: 'hint', text: (cloneSrc ? `Source : <b style="color:var(--g200)">${Math.round(cloneSrc.x)}, ${Math.round(cloneSrc.y)}</b><br>` : '<b style="color:#fb7185">Pas encore de source.</b><br>') + '<b>Ctrl+clic</b> : choisir la source · <b>clic / glisser</b> : cloner. <b>Aligné</b> : le décalage source → pinceau est gardé d\'un trait à l\'autre ; décoché, chaque trait repart de la source.' }];
     case 'hand': case 'zoom': case 'zoomout': return [{ type: 'btn', label: 'Ajuster à l\'écran (Ctrl+0)', fn: fit }, { type: 'btn', label: '100 % (Ctrl+1)', fn: () => setZoom(1) }, { type: 'hint', text: tool === 'zoom' ? 'Clic : zoom avant · Alt+clic : zoom arrière' : tool === 'zoomout' ? 'Clic : zoom arrière · Alt+clic : zoom avant' : 'Glisser · aussi Espace ou clic-molette avec n\'importe quel outil' }];
@@ -2980,7 +3494,7 @@ function optSpec() {
   return [];
 }
 function renderOptbar() {
-  { const bx = $('#toolopts'); if (doc && !xf && EL_TOOLS.includes(tool) && L() && (picked || tool === 'move')) { if (picked) renderElPanel(bx); else renderPagePanel(bx); return; } }
+  { const bx = $('#toolopts'); if (doc && !xf && EL_TOOLS.includes(tool) && L() && picked) { renderElPanel(bx); return; } }
   const T = xf && xf.shape ? { c: TOOL_BY_ID[xf.shape].c, name: TOOL_BY_ID[xf.shape].name + (xf.mode === 'distort' ? ' · déformation' : ' · modifiable'), key: 'Entrée' } : xf ? { c: xf.mode === 'distort' ? '#c084fc' : xf.copy ? '#f59e0b' : '#60a5fa', name: xf.mode === 'distort' ? 'Déformer la sélection' : xf.paste ? 'Collage (flottant)' : xf.copy ? 'Copie miroir' : 'Rotation / échelle', key: 'Entrée' } : TOOL_BY_ID[tool], box = $('#toolopts');
   const ico = xf && xf.shape ? IC[xf.shape] : xf ? IC[xf.mode === 'distort' ? 'xdistort' : xf.copy ? 'xmirror' : 'xrotate'] : IC[tool];
   box.style.setProperty('--tc', T.c);
@@ -3022,6 +3536,8 @@ function renderOptbar() {
       el = document.createElement('div'); el.className = 'orow otiles'; el.style.gridTemplateColumns = `repeat(${Math.max(2, o.items.length)},1fr)`;
       o.items.forEach(([k, ic, t]) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'otile tog' + (opts[k] ? ' on' : ''); b.title = t + ' : ' + (opts[k] ? 'activé' : 'désactivé'); b.innerHTML = ic + `<span>${t}</span><i>${opts[k] ? 'oui' : 'non'}</i>`;
         b.onclick = () => { opts[k] = !opts[k]; saveOpts(); renderOptbar(); if (textEdit) styleTextEdit(); req(); }; el.appendChild(b); });
+    } else if (o.type === 'custom') {
+      el = o.el();
     } else if (o.type === 'preview') {
       el = document.createElement('div'); el.className = 'orow'; el.innerHTML = '<canvas class="opv"></canvas>';
       requestAnimationFrame(() => { const cv = el.querySelector('.opv'); if (cv && cv.isConnected) { if (tool === 'text') ensureFont(opts.font).then(() => cv.isConnected && drawToolPreview(cv)); drawToolPreview(cv); } });
@@ -3039,7 +3555,7 @@ function renderOptbar() {
         b.onclick = () => { opts[o.key] = v; saveOpts(); renderOptbar(); if (textEdit) styleTextEdit(); }; el.appendChild(b); });
     }
     else if (o.type === 'btn') {
-      const b = document.createElement('button'); b.className = 'obtn ' + (o.cls || ''); b.textContent = o.label; b.onclick = o.fn;
+      const b = document.createElement('button'); b.className = 'obtn ' + (o.cls || ''); if (/^<svg/.test(o.label)) b.innerHTML = o.label; else b.textContent = o.label; b.onclick = o.fn;
       if (o.row) { if (!btnRow) { btnRow = document.createElement('div'); btnRow.className = 'obtns'; box.appendChild(btnRow); } btnRow.appendChild(b); return; }
       el = b;
     }
@@ -3378,6 +3894,155 @@ Object.assign(ADJUST, {
     run: (src, p, X) => { const cont = cloneCanvas(src); if (X.mask) { const c = cont.getContext('2d'); c.globalCompositeOperation = 'destination-in'; c.drawImage(X.mask, 0, 0); }
       let sh = p.sp ? morphCanvas(cont, p.sp, true) : cont; const t = cloneCanvas(sh), tc = t.getContext('2d'); tc.globalCompositeOperation = 'source-in'; tc.fillStyle = p.col; tc.fillRect(0, 0, t.width, t.height);
       sh = blurCanvas(t, p.b); const out = mkCanvas(src.width, src.height), x = out.getContext('2d'); x.globalAlpha = p.o / 100; x.drawImage(sh, p.dx, p.dy); x.globalAlpha = 1; x.drawImage(src, 0, 0); return out; } },
+});
+/* ---------------- filtres, 2e fournée : couleur & lumière, préréglages, flous créatifs, artistique ---------------- */
+const lumv = (r, g, b) => r * .299 + g * .587 + b * .114;
+function lutFilter(src, f) {   // f(v, canal) -> v' ; table 3 × 256
+  const t = new Uint8ClampedArray(768); for (let c = 0; c < 3; c++) for (let v = 0; v < 256; v++) t[c * 256 + v] = f(v, c);
+  return pixelFilter(src, d => { for (let i = 0; i < d.length; i += 4) { d[i] = t[d[i]]; d[i + 1] = t[256 + d[i + 1]]; d[i + 2] = t[512 + d[i + 2]]; } });
+}
+function grayArr(sd, n) { const g = new Float32Array(n); for (let i = 0, j = 0; j < n; i += 4, j++) g[j] = lumv(sd[i], sd[i + 1], sd[i + 2]); return g; }
+function sobelArr(g, w, h) {
+  const m = new Float32Array(w * h), at = (x, y) => g[clamp(y, 0, h - 1) * w + clamp(x, 0, w - 1)];
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    const gx = at(x + 1, y - 1) + 2 * at(x + 1, y) + at(x + 1, y + 1) - at(x - 1, y - 1) - 2 * at(x - 1, y) - at(x - 1, y + 1);
+    const gy = at(x - 1, y + 1) + 2 * at(x, y + 1) + at(x + 1, y + 1) - at(x - 1, y - 1) - 2 * at(x, y - 1) - at(x + 1, y - 1);
+    m[y * w + x] = Math.hypot(gx, gy) / 4; }
+  return m;
+}
+// moyenne glissante sur la fenêtre [x-r..x] × [y-r..y] (bords : fenêtre tronquée)
+function boxTrail(a, w, h, r) {
+  const t = new Float32Array(w * h), o = new Float32Array(w * h);
+  for (let y = 0; y < h; y++) { let s = 0; const row = y * w; for (let x = 0; x < w; x++) { s += a[row + x]; if (x > r) s -= a[row + x - r - 1]; t[row + x] = s / Math.min(x + 1, r + 1); } }
+  for (let x = 0; x < w; x++) { let s = 0; for (let y = 0; y < h; y++) { s += t[y * w + x]; if (y > r) s -= t[(y - r - 1) * w + x]; o[y * w + x] = s / Math.min(y + 1, r + 1); } }
+  return o;
+}
+const satMix = (d, i, f) => { const l = lumv(d[i], d[i + 1], d[i + 2]); d[i] = l + (d[i] - l) * f; d[i + 1] = l + (d[i + 1] - l) * f; d[i + 2] = l + (d[i + 2] - l) * f; };
+const contr = (v, c) => (v - 128) * c + 128;
+// accumule des copies déplacées / zoomées (moyenne exacte) : flou de mouvement, flou radial
+function accumDraw(src, n, place) {
+  const c = mkCanvas(src.width, src.height), x = c.getContext('2d'); x.imageSmoothingQuality = 'high'; x.drawImage(src, 0, 0);
+  for (let k = 0; k < n; k++) { x.save(); x.globalAlpha = 1 / (k + 2); place(x, k / Math.max(1, n - 1)); x.drawImage(src, 0, 0); x.restore(); }
+  return c;
+}
+// préréglages façon Canva : (r, g, b, l) -> écrit dans o ; vignette et grain facultatifs
+const PRESETS = {
+  vintage: { lab: 'Vintage', vig: .45, grain: 6, f: (r, g, b, o) => { o[0] = 40 + r * .82 + g * .1; o[1] = 30 + g * .8 + r * .05; o[2] = 25 + b * .65 + g * .05; } },
+  chaud: { lab: 'Soleil (chaud)', f: (r, g, b, o) => { o[0] = r * 1.08 + 12; o[1] = g * 1.02 + 5; o[2] = b * .86; } },
+  froid: { lab: 'Glacier (froid)', f: (r, g, b, o) => { const l = lumv(r, g, b); o[0] = (r * .85 + l * .15) * .92; o[1] = (g * .85 + l * .15) * .99 + 4; o[2] = (b * .85 + l * .15) * 1.06 + 14; } },
+  cine: { lab: 'Cinéma (bleu-orangé)', vig: .3, f: (r, g, b, o) => { const l = lumv(r, g, b) / 255, s = 1 - smooth(.15, .55, l), h = smooth(.45, .9, l);
+    o[0] = contr(r, 1.12) - 22 * s + 26 * h; o[1] = contr(g, 1.12) + 6 * s + 8 * h; o[2] = contr(b, 1.12) + 26 * s - 30 * h; } },
+  lomo: { lab: 'Lomo', vig: .75, f: (r, g, b, o) => { const l = lumv(r, g, b); o[0] = contr(l + (r - l) * 1.4, 1.3); o[1] = contr(l + (g - l) * 1.4, 1.3); o[2] = contr(l + (b - l) * 1.4, 1.25) - 6; } },
+  delave: { lab: 'Délavé (mat)', f: (r, g, b, o) => { const l = lumv(r, g, b); o[0] = 38 + (l + (r - l) * .78) * .82; o[1] = 38 + (l + (g - l) * .78) * .82; o[2] = 44 + (l + (b - l) * .78) * .8; } },
+  nbdrame: { lab: 'N&B dramatique', vig: .35, f: (r, g, b, o) => { const v = contr(lumv(r * 1.1, g, b * .9), 1.45); o[0] = o[1] = o[2] = v; } },
+  nbdoux: { lab: 'N&B doux', f: (r, g, b, o) => { const v = 20 + lumv(r, g, b) * .88; o[0] = v + 4; o[1] = v + 2; o[2] = v; } },
+  polaroid: { lab: 'Polaroïd', vig: .25, grain: 4, f: (r, g, b, o) => { const l = lumv(r, g, b) / 255, s = 1 - l; o[0] = 18 + r * .9 + 18 * l; o[1] = 22 + g * .9 + 10 * s; o[2] = 26 + b * .82 + 16 * s; } },
+  pop: { lab: 'Pop (éclatant)', f: (r, g, b, o) => { const l = lumv(r, g, b); o[0] = contr(l + (r - l) * 1.55, 1.12); o[1] = contr(l + (g - l) * 1.55, 1.12); o[2] = contr(l + (b - l) * 1.55, 1.12); } },
+  nuit: { lab: 'Nocturne', vig: .5, f: (r, g, b, o) => { const l = lumv(r, g, b); o[0] = (l * .5 + r * .5) * .72; o[1] = (l * .5 + g * .5) * .8 + 4; o[2] = (l * .5 + b * .5) * .95 + 22; } },
+  automne: { lab: 'Automne', f: (r, g, b, o) => { o[0] = r * 1.05 + g * .08 + 6; o[1] = g * .9 + r * .06; o[2] = b * .72; } },
+};
+Object.assign(FILTERS, {
+  autolevels: (d, w, h) => {   // étire chaque canal entre ses 0,5 % extrêmes
+    const hs = [new Uint32Array(256), new Uint32Array(256), new Uint32Array(256)]; let n = 0;
+    for (let i = 0; i < d.length; i += 4) if (d[i + 3]) { hs[0][d[i]]++; hs[1][d[i + 1]]++; hs[2][d[i + 2]]++; n++; }
+    if (!n) return; const cut = n * .005, lo = [], hi = [];
+    for (let c = 0; c < 3; c++) { let s = 0, a = 0; while (a < 255 && (s += hs[c][a]) <= cut) a++; s = 0; let b = 255; while (b > 0 && (s += hs[c][b]) <= cut) b--; lo[c] = a; hi[c] = Math.max(a + 1, b); }
+    for (let i = 0; i < d.length; i += 4) for (let c = 0; c < 3; c++) d[i + c] = (d[i + c] - lo[c]) * 255 / (hi[c] - lo[c]);
+  },
+  solarize: d => { for (let i = 0; i < d.length; i += 4) for (let c = 0; c < 3; c++) if (d[i + c] > 128) d[i + c] = 255 - d[i + c]; },
+});
+Object.assign(ADJUST, {
+  /* ---- Couleur & lumière ---- */
+  levels: { title: 'Niveaux', params: [['Noir (entrée)', 'lo', 0, 254, 0], ['Blanc (entrée)', 'hi', 1, 255, 255], ['Tons moyens (gamma)', 'g', .1, 3, 1, .01], ['Noir (sortie)', 'olo', 0, 255, 0], ['Blanc (sortie)', 'ohi', 0, 255, 255]],
+    note: 'Resserre la plage des tons : monte le noir et descends le blanc pour plus de punch ; le gamma éclaircit (> 1) ou assombrit (< 1) les tons moyens.',
+    run: (src, p) => lutFilter(src, v => { const t = clamp((v - p.lo) / Math.max(1, p.hi - p.lo), 0, 1); return p.olo + Math.pow(t, 1 / p.g) * (p.ohi - p.olo); }) },
+  expo: { title: 'Exposition', params: [['Exposition', 'e', -3, 3, 0, .05, ' IL'], ['Décalage', 'o', -100, 100, 0], ['Gamma', 'g', .1, 3, 1, .01]], note: 'Comme sur l\'appareil photo : +1 IL double la lumière, −1 IL la divise par deux.',
+    run: (src, p) => lutFilter(src, v => 255 * Math.pow(clamp(v / 255 * Math.pow(2, p.e) + p.o / 255, 0, 1), 1 / p.g)) },
+  tones: { title: 'Ombres / Hautes lumières', params: [['Déboucher les ombres', 'sh', 0, 100, 35, 1, '%'], ['Récupérer les hautes lumières', 'hl', 0, 100, 0, 1, '%'], ['Rayon', 'r', 2, 80, 20, 1, 'px']],
+    note: 'Éclaircit les zones sombres (contre-jour) et/ou ramène du détail dans les zones brûlées, sans toucher au reste.',
+    run: (src, p) => { const gc = pixelFilter(src, d => { for (let i = 0; i < d.length; i += 4) d[i] = d[i + 1] = d[i + 2] = lumv(d[i], d[i + 1], d[i + 2]); }), lb = imgData(blurCanvas(gc, p.r)).data;
+      return pixelFilter(src, d => { for (let i = 0; i < d.length; i += 4) { const l = lb[i] / 255, up = 1 + p.sh / 100 * 1.6 * (1 - l) * (1 - l), dn = p.hl / 100 * .55 * l * l;
+        for (let c = 0; c < 3; c++) { let v = d[i + c] * up; v -= (v - 90) * dn * (v > 90); d[i + c] = v; } } }); } },
+  temp: { title: 'Balance des blancs', params: [['Température', 'k', -100, 100, 0], ['Teinte (vert ↔ magenta)', 't', -100, 100, 0]], note: 'Réchauffe (vers le jaune-orangé) ou refroidit (vers le bleu) une photo, corrige une dominante verte ou magenta.',
+    run: (src, p) => lutFilter(src, (v, c) => c === 0 ? v * (1 + p.k / 260) + p.k * .12 : c === 2 ? v * (1 - p.k / 260) - p.k * .12 : v * (1 - p.t / 300) - p.t * .05) },
+  vibrance: { title: 'Vibrance', params: [['Vibrance', 'v', -100, 100, 40], ['Saturation', 's', -100, 100, 0]], note: 'La vibrance ravive surtout les couleurs ternes et épargne les tons déjà vifs (et la peau), contrairement à la saturation.',
+    run: (src, p) => pixelFilter(src, d => { for (let i = 0; i < d.length; i += 4) { const mx = Math.max(d[i], d[i + 1], d[i + 2]), mn = Math.min(d[i], d[i + 1], d[i + 2]), st = mx ? (mx - mn) / mx : 0;
+      satMix(d, i, (1 + p.v / 100 * (1 - st) * 1.4) * (1 + p.s / 100)); } }) },
+  posterize: { title: 'Postérisation', params: [['Niveaux par couleur', 'n', 2, 32, 5]], note: 'Réduit le nombre de couleurs : aplats façon affiche sérigraphiée.',
+    run: (src, p) => lutFilter(src, v => Math.round(Math.round(v / 255 * (p.n - 1)) * 255 / (p.n - 1))) },
+  duotone: { title: 'Bichromie', params: [{ t: 'color', lab: 'Ombres', k: 'c1', def: '#1e3a8a' }, { t: 'color', lab: 'Lumières', k: 'c2', def: '#fbbf24' }, ['Contraste', 'c', -50, 100, 10], ['Mélange', 'm', 0, 100, 100, 1, '%']],
+    note: 'Remplace les couleurs par un dégradé entre deux teintes (effet affiche, Spotify…).',
+    run: (src, p) => { const a = hexToRgb(p.c1), b = hexToRgb(p.c2), m = p.m / 100, cf = 1 + p.c / 100;
+      return pixelFilter(src, d => { for (let i = 0; i < d.length; i += 4) { const t = clamp(contr(lumv(d[i], d[i + 1], d[i + 2]), cf) / 255, 0, 1);
+        d[i] += (a.r + (b.r - a.r) * t - d[i]) * m; d[i + 1] += (a.g + (b.g - a.g) * t - d[i + 1]) * m; d[i + 2] += (a.b + (b.b - a.b) * t - d[i + 2]) * m; } }); } },
+  presets: { title: 'Préréglages photo', params: [{ t: 'select', lab: 'Style', k: 'ps', def: 'vintage', opts: Object.entries(PRESETS).map(([k, v]) => [k, v.lab]) }, ['Intensité', 'i', 0, 100, 100, 1, '%']],
+    note: 'Des « looks » tout faits, à doser avec l\'intensité. Sur un texte ou une forme, ils restent modifiables.',
+    run: (src, p, X) => { const P = PRESETS[p.ps] || PRESETS.vintage, k = p.i / 100, o = [0, 0, 0], w = src.width;
+      return pixelFilter(src, d => { for (let i = 0, n = 0; i < d.length; i += 4, n++) { if (!d[i + 3]) continue; const r = d[i], g = d[i + 1], b = d[i + 2]; P.f(r, g, b, o);
+        if (P.vig) { const x = n % w + .5, y = (n / w | 0) + .5, e = Math.hypot((x - X.cx) / X.rw, (y - X.cy) / X.rh) / Math.SQRT2, t = 1 - smooth(.4, 1.05, e) * P.vig; o[0] *= t; o[1] *= t; o[2] *= t; }
+        if (P.grain) { const z = (hash2(n % w, n / w | 0, 77) - .5) * P.grain * 2; o[0] += z; o[1] += z; o[2] += z; }
+        d[i] = r + (o[0] - r) * k; d[i + 1] = g + (o[1] - g) * k; d[i + 2] = b + (o[2] - b) * k; } }); } },
+  /* ---- Flous ---- */
+  motion: { title: 'Flou de mouvement', params: [['Angle', 'a', -180, 180, 0, 1, '°'], ['Distance', 'd', 1, 300, 30, 1, 'px']], note: 'Filé dans une direction, comme une photo prise en mouvement.',
+    run: (src, p) => { const a = p.a * Math.PI / 180, n = clamp(Math.round(p.d), 2, 64); return accumDraw(src, n, (x, t) => x.translate(Math.cos(a) * p.d * (t - .5), Math.sin(a) * p.d * (t - .5))); } },
+  zoomblur: { title: 'Flou radial (zoom)', params: [['Quantité', 'q', 1, 100, 25, 1, '%']], note: 'Effet de vitesse qui part du centre de la sélection (ou du calque).',
+    run: (src, p, X) => accumDraw(src, 40, (x, t) => { const s = 1 + p.q / 100 * .4 * t; x.translate(X.cx, X.cy); x.scale(s, s); x.translate(-X.cx, -X.cy); }) },
+  tiltshift: { title: 'Effet miniature', params: [['Position de la zone nette', 'pos', 0, 100, 55, 1, '%'], ['Largeur nette', 'wd', 2, 80, 18, 1, '%'], ['Flou', 'b', 1, 40, 10, 1, 'px'], ['Saturation', 's', 0, 80, 30, 1, '%']],
+    note: 'Bande nette horizontale et flou au-dessus et en dessous : un chantier ou une ville a l\'air d\'une maquette.',
+    run: (src, p) => { const bl = imgData(blurCanvas(src, p.b)).data, w = src.width, h = src.height, c0 = p.pos / 100, hw = p.wd / 200;
+      return pixelFilter(src, d => { for (let i = 0, n = 0; i < d.length; i += 4, n++) { const y = (n / w | 0) / h, t = smooth(hw, hw + .22, Math.abs(y - c0));
+        for (let c = 0; c < 4; c++) d[i + c] += (bl[i + c] - d[i + c]) * t; satMix(d, i, 1 + p.s / 100); } }); } },
+  /* ---- Artistique ---- */
+  oil: { title: 'Peinture à l\'huile', params: [['Taille du pinceau', 'r', 2, 14, 5, 1, 'px']], note: 'Lisse les aplats en gardant les contours nets (filtre de Kuwahara) : rendu peint.',
+    run: (src, p) => { const w = src.width, h = src.height, n = w * h, r = p.r, out = imgData(src), d = out.data, L = grayArr(d, n), L2 = new Float32Array(n);
+      for (let j = 0; j < n; j++) L2[j] = L[j] * L[j];
+      const mL = boxTrail(L, w, h, r), mL2 = boxTrail(L2, w, h, r), best = new Int32Array(n);
+      for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) { let bv = 1e18, bi = 0;
+        for (let q = 0; q < 4; q++) { const i = Math.min(y + (q >> 1) * r, h - 1) * w + Math.min(x + (q & 1) * r, w - 1), v = mL2[i] - mL[i] * mL[i]; if (v < bv) { bv = v; bi = i; } } best[y * w + x] = bi; }
+      for (let c = 0; c < 3; c++) { const ch = new Float32Array(n); for (let j = 0; j < n; j++) ch[j] = d[j * 4 + c]; const m = boxTrail(ch, w, h, r); for (let j = 0; j < n; j++) d[j * 4 + c] = m[best[j]]; }
+      return fromData(w, h, out); } },
+  sketch: { title: 'Croquis au crayon', params: [['Finesse du trait', 'r', 1, 30, 6, 1, 'px'], ['Appui du crayon', 'c', 0, 100, 40, 1, '%'], { t: 'check', lab: 'Garder les couleurs (crayons de couleur)', k: 'col', def: false }],
+    note: 'Transforme une photo en dessin au crayon sur papier blanc.',
+    run: (src, p) => { const inv = pixelFilter(src, d => { for (let i = 0; i < d.length; i += 4) d[i] = d[i + 1] = d[i + 2] = 255 - lumv(d[i], d[i + 1], d[i + 2]); }), b = imgData(blurCanvas(inv, p.r)).data, cf = 1 + p.c / 50;
+      return pixelFilter(src, d => { for (let i = 0; i < d.length; i += 4) { const g = lumv(d[i], d[i + 1], d[i + 2]), s = clamp(255 - (255 - Math.min(255, g * 255 / Math.max(1, 255 - b[i]))) * cf * 1.6, 0, 255);
+        if (p.col) { const k = s / 255; for (let c = 0; c < 3; c++) d[i + c] = 255 - (255 - d[i + c]) * .55 * (1 - k) - (255 - s) * .45; } else d[i] = d[i + 1] = d[i + 2] = s; } }); } },
+  cartoon: { title: 'Bande dessinée', params: [['Niveaux de couleur', 'n', 3, 12, 6], ['Traits', 'e', 0, 100, 55, 1, '%'], ['Lissage', 'sm', 0, 10, 3, 1, 'px']], note: 'Aplats de couleur et contours encrés, façon BD.',
+    run: (src, p) => { const sm = p.sm ? blurCanvas(src, p.sm) : src, sd = imgData(sm).data, w = src.width, h = src.height, ed = sobelArr(grayArr(sd, w * h), w, h), th = 120 - p.e, st = 255 / (p.n - 1);
+      return pixelFilter(src, d => { for (let i = 0, j = 0; i < d.length; i += 4, j++) { const ink = p.e > 0 && ed[j] > th;
+        for (let c = 0; c < 3; c++) d[i + c] = ink ? 20 : Math.round(sd[i + c] / st) * st; satMix(d, i, ink ? 1 : 1.2); } }); } },
+  edges: { title: 'Contours', params: [{ t: 'select', lab: 'Rendu', k: 'm', def: 'ink', opts: [['ink', 'Trait noir sur blanc'], ['white', 'Trait blanc sur noir'], ['neon', 'Néon (couleurs sur noir)']] }, ['Force', 'f', 10, 400, 150, 1, '%']],
+    note: 'Ne garde que les bords des formes : effet plan au trait, ou néon lumineux.',
+    run: (src, p) => { const w = src.width, h = src.height, ed = sobelArr(grayArr(imgData(src).data, w * h), w, h), k = p.f / 100;
+      return pixelFilter(src, d => { for (let i = 0, j = 0; i < d.length; i += 4, j++) { const e = clamp(ed[j] * k, 0, 255);
+        if (p.m === 'ink') d[i] = d[i + 1] = d[i + 2] = 255 - e; else if (p.m === 'white') d[i] = d[i + 1] = d[i + 2] = e;
+        else { const mx = Math.max(d[i], d[i + 1], d[i + 2], 1), t = e / 255 * 1.6; for (let c = 0; c < 3; c++) d[i + c] = d[i + c] / mx * 255 * t; } } }); } },
+  emboss: { title: 'Estampage', params: [['Angle de la lumière', 'a', -180, 180, 135, 1, '°'], ['Relief', 'hgt', 1, 10, 3], { t: 'check', lab: 'Garder les couleurs', k: 'col', def: false }], note: 'Relief gravé, comme une plaque de métal frappée.',
+    run: (src, p) => { const w = src.width, h = src.height, g = grayArr(imgData(src).data, w * h), a = p.a * Math.PI / 180, dx = Math.round(Math.cos(a)), dy = Math.round(Math.sin(a));
+      return pixelFilter(src, d => { for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) { const j = y * w + x, i = j * 4, v = (g[clamp(y - dy, 0, h - 1) * w + clamp(x - dx, 0, w - 1)] - g[clamp(y + dy, 0, h - 1) * w + clamp(x + dx, 0, w - 1)]) * p.hgt;
+        if (p.col) { d[i] += v; d[i + 1] += v; d[i + 2] += v; } else d[i] = d[i + 1] = d[i + 2] = 128 + v; } }); } },
+  halftone: { title: 'Trame (demi-teinte)', params: [['Taille de la trame', 'sz', 3, 60, 10, 1, 'px'], ['Angle', 'a', 0, 90, 45, 1, '°'], { t: 'select', lab: 'Points', k: 'm', def: 'black', opts: [['black', 'Noirs sur papier blanc'], ['color', 'De la couleur de l\'image'], ['ink', 'Couleur d\'encre au choix']] }, { t: 'color', lab: 'Encre', k: 'col', def: '#e11d48' }],
+    note: 'Imprime l\'image en points de tailles variables, comme une vieille BD ou un journal.',
+    run: (src, p) => { const w = src.width, h = src.height, sz = p.sz, a = p.a * Math.PI / 180, ca = Math.cos(a), sa = Math.sin(a), sd = imgData(blurCanvas(src, sz / 3)).data;
+      const c = mkCanvas(w, h), x = c.getContext('2d'); x.fillStyle = '#ffffff'; x.fillRect(0, 0, w, h); const R = Math.hypot(w, h) / 2 + sz, cx = w / 2, cy = h / 2;
+      for (let v = -R; v <= R; v += sz) for (let u = -R; u <= R; u += sz) { const px = cx + u * ca - v * sa, py = cy + u * sa + v * ca; if (px < -sz || py < -sz || px > w + sz || py > h + sz) continue;
+        const i = (clamp(py | 0, 0, h - 1) * w + clamp(px | 0, 0, w - 1)) * 4; if (sd[i + 3] < 8) continue; const l = lumv(sd[i], sd[i + 1], sd[i + 2]) / 255, rad = sz * .72 * Math.sqrt(1 - l * (p.m === 'color' ? .8 : 1));
+        if (rad < .3) continue; x.fillStyle = p.m === 'color' ? `rgb(${sd[i]},${sd[i + 1]},${sd[i + 2]})` : p.m === 'ink' ? p.col : '#111111'; x.beginPath(); x.arc(px, py, rad, 0, 7); x.fill(); }
+      x.globalCompositeOperation = 'destination-in'; x.drawImage(src, 0, 0); return c; } },
+  grain: { title: 'Grain / bruit', params: [['Quantité', 'q', 0, 100, 25, 1, '%'], ['Taille du grain', 'sz', 1, 4, 1, 1, 'px'], { t: 'check', lab: 'Monochrome (grain argentique)', k: 'mono', def: true }, ['Motif (graine)', 'seed', 1, 99, 5]],
+    note: 'Ajoute du grain de pellicule : donne du caractère et masque les aplats trop lisses.',
+    run: (src, p) => { const w = src.width, a = p.q * 1.1;
+      return pixelFilter(src, d => { for (let i = 0, n = 0; i < d.length; i += 4, n++) { const gx = (n % w) / p.sz | 0, gy = (n / w | 0) / p.sz | 0, z = (k) => (hash2(gx, gy, p.seed + k) + hash2(gx, gy, p.seed + k + 50) - 1) * a;
+        if (p.mono) { const v = z(0); d[i] += v; d[i + 1] += v; d[i + 2] += v; } else { d[i] += z(0); d[i + 1] += z(1); d[i + 2] += z(2); } } }); } },
+  chroma: { title: 'Aberration chromatique', params: [['Décalage', 'dd', 0, 40, 6, 1, 'px'], ['Angle', 'a', -180, 180, 0, 1, '°']], note: 'Sépare le rouge et le bleu, comme un objectif bas de gamme ou un écran qui bave : effet rétro / clip.',
+    run: (src, p) => { const w = src.width, h = src.height, s = imgData(src).data, a = p.a * Math.PI / 180, dx = Math.round(Math.cos(a) * p.dd), dy = Math.round(Math.sin(a) * p.dd);
+      return pixelFilter(src, d => { for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) { const i = (y * w + x) * 4, ir = (clamp(y + dy, 0, h - 1) * w + clamp(x + dx, 0, w - 1)) * 4, ib = (clamp(y - dy, 0, h - 1) * w + clamp(x - dx, 0, w - 1)) * 4;
+        d[i] = s[ir]; d[i + 2] = s[ib + 2]; d[i + 3] = Math.max(s[i + 3], s[ir + 3], s[ib + 3]); } }); } },
+  glitch: { title: 'Glitch', params: [['Force', 'f', 0, 100, 40, 1, '%'], ['Décalage des couleurs', 'cs', 0, 30, 6, 1, 'px'], ['Motif (graine)', 'seed', 1, 99, 9]], note: 'Bandes décalées et couleurs séparées, comme un signal vidéo abîmé.',
+    run: (src, p) => { const w = src.width, h = src.height, s = imgData(src).data;
+      return pixelFilter(src, d => { let y = 0, k = 0; while (y < h) { const bh = 2 + Math.floor(hash2(k, 1, p.seed) * h / 14), on = hash2(k, 2, p.seed) * 100 < p.f, sh = on ? Math.round((hash2(k, 3, p.seed) * 2 - 1) * w * p.f / 300) : 0, cs = on ? p.cs : 0;
+        for (let yy = y; yy < Math.min(h, y + bh); yy++) for (let x = 0; x < w; x++) { const i = (yy * w + x) * 4, row = yy * w, at = xx => (row + clamp(xx, 0, w - 1)) * 4;
+          d[i] = s[at(x - sh + cs)]; d[i + 1] = s[at(x - sh) + 1]; d[i + 2] = s[at(x - sh - cs) + 2]; d[i + 3] = s[at(x - sh) + 3]; }
+        y += bh; k++; } }); } },
 });
 let filterPreviewActive = false;
 const filterMem = {};
@@ -3882,8 +4547,13 @@ function toast(msg, btn) {
 const NF_FMT = [
   { id: 'sq', name: 'Carré', sub: '1:1 · réseaux', r: [1, 1] }, { id: '169', name: '16:9', sub: 'écran, vidéo', r: [16, 9] },
   { id: '43', name: '4:3', sub: 'photo compacte', r: [4, 3] }, { id: '32', name: '3:2', sub: 'photo reflex', r: [3, 2] },
-  { id: '21', name: '2:1', sub: 'panorama, bannière', r: [2, 1] }, { id: 'a4', name: 'A4', sub: '21 × 29,7 cm', mm: [297, 210] },
-  { id: 'a3', name: 'A3', sub: '29,7 × 42 cm', mm: [420, 297] }, { id: 'p15', name: 'Photo 10×15', sub: 'tirage', mm: [150, 100] },
+  { id: '21', name: '2:1', sub: 'panorama, bannière', r: [2, 1] }, { id: '31', name: 'Bandeau 3:1', sub: 'couverture réseaux, site', r: [3, 1], o: 'land' },
+  { id: 'story', name: 'Story', sub: '9:16 · Insta, TikTok', r: [16, 9], o: 'port' }, { id: 'post', name: 'Post 4:5', sub: 'Instagram, Facebook', r: [5, 4], o: 'port' },
+  { id: 'p15', name: 'Photo 10×15', sub: 'tirage', mm: [150, 100] }, { id: 'cv', name: 'Carte de visite', sub: '8,5 × 5,5 cm', mm: [85, 55], o: 'land' },
+  { id: 'aff', name: 'Affiche', sub: '40 × 60 cm', mm: [600, 400], o: 'port' }, { id: 'a6', name: 'A6', sub: '10,5 × 14,8 cm · carte', mm: [148, 105], o: 'port' },
+  { id: 'a5', name: 'A5', sub: '14,8 × 21 cm · flyer', mm: [210, 148], o: 'port' }, { id: 'a4', name: 'A4', sub: '21 × 29,7 cm', mm: [297, 210] },
+  { id: 'a3', name: 'A3', sub: '29,7 × 42 cm', mm: [420, 297] }, { id: 'a2', name: 'A2', sub: '42 × 59,4 cm', mm: [594, 420], o: 'port' },
+  { id: 'a1', name: 'A1', sub: '59,4 × 84,1 cm', mm: [841, 594], o: 'port' },
   { id: 'free', name: 'Libre', sub: 'tes dimensions' }];
 const NF_RES_PX = [[720, 'Léger', 'web, mail'], [1080, 'HD', 'Full HD'], [1440, '2K', 'grand écran'], [2160, '4K', 'très détaillé']];
 const NF_RES_DPI = [[96, '96 dpi', 'écran'], [150, '150 dpi', 'brouillon'], [300, '300 dpi', 'impression']];
@@ -3903,8 +4573,8 @@ async function newDocDialog(startup) {
   const body = `<div class="nf">
     <div class="nf-l">Format</div><div class="nf-fmts" id="nf-fmts"></div>
     <div class="nf-row"><div><div class="nf-l">Orientation</div><div class="nf-seg" id="nf-ori"><button type="button" data-o="land"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/></svg>Paysage</button><button type="button" data-o="port"><svg viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2"/></svg>Portrait</button></div></div></div>
-    <div><div class="nf-l" id="nf-resl">Résolution</div><div class="nf-seg nf-res" id="nf-res"></div></div>
-    <div class="nf-row nf-dims"><label>Largeur<input type="number" id="n-w" min="1" max="12000"><span>px</span></label><button type="button" class="nf-swap" id="nf-swap" title="Inverser largeur et hauteur">⇄</button><label>Hauteur<input type="number" id="n-h" min="1" max="12000"><span>px</span></label><div class="nf-mp" id="nf-mp"></div></div>
+    <div><div class="nf-l" id="nf-resl">Résolution</div><div class="nf-seg nf-res" id="nf-res"></div><div class="nf-row nf-dims" id="nf-dims"><label>Largeur<input type="number" id="n-w" min="1" max="12000"><span>px</span></label><button type="button" class="nf-swap" id="nf-swap" title="Inverser largeur et hauteur">⇄</button><label>Hauteur<input type="number" id="n-h" min="1" max="12000"><span>px</span></label></div></div>
+    <div class="nf-row"><div class="nf-mp" id="nf-mp"></div></div>
     <div class="nf-row"><div style="flex:1"><div class="nf-l">Fond</div><div class="nf-seg nf-bg" id="nf-bg">
       <button type="button" data-b="#ffffff"><i style="background:#fff"></i>Blanc</button><button type="button" data-b="transparent"><i class="tr"></i>Transparent</button><button type="button" data-b="c1"><i style="background:${color1}"></i>Couleur 1</button><button type="button" data-b="c2"><i style="background:${color2}"></i>Couleur 2</button></div></div></div>
     <div class="nf-row"><label class="nf-name">Nom<input type="text" id="n-name" value="Sans titre"></label></div>
@@ -3912,16 +4582,17 @@ async function newDocDialog(startup) {
   const r = await dialog({ title: startup ? 'Bienvenue ! Quel format pour ton image ?' : 'Nouveau document', body, ok: 'Créer', cancel: startup ? 'Plus tard' : 'Annuler', alt: startup ? 'Ouvrir un fichier…' : undefined, wide: true, onOpen: o => {
     const $o = q => o.querySelector(q), W = $o('#n-w'), H = $o('#n-h');
     const paint = () => {
-      const f = F(); $o('#nf-fmts').innerHTML = NF_FMT.map(x => `<button type="button" data-f="${x.id}" class="${x.id === st.fmt ? 'on' : ''}">${icon(x)}<b>${x.name}</b><small>${x.sub}</small></button>`).join('');
+      const f = F(); $o('#nf-fmts').innerHTML = NF_FMT.map(x => `<button type="button" data-f="${x.id}" class="${x.id === 'free' ? 'nf-lib ' : ''}${x.id === st.fmt ? 'on' : ''}">${icon(x)}<b>${x.name}</b><small>${x.sub}</small></button>`).join('');
       $o('#nf-ori').querySelectorAll('button').forEach(b => { b.classList.toggle('on', b.dataset.o === st.ori); b.disabled = f.id === 'sq'; });
       const paper = !!f.mm, R = paper ? NF_RES_DPI : NF_RES_PX, cur = paper ? st.dpi : st.res;
-      $o('#nf-resl').textContent = paper ? 'Résolution (points par pouce)' : 'Résolution (petit côté)';
-      $o('#nf-res').innerHTML = f.id === 'free' ? '<span class="nf-free">Tape tes dimensions ci-dessous</span>' : R.map(([v, t, d]) => `<button type="button" data-r="${v}" class="${v === cur ? 'on' : ''}" title="${d}"><b>${t}</b><small>${paper ? d : v + ' px · ' + d}</small></button>`).join('');
+      const free = f.id === 'free'; $o('#nf-resl').textContent = free ? 'Dimensions' : paper ? 'Résolution (points par pouce)' : 'Résolution (petit côté)';
+      $o('#nf-res').style.display = free ? 'none' : ''; $o('#nf-dims').style.display = free ? '' : 'none';
+      $o('#nf-res').innerHTML = free ? '' : R.map(([v, t, d]) => `<button type="button" data-r="${v}" class="${v === cur ? 'on' : ''}" title="${d}"><b>${t}</b><small>${paper ? d : v + ' px · ' + d}</small></button>`).join('');
       $o('#nf-bg').querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.b === st.bg));
       W.value = st.w; H.value = st.h; const mp = st.w * st.h / 1e6;
       $o('#nf-mp').innerHTML = `<b>${st.w} × ${st.h}</b> px · ${mp < 10 ? mp.toFixed(1).replace('.', ',') : Math.round(mp)} Mpx${f.mm ? ` · ${f.name} à ${st.dpi} dpi` : ''}`;
     };
-    $o('#nf-fmts').onclick = e => { const b = e.target.closest('[data-f]'); if (!b) return; const was = F(); st.fmt = b.dataset.f; const f = F(); if (f.mm && !was.mm) st.ori = f.id === 'p15' ? 'land' : 'port'; calc(); paint(); };
+    $o('#nf-fmts').onclick = e => { const b = e.target.closest('[data-f]'); if (!b) return; const was = F(); st.fmt = b.dataset.f; const f = F(); if (f.o) st.ori = f.o; else if (f.mm && !was.mm) st.ori = f.id === 'p15' ? 'land' : 'port'; calc(); paint(); };
     $o('#nf-ori').onclick = e => { const b = e.target.closest('[data-o]'); if (!b || b.disabled) return; st.ori = b.dataset.o; if (st.fmt === 'free') { if ((st.ori === 'port') !== (st.h > st.w)) [st.w, st.h] = [st.h, st.w]; } else calc(); paint(); };
     $o('#nf-res').onclick = e => { const b = e.target.closest('[data-r]'); if (!b) return; if (F().mm) st.dpi = +b.dataset.r; else st.res = +b.dataset.r; calc(); paint(); };
     $o('#nf-bg').onclick = e => { const b = e.target.closest('[data-b]'); if (!b) return; st.bg = b.dataset.b; paint(); };
@@ -4144,7 +4815,7 @@ const GUIDE = [
     GI('Règles', `Bouton règles dans <b>VUE</b> ou ${K('Ctrl+R')} : graduations en pixels du document en haut et à gauche, avec la position du curseur en rouge. L\'échelle s\'adapte au zoom.`),
     GI('Grille de pixels', 'Apparaît au fort zoom (réglable dans les Paramètres).')]]]],
   ['keys', '⌨️', 'Raccourcis', [[null, [
-    GI('Outils', `${K('V')} déplacer · ${K('M')} rectangle · ${K('O')} ellipse · ${K('L')} lasso · ${K('W')} baguette · ${K('C')} recadrage · ${K('B')} pinceau · ${K('N')} crayon · ${K('E')} gomme · ${K('G')} pot · ${K('Q')} dégradé · ${K('I')} pipette · ${K('S')} tampon · ${K('F')} doigt · ${K('K')} flou / netteté · ${K('T')} texte · ${K('R')} rectangle · ${K('U')} ellipse · ${K('Y')} ligne · ${K('A')} flèche · ${K('P')} polygone · ${K('H')} main · ${K('Z')} loupe + · ${K('Maj+Z')} loupe − · ${K('J')} mesure`),
+    GI('Outils', `${K('V')} déplacer · ${K('M')} rectangle · ${K('O')} ellipse · ${K('L')} lasso · ${K('W')} baguette · ${K('C')} recadrage · ${K('B')} pinceau · ${K('N')} crayon · ${K('E')} gomme · ${K('G')} pot · ${K('Q')} dégradé · ${K('I')} pipette · ${K('S')} tampon · ${K('F')} doigt · ${K('K')} flou / netteté · ${K('T')} texte · ${K('R')} rectangle · ${K('U')} ellipse · ${K('Y')} ligne · ${K('A')} flèche · ${K('P')} plume (tracés de Bézier) · ${K('Maj+P')} polygone · ${K('H')} main · ${K('Z')} loupe + · ${K('Maj+Z')} loupe − · ${K('J')} mesure`),
     GI('Fichiers', `${K('Ctrl+N')} nouveau · ${K('Ctrl+O')} ouvrir · ${K('Ctrl+S')} enregistrer · ${K('Ctrl+Maj+S')} enregistrer sous · ${K('Ctrl+Maj+E')} enregistrer en image · ${K('Ctrl+P')} imprimer`),
     GI('Édition', `${K('Ctrl+Z')} annuler · ${K('Ctrl+Y')} rétablir · ${K('Ctrl+C / X / V')} copier, couper, coller · ${K('Suppr')} effacer · ${K('Alt+Suppr')} remplir`),
     GI('Calques', `${K('Ctrl+Maj+N')} nouveau · ${K('Ctrl+J')} calque par copie · ${K('Ctrl+T')} rotation / échelle de la sélection · ${K('Ctrl+E')} fusionner`),
@@ -4480,7 +5151,7 @@ function iaRefs() {
   return out.join('\n');
 }
 function iaGuide() { return iaGuideCache || (iaGuideCache = { guide: guideText().slice(0, 45000), refs: iaRefs() }); }
-const FILTER_NAMES = { gray: 'noir et blanc', sepia: 'sépia', invert: 'négatif', sharpen: 'netteté rapide' };
+const FILTER_NAMES = { gray: 'noir et blanc', sepia: 'sépia', invert: 'négatif', sharpen: 'netteté rapide', autolevels: 'niveaux auto', solarize: 'solarisation' };
 function iaFilters() {
   const o = Object.entries(FILTER_NAMES).map(([k, v]) => `${k} (${v}, sans réglage)`);
   Object.entries(ADJUST).forEach(([k, F]) => o.push(`${k} (${F.title}) réglages : ` + F.params.map(q => Array.isArray(q) ? `${q[1]}=${q[0]} [${q[2]}…${q[3]}, défaut ${q[4]}]` : q.t === 'select' ? `${q.k}=${q.lab} [${q.opts.map(x => x[0]).join('|')}]` : `${q.k}=${q.lab} (${q.t === 'color' ? 'couleur #rrggbb' : 'oui/non'})`).join(', ')));
@@ -4941,7 +5612,8 @@ async function iaClaude(contents, sysTxt, tools, onDelta) {
     'layer:new': 'lnew', 'layer:dup': 'ldup', 'layer:copysel': 'lcopy', 'layer:import': 'limp', 'layer:merge': 'lmerge', 'layer:flatten': 'lflat', 'layer:del': 'ldel', 'layer:fliph': 'fh', 'layer:flipv': 'fv',
     'sel:all': 'sall', 'sel:none': 'snone', 'sel:inv': 'sinv', 'sel:alpha': 'salpha', copy: 'copy', cut: 'cut', pastehint: 'paste', fill: 'fill', clear: 'clear',
     'xf:free': 'free', 'xf:distort': 'distort', 'xf:ch': 'mirror', 'xf:cv': 'mirror', 'xf:fh': 'fh', 'xf:fv': 'fv', 'xf:r90': 'rcw', 'xf:r-90': 'rccw', 'xf:r180': 'r180', cutout: 'cut', cutoutc: 'cut', install: 'install', fullscreen: 'full', guide: 'guide', settings: 'settings' };
-  const FLT = { gray: ['#9ca3af', '<circle cx="12" cy="12" r="9"/><path d="M12 3v18a9 9 0 0 0 0-18z" fill="currentColor"/>'], sepia: ['#d97706', '<circle cx="12" cy="12" r="9"/><path d="M12 3v18a9 9 0 0 0 0-18z" fill="currentColor"/>'],
+  const FLT = { presets: ['#f59e0b', '<rect x="3" y="6" width="18" height="14" rx="2"/><path d="M7 6V4h10v2"/><circle cx="12" cy="13" r="3.5"/>'], autolevels: ['#4ade80', '<path d="M3 20h18"/><path d="M5 20V14M9 20V9M13 20V5M17 20V11"/>'], levels: ['#a3e635', '<path d="M3 20h18"/><path d="M4 20c3-1 4-12 8-12s5 11 8 12"/>'], expo: ['#fde047', '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 21 21 3"/><path d="M6 8h4M8 6v4M14 16h4"/>'], tones: ['#94a3b8', '<circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor" fill-opacity=".5"/>'], temp: ['#fb923c', '<path d="M14 14.8V4a2 2 0 0 0-4 0v10.8a4 4 0 1 0 4 0z"/>'], vibrance: ['#f472b6', '<path d="M12 2.7 16 9a5 5 0 1 1-8 0z"/>'], duotone: ['#818cf8', '<circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6" fill="currentColor" fill-opacity=".35"/>'], posterize: ['#22d3ee', '<rect x="3" y="3" width="6" height="18" fill="currentColor" fill-opacity=".8"/><rect x="9" y="3" width="6" height="18" fill="currentColor" fill-opacity=".45"/><rect x="15" y="3" width="6" height="18"/>'], motion: ['#60a5fa', '<path d="M3 8h9M5 12h11M3 16h9"/><circle cx="19" cy="12" r="2.5" fill="currentColor"/>'], zoomblur: ['#38bdf8', '<circle cx="12" cy="12" r="2" fill="currentColor"/><path d="M12 2v5M12 17v5M2 12h5M17 12h5M5 5l3.5 3.5M15.5 15.5 19 19M5 19l3.5-3.5M15.5 8.5 19 5"/>'], tiltshift: ['#34d399', '<rect x="3" y="3" width="18" height="18" rx="2" stroke-dasharray="2 2"/><path d="M3 10h18M3 14h18"/>'], oil: ['#f59e0b', '<path d="M18 3 9 12l3 3 9-9z"/><path d="M9 12c-3 0-5 2-5 5 0 2-1 3-2 3 4 1 9 0 10-5z"/>'], sketch: ['#e5e7eb', '<path d="m15 4 5 5L9 20H4v-5z"/><path d="m13 6 5 5"/>'], cartoon: ['#facc15', '<path d="M4 5h16v10H10l-5 4v-4H4z"/>'], halftone: ['#f87171', '<circle cx="6" cy="6" r="2.5" fill="currentColor"/><circle cx="14" cy="6" r="1.5" fill="currentColor"/><circle cx="6" cy="14" r="1.5" fill="currentColor"/><circle cx="14" cy="14" r="1" fill="currentColor"/><circle cx="20" cy="10" r=".8" fill="currentColor"/><circle cx="10" cy="20" r=".8" fill="currentColor"/>'], edges: ['#a78bfa', '<path d="M4 18 10 6l4 8 2-4 4 8z"/>'], emboss: ['#cbd5e1', '<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 16V8h8" stroke-width="3"/>'], grain: ['#d6d3d1', '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 7h.01M12 9h.01M16 7h.01M8 12h.01M14 13h.01M17 16h.01M10 16h.01M7 17h.01" stroke-width="2.6"/>'], chroma: ['#f43f5e', '<circle cx="10" cy="12" r="6"/><circle cx="14" cy="12" r="6" stroke="#22d3ee"/>'], glitch: ['#22d3ee', '<path d="M3 5h12M7 9h14M3 13h9M9 17h12M3 21h8"/>'], solarize: ['#fb7185', '<circle cx="12" cy="12" r="5"/><path d="M12 7a5 5 0 0 1 0 10z" fill="currentColor"/><path d="M12 1v3M12 20v3M1 12h3M20 12h3"/>'],
+    gray: ['#9ca3af', '<circle cx="12" cy="12" r="9"/><path d="M12 3v18a9 9 0 0 0 0-18z" fill="currentColor"/>'], sepia: ['#d97706', '<circle cx="12" cy="12" r="9"/><path d="M12 3v18a9 9 0 0 0 0-18z" fill="currentColor"/>'],
     invert: ['#e5e7eb', '<circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/>'], bc: ['#fbbf24', '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.4 1.4M17.6 17.6 19 19M5 19l1.4-1.4M17.6 6.4 19 5"/>'],
     hsl: ['#f472b6', '<circle cx="12" cy="12" r="9"/><path d="M12 3v9l7 5"/>'], blur: ['#60a5fa', '<circle cx="12" cy="12" r="3" fill="currentColor"/><circle cx="12" cy="12" r="6" opacity=".6"/><circle cx="12" cy="12" r="9" opacity=".3"/>'],
     sharpen: ['#22d3ee', '<path d="M12 3 21 20H3z"/>'], unsharp: ['#22d3ee', '<path d="M12 3 21 20H3z"/><path d="M12 9v6"/>'], vignette: ['#a78bfa', '<rect x="3" y="5" width="18" height="14" rx="2"/><ellipse cx="12" cy="12" rx="6" ry="4"/>'],
@@ -5018,6 +5690,11 @@ function colorCutout(tol = 38) {
 }
 
 /* ---------------- démarrage ---------------- */
+function rangeFill(r) { const mn = +r.min || 0, mx = r.max === '' ? 100 : +r.max, v = +r.value; r.style.setProperty('--p', (mx > mn ? (v - mn) / (mx - mn) * 100 : 0) + '%'); }
+document.addEventListener('input', e => { if (e.target.type === 'range') rangeFill(e.target); }, true);
+new MutationObserver(ms => { for (const m of ms) for (const n of m.addedNodes) if (n.nodeType === 1) { if (n.type === 'range') rangeFill(n); else n.querySelectorAll && n.querySelectorAll('input[type=range]').forEach(rangeFill); } }).observe(document.body, { childList: true, subtree: true });
+document.querySelectorAll('input[type=range]').forEach(rangeFill);
+{ const d = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value'); Object.defineProperty(HTMLInputElement.prototype, 'value', { ...d, set(v) { d.set.call(this, v); if (this.type === 'range') rangeFill(this); } }); }
 if (canAvif()) $('#m-avif')?.classList.remove('hidden');
 buildTools(); renderFavs();
 createDoc(S.newW, S.newH, S.newBg);
