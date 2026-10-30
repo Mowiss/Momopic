@@ -1161,9 +1161,11 @@ const saveOpts = () => { try { localStorage.setItem('momoshop.opts', JSON.string
 
 /* ---------------- paramètres de l'application ---------------- */
 const S_DEF = { splash: true, gridZoom: 12, checker: 'light', stageBg: '#2a2f38', wheel: 'zoom', history: 40,
-  newW: 1920, newH: 1080, newBg: '#ffffff', quality: 90, showGrid: false, showRulers: false, gridSize: 50, gridColor: '#3b82f6', backup: 5, confirmClose: true, backupPrompt: true, askFormat: true };
+  newW: 2480, newH: 3508, newFmt: 'a4', newOri: 'port', newDpi: 300, newFmtDpi: 300, newBg: '#ffffff', quality: 90, showGrid: false, showRulers: false, gridSize: 50, gridColor: '#3b82f6', backup: 5, confirmClose: true, backupPrompt: true, askFormat: false };
 let S = Object.assign({}, S_DEF);
 try { Object.assign(S, JSON.parse(localStorage.getItem('momoshop.settings') || '{}')); } catch (e) {}
+// v2 : au démarrage, une A4 verticale directement (la fenêtre de format se réactive dans les Paramètres)
+if (!S.fmtV2) { Object.assign(S, { fmtV2: true, askFormat: false, newW: 2480, newH: 3508, newFmt: 'a4', newOri: 'port', newDpi: 300, newFmtDpi: 300 }); try { localStorage.setItem('momoshop.settings', JSON.stringify(S)); } catch (e) {} }
 const saveSettings = () => { try { localStorage.setItem('momoshop.settings', JSON.stringify(S)); } catch (e) {} };
 const CHECKERS = { light: ['#ffffff', '#d4d7dc'], mid: ['#9ca3af', '#7b828e'], dark: ['#3a404a', '#2e333b'] };
 
@@ -1279,7 +1281,7 @@ async function projClose(i) {
   PROJ.list.splice(i, 1);
   if (!isCur) { if (i < PROJ.cur) PROJ.cur--; projRender(); return; }
   PROJ.cur = -1;
-  if (!PROJ.list.length) { createDoc(S.newW, S.newH, S.newBg); saveTarget = { handle: null, fmt: 'mms' }; return; }
+  if (!PROJ.list.length) { createDoc(2480, 3508, '#ffffff', 'Sans titre'); doc.dpi = 300; saveTarget = { handle: null, fmt: 'mms' }; return; }
   const n = Math.min(i, PROJ.list.length - 1), Q = PROJ.list[n]; PROJ.cur = n; PROJ.list[n] = Q;
   doc = Q.doc; undoStack = Q.undo || []; redoStack = Q.redo || []; saveTarget = Q.saveTarget || { handle: null, fmt: 'mms' }; sel = Q.sel || null; picked = false; override = null;
   ensureBuffers(); if (Q.cam) { Object.assign(cam, Q.cam); setViewRot(cam.rot * 180 / Math.PI); } else fit(); dirty = !!Q.dirty; updateTitle(); renderLayers(); renderPages(); renderOptbar(); updateStatus(); updateUndoBtns(); req(true); projRender();
@@ -4884,7 +4886,7 @@ async function newDocDialog(startup) {
     <div class="nf-row"><div style="flex:1"><div class="nf-l">Fond</div><div class="nf-seg nf-bg" id="nf-bg">
       <button type="button" data-b="#ffffff"><i style="background:#fff"></i>Blanc</button><button type="button" data-b="transparent"><i class="tr"></i>Transparent</button><button type="button" data-b="c1"><i style="background:${color1}"></i>Couleur 1</button><button type="button" data-b="c2"><i style="background:${color2}"></i>Couleur 2</button></div></div></div>
     <div class="nf-row"><label class="nf-name">Nom<input type="text" id="n-name" value="Sans titre"></label></div>
-    ${startup ? `<label class="nf-ask"><input type="checkbox" id="nf-ask" ${S.askFormat !== false ? 'checked' : ''}> Me proposer ce choix à chaque ouverture de MomoPIC</label>` : ''}</div>`;
+    ${startup ? `<label class="nf-ask"><input type="checkbox" id="nf-ask" ${S.askFormat === true ? 'checked' : ''}> Me proposer ce choix à chaque ouverture de MomoPIC</label>` : ''}</div>`;
   const r = await dialog({ title: startup ? 'Bienvenue ! Quel format pour ton image ?' : 'Nouveau document', body, ok: 'Créer', cancel: startup ? 'Plus tard' : 'Annuler', alt: startup ? 'Ouvrir un fichier…' : undefined, wide: true, onOpen: o => {
     const $o = q => o.querySelector(q), W = $o('#n-w'), H = $o('#n-h');
     const paint = () => {
@@ -4960,7 +4962,7 @@ async function settingsDialog() {
   </div>
   <div class="spane" data-p="a">
     ${chk('s-splash', S.splash, 'Animation du logo à l\'ouverture')}
-    ${chk('s-askfmt', S.askFormat !== false, 'Choisir le format de l\'image à l\'ouverture')}
+    ${chk('s-askfmt', S.askFormat === true, 'Choisir le format de l\'image à l\'ouverture (sinon : une A4 verticale)')}
     <div class="row"><span>Molette</span>${sel('s-wheel', [['zoom', 'Molette = zoom (Maj = défilement horizontal)'], ['scroll', 'Molette = défilement, Ctrl+molette = zoom (pavé tactile)']], S.wheel)}</div>
     <div class="row"><span>Damier (transparence)</span>${sel('s-checker', [['light', 'Clair'], ['mid', 'Moyen'], ['dark', 'Sombre']], S.checker)}</div>
     <div class="row"><span>Fond de travail</span><input type="color" id="s-stage" value="${S.stageBg}" style="width:60px;height:28px;background:none;border:0;flex:none"><button class="mini" id="s-stage-reset" type="button">Par défaut</button></div>
@@ -6240,14 +6242,14 @@ document.querySelectorAll('input[type=range]').forEach(rangeFill);
 { const d = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value'); Object.defineProperty(HTMLInputElement.prototype, 'value', { ...d, set(v) { d.set.call(this, v); if (this.type === 'range') rangeFill(this); } }); }
 if (canAvif()) $('#m-avif')?.classList.remove('hidden');
 buildTools(); renderFavs();
-createDoc(S.newW, S.newH, S.newBg);
+createDoc(2480, 3508, '#ffffff', 'Sans titre'); doc.dpi = 300;
 setTool(TOOL_BY_ID[localStorage.getItem('momoshop.tool')] ? localStorage.getItem('momoshop.tool') : 'brush');
 window.addEventListener('pagehide', () => { try { localStorage.setItem('momoshop.tool', tool); } catch (e) {} });
 setColor1('#000000');
 setBackupInterval(S.backup); $('#stage').style.background = S.stageBg;
 updateUndoBtns(); mcRefresh();
 // au démarrage : choix du format (après l'animation du logo), sauf si un fichier est ouvert avec l'appli
-if (S.askFormat !== false) (function ask() {
+if (S.askFormat === true) (function ask() {
   if (document.getElementById('ms-splash')) return setTimeout(ask, 150);
   setTimeout(() => { if (!window.__launchFile && !dirty && !document.querySelector('.ovl')) newDocDialog(true); }, 120);
 })();
