@@ -159,6 +159,8 @@ aside.panels{width:268px;background:var(--g800);border-left:1px solid var(--g700
 #toolopts .to-t{flex:1;min-width:0}
 #toolopts .to-k{font:700 10.5px ui-monospace,monospace;padding:2px 6px;border-radius:5px;background:#111827;color:var(--tc);border:1px solid color-mix(in srgb,var(--tc) 50%,transparent)}
 #toolopts .otiles{display:grid;gap:6px}
+#rot-warn{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);z-index:33;display:none;align-items:center;gap:7px;padding:6px 14px;border-radius:20px;border:1px solid #f59e0b;background:#422006ee;color:#fde68a;font:600 12px system-ui;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+#rot-warn.on{display:flex}#rot-warn:hover{background:#78350f;color:#fff}
 #pn-hist .pb{max-height:240px;overflow-y:auto;padding:6px}
 #hist{display:flex;flex-direction:column;gap:2px}
 .hist-it{display:flex;align-items:center;gap:8px;width:100%;padding:5px 8px;border-radius:8px;border:1px solid transparent;background:none;color:var(--g300,#d1d5db);font-size:12px;text-align:left;cursor:pointer}
@@ -1243,7 +1245,7 @@ function afterNewDoc() {
   if (textEdit) { textEdit.ta.remove(); textEdit.hd.remove(); textEdit = null; }
   initPages(); picked = false;
   sel = null; override = null; undoStack = []; redoStack = []; cancelTransient();
-  ensureBuffers(); fit(); renderLayers(); renderPages(); renderOptbar(); markDirty(false); updateStatus(); updateUndoBtns(); req(true); projRender();
+  if (cam.rot) setViewRot(0); ensureBuffers(); fit(); renderLayers(); renderPages(); renderOptbar(); markDirty(false); updateStatus(); updateUndoBtns(); req(true); projRender();
 }
 /* ---------------- projets : plusieurs images ouvertes en même temps ----------------
    chaque projet garde son document (pages, éléments), son historique, sa vue, sa sélection et son fichier d'enregistrement */
@@ -1268,7 +1270,7 @@ function projSwitch(i) {
   if (i === PROJ.cur || !PROJ.list[i]) return; projStoreCur();
   const P = PROJ.list[i]; PROJ.cur = i; cropRect = null; override = null; picked = false;
   doc = P.doc; undoStack = P.undo || []; redoStack = P.redo || []; saveTarget = P.saveTarget || { handle: null, fmt: 'mms' }; sel = P.sel || null;
-  ensureBuffers(); if (P.cam) Object.assign(cam, P.cam); else fit();
+  ensureBuffers(); if (P.cam) { Object.assign(cam, P.cam); setViewRot(cam.rot * 180 / Math.PI); } else fit();
   dirty = !!P.dirty; updateTitle(); renderLayers(); renderPages(); renderOptbar(); updateStatus(); updateUndoBtns(); req(true); projRender();
 }
 async function projClose(i) {
@@ -1280,7 +1282,7 @@ async function projClose(i) {
   if (!PROJ.list.length) { createDoc(S.newW, S.newH, S.newBg); saveTarget = { handle: null, fmt: 'mms' }; return; }
   const n = Math.min(i, PROJ.list.length - 1), Q = PROJ.list[n]; PROJ.cur = n; PROJ.list[n] = Q;
   doc = Q.doc; undoStack = Q.undo || []; redoStack = Q.redo || []; saveTarget = Q.saveTarget || { handle: null, fmt: 'mms' }; sel = Q.sel || null; picked = false; override = null;
-  ensureBuffers(); if (Q.cam) Object.assign(cam, Q.cam); else fit(); dirty = !!Q.dirty; updateTitle(); renderLayers(); renderPages(); renderOptbar(); updateStatus(); updateUndoBtns(); req(true); projRender();
+  ensureBuffers(); if (Q.cam) { Object.assign(cam, Q.cam); setViewRot(cam.rot * 180 / Math.PI); } else fit(); dirty = !!Q.dirty; updateTitle(); renderLayers(); renderPages(); renderOptbar(); updateStatus(); updateUndoBtns(); req(true); projRender();
 }
 function projRender() {
   const n = PROJ.list.length, nb = $('#proj-n'); if (nb) nb.textContent = n > 1 ? n : '';
@@ -3165,7 +3167,8 @@ function setViewRot(deg) {
   const W = stage.clientWidth / 2, H = stage.clientHeight / 2, old = cam.rot, nw = deg * Math.PI / 180;
   // le point du document au centre de l'écran reste au centre
   const cx = (W - cam.x) / cam.z, cy = (H - cam.y) / cam.z; cam.rot = nw; cam.x = W - cx * cam.z; cam.y = H - cy * cam.z;
-  $('#dl-disc').style.transform = `rotate(${deg}deg)`; const v = $('#dl-val'); v.innerHTML = `<span>${Math.round(deg * 10) / 10}°</span>`; v.classList.toggle('on', !!deg);
+  $('#dl-disc').style.transform = `rotate(${deg}deg)`; { let b = $('#rot-warn'); if (!b) { b = document.createElement('button'); b.id = 'rot-warn'; b.type = 'button'; b.title = 'L\'affichage est tourné (la page, elle, ne l\'est pas). Clic : remettre la vue droite.'; b.onclick = () => setViewRot(0); stage.appendChild(b); }
+    b.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 0 2.5-5.8L4 8.5"/><path d="M4 3v5.5h5.5"/></svg>Vue tournée de ${Math.round(deg)}° · remettre droite`; b.classList.toggle('on', !!deg); } const v = $('#dl-val'); v.innerHTML = `<span>${Math.round(deg * 10) / 10}°</span>`; v.classList.toggle('on', !!deg);
   styleTextEdit(); req();
 }
 (function () {
@@ -3174,7 +3177,7 @@ function setViewRot(deg) {
   disc.addEventListener('pointerdown', e => { e.stopPropagation(); e.preventDefault(); disc.setPointerCapture(e.pointerId); dr = { a0: ang(e), r0: cam.rot * 180 / Math.PI }; d.classList.add('hot'); });
   disc.addEventListener('pointermove', e => { if (!dr) return; let v = dr.r0 + (ang(e) - dr.a0) * 2; if (e.shiftKey) v = Math.round(v / 15) * 15; else if (Math.abs(v - Math.round(v / 90) * 90) < 2) v = Math.round(v / 90) * 90; setViewRot(v); });
   const end = () => { dr = null; d.classList.remove('hot'); }; disc.addEventListener('pointerup', end); disc.addEventListener('pointercancel', end);
-  d.addEventListener('wheel', e => { e.preventDefault(); e.stopPropagation(); const st = e.shiftKey ? 1 : 5; setViewRot(Math.round((cam.rot * 180 / Math.PI) / st) * st + (e.deltaY > 0 ? st : -st)); }, { passive: false });
+  d.addEventListener('wheel', e => { if (!e.altKey) return; e.preventDefault(); e.stopPropagation(); const st = e.shiftKey ? 1 : 5; setViewRot(Math.round((cam.rot * 180 / Math.PI) / st) * st + (e.deltaY > 0 ? st : -st)); }, { passive: false });
   $('#dl-val').addEventListener('pointerdown', e => e.stopPropagation());
   $('#dl-val').onclick = () => setViewRot(0);
   setViewRot(0);
@@ -4673,6 +4676,7 @@ async function placeImage(img, name, px, py, floating) {
   if (px === undefined) { px = Math.round((doc.w - iw) / 2); py = Math.round((doc.h - ih) / 2); }
   if (floating) { if (editable()) startFloat(src, px, py); updateStatus(); return; }   // collage : jamais de nouveau calque
   histSay('Image « ' + name + ' »'); pushDoc(); const l = newLayer(name, iw, ih); l.canvas.getContext('2d').drawImage(src, 0, 0); l.x = px; l.y = py; insertLayer(l); picked = true;
+  if (cam.rot) ensureTf(l).rot = Math.atan2(Math.sin(-cam.rot), Math.cos(-cam.rot));   // vue tournée : l'image arrive droite à l'écran
   if (!EL_TOOLS.includes(tool)) setTool('move'); renderLayers(); renderOptbar(); req(true); updateStatus(); renderPagesThumb();
 }
 function serL(l) {
