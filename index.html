@@ -3841,7 +3841,7 @@ function trimTransparent() {
 }
 
 /* ---------------- filtres ---------------- */
-function pixelFilter(src, fn) { const c = cloneCanvas(src), x = c.getContext('2d'), id = x.getImageData(0, 0, c.width, c.height); fn(id.data, c.width, c.height); x.putImageData(id, 0, 0); return c; }
+function pixelFilter(src, fn) { if (fn && fn.gl) { const g = gpuTry(() => gpuRun(fn.gl, src)); if (g) return g; } const c = cloneCanvas(src), x = c.getContext('2d'), id = x.getImageData(0, 0, c.width, c.height); fn(id.data, c.width, c.height); x.putImageData(id, 0, 0); return c; }
 const FILTERS = {
   gray: d => { for (let i = 0; i < d.length; i += 4) { const v = d[i] * .299 + d[i + 1] * .587 + d[i + 2] * .114; d[i] = d[i + 1] = d[i + 2] = v; } },
   sepia: d => { for (let i = 0; i < d.length; i += 4) { const r = d[i], g = d[i + 1], b = d[i + 2]; d[i] = r * .393 + g * .769 + b * .189; d[i + 1] = r * .349 + g * .686 + b * .168; d[i + 2] = r * .272 + g * .534 + b * .131; } },
@@ -3992,6 +3992,8 @@ Object.assign(ADJUST, {
 const lumv = (r, g, b) => r * .299 + g * .587 + b * .114;
 function lutFilter(src, f) {   // f(v, canal) -> v' ; table 3 × 256
   const t = new Uint8ClampedArray(768); for (let c = 0; c < 3; c++) for (let v = 0; v < 256; v++) t[c * 256 + v] = f(v, c);
+  const lut = new Uint8Array(1024); for (let v = 0; v < 256; v++) { lut[v * 4] = t[v]; lut[v * 4 + 1] = t[256 + v]; lut[v * 4 + 2] = t[512 + v]; lut[v * 4 + 3] = 255; }
+  const g = gpuTry(() => gpuRun(GL_LUT, src, {}, { lut })); if (g) return g;
   return pixelFilter(src, d => { for (let i = 0; i < d.length; i += 4) { d[i] = t[d[i]]; d[i + 1] = t[256 + d[i + 1]]; d[i + 2] = t[512 + d[i + 2]]; } });
 }
 function grayArr(sd, n) { const g = new Float32Array(n); for (let i = 0, j = 0; j < n; i += 4, j++) g[j] = lumv(sd[i], sd[i + 1], sd[i + 2]); return g; }
@@ -4879,6 +4881,9 @@ async function settingsDialog() {
     <div class="row"><span>Annulations</span>${sel('s-hist', [[20, '20 étapes'], [40, '40 étapes'], [60, '60 étapes'], [100, '100 étapes (plus de mémoire)']], S.history)}</div>
     <h4>Fermeture</h4>
     ${chk('s-close', S.confirmClose, 'Demander confirmation avant de fermer si le document n\'est pas enregistré')}
+    <h4>Performances</h4>
+    ${chk('s-gpu', S.gpu !== false, 'Accélération graphique : calculer les filtres sur la carte graphique')}
+    <div class="note">${!gpuCtx() ? 'Indisponible sur ce poste ou ce navigateur : les filtres sont calculés normalement.' : GPU.soft ? 'Ce navigateur n\'a accès qu\'à un rendu logiciel (' + esc(GPU.info.replace(/\(.*$/, '').trim() || 'logiciel') + ') : pas de gain, les filtres restent calculés normalement.' : 'Carte graphique utilisée : ' + esc(GPU.info.replace(/^ANGLE \(|\)$/g, '')) + '. À couper seulement si des filtres s\'affichent mal.'}</div>
   </div>
   <div class="spane" data-p="a">
     ${chk('s-splash', S.splash, 'Animation du logo à l\'ouverture')}
@@ -4918,7 +4923,7 @@ async function settingsDialog() {
   } });
   if (!r) return;
   const v = id => r.querySelector('#' + id);
-  Object.assign(S, { backup: +v('s-backup').value, backupPrompt: v('s-bprompt').checked, history: +v('s-hist').value, confirmClose: v('s-close').checked,
+  Object.assign(S, { backup: +v('s-backup').value, backupPrompt: v('s-bprompt').checked, history: +v('s-hist').value, confirmClose: v('s-close').checked, gpu: v('s-gpu').checked,
     splash: v('s-splash').checked, askFormat: v('s-askfmt').checked, wheel: v('s-wheel').value, checker: v('s-checker').value, stageBg: v('s-stage').value, gridZoom: +v('s-grid').value, gridSize: clamp(+v('s-gsize').value || 50, 2, 2000), gridColor: v('s-gcol').value,
     newW: clamp(+v('s-nw').value | 0, 1, 12000), newH: clamp(+v('s-nh').value | 0, 1, 12000), newBg: v('s-nbg').value, quality: +v('s-q').value });
   saveSettings(); applySettings(); toast('Paramètres enregistrés.');
@@ -5942,7 +5947,181 @@ function colorCutout(tol = 38) {
   renderLayers(); renderOptbar(); req(true); renderPagesThumb(); markDirty(); toast('Fond uni retiré : l\'original est gardé, masqué, juste en dessous.');
 }
 
+/* ================= accélération graphique (WebGL2) =================
+   Les filtres portés ici s'exécutent sur la carte graphique (tous les pixels en parallèle). Si WebGL2 manque, si l'image
+   dépasse la taille maximale de texture, ou si l'option est coupée dans les Paramètres, on retombe sur le calcul JavaScript. */
+const GPU = { tried: false, gl: null, cv: null, progs: new Map(), vao: null, info: '', max: 0, fails: 0 };
+function gpuCtx() {
+  if (GPU.tried) return GPU.gl; GPU.tried = true;
+  try {
+    const cv = document.createElement('canvas'), gl = cv.getContext('webgl2', { premultipliedAlpha: false, preserveDrawingBuffer: true, antialias: false, depth: false, stencil: false, alpha: true });
+    if (!gl) return null;
+    GPU.cv = cv; GPU.gl = gl; GPU.max = gl.getParameter(gl.MAX_TEXTURE_SIZE);
+    const dbg = gl.getExtension('WEBGL_debug_renderer_info'); GPU.info = (dbg && gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL)) || 'WebGL2';
+    GPU.soft = /swiftshader|llvmpipe|softpipe|software|basic render/i.test(GPU.info);   // pas de vraie carte graphique : aucun gain
+    cv.addEventListener('webglcontextlost', e => { e.preventDefault(); GPU.gl = null; GPU.progs.clear(); GPU.tried = false; });
+    const vao = gl.createVertexArray(); gl.bindVertexArray(vao); const b = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, b);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW); gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0); GPU.vao = vao;
+  } catch (e) { GPU.gl = null; }
+  return GPU.gl;
+}
+const gpuOn = () => S.gpu !== false && GPU.fails < 3 && !!gpuCtx() && (!GPU.soft || S.gpuForce === true);
+const GL_VS = `#version 300 es
+layout(location=0) in vec2 a; void main(){ gl_Position = vec4(a, 0., 1.); }`;
+const GL_HEAD = `#version 300 es
+precision highp float; precision highp int; precision highp sampler2D;
+uniform sampler2D u_src; uniform sampler2D u_aux; uniform sampler2D u_lut; uniform vec2 u_size; uniform int u_flip; out vec4 o;
+vec2 P(){ vec2 f = floor(gl_FragCoord.xy); if (u_flip == 1) f.y = u_size.y - 1.0 - f.y; return f + 0.5; }
+vec4 F(vec2 p){ return texelFetch(u_src, clamp(ivec2(floor(p)), ivec2(0), ivec2(u_size) - 1), 0); }
+vec4 FA(vec2 p){ return texelFetch(u_aux, clamp(ivec2(floor(p)), ivec2(0), ivec2(u_size) - 1), 0); }
+float lum(vec3 c){ return dot(c, vec3(.299, .587, .114)); }
+float contr(float v, float c){ return (v - 128.) * c + 128.; }
+vec3 satMix(vec3 c, float f){ float l = lum(c); return l + (c - l) * f; }
+vec4 BL(vec2 p){ p -= 0.5; vec2 f = fract(p), i = floor(p); vec4 a = F(i + .5), b = F(i + vec2(1.5, .5)), c = F(i + vec2(.5, 1.5)), d = F(i + 1.5);
+  float wa = a.a * (1. - f.x) * (1. - f.y), wb = b.a * f.x * (1. - f.y), wc = c.a * (1. - f.x) * f.y, wd = d.a * f.x * f.y, s = wa + wb + wc + wd;
+  if (s <= 0.) return vec4(0); return vec4((a.rgb * wa + b.rgb * wb + c.rgb * wc + d.rgb * wd) / s, s); }
+float mref(float v, float n){ v = mod(v, 2. * n); return v >= n ? 2. * n - v : v; }
+vec4 EDGE(vec2 q, int e){ if (e == 1) q = mod(q, u_size); else if (e == 2) q = vec2(mref(q.x, u_size.x), mref(q.y, u_size.y)); else if (e == 3 && (q.x < -.5 || q.y < -.5 || q.x > u_size.x + .5 || q.y > u_size.y + .5)) return vec4(0); return BL(q); }
+uint hsh(uint x){ x ^= x >> 16; x *= 0x7feb352du; x ^= x >> 15; x *= 0x846ca68bu; x ^= x >> 16; return x; }
+float h2(float x, float y, float s){ return float(hsh(uint(int(x)) * 374761393u + uint(int(y)) * 668265263u + uint(int(s)) * 982451653u)) / 4294967295.; }
+float vn(vec2 p, float s){ vec2 i = floor(p), f = p - i, u = f * f * (3. - 2. * f); return mix(mix(h2(i.x, i.y, s), h2(i.x + 1., i.y, s), u.x), mix(h2(i.x, i.y + 1., s), h2(i.x + 1., i.y + 1., s), u.x), u.y); }
+vec3 rgb2hsv(vec3 c){ vec4 K = vec4(0., -1. / 3., 2. / 3., -1.); vec4 p = mix(vec4(c.bg, K.wz), vec4(c.gb, K.xy), step(c.b, c.g)); vec4 q = mix(vec4(p.xyw, c.r), vec4(c.r, p.yzx), step(p.x, c.r));
+  float d = q.x - min(q.w, q.y), e = 1.0e-10; return vec3(abs(q.z + (q.w - q.y) / (6. * d + e)), d / (q.x + e), q.x); }
+vec3 hsv2rgb(vec3 c){ vec3 p = abs(fract(c.xxx + vec3(1., 2. / 3., 1. / 3.)) * 6. - 3.); return c.z * mix(vec3(1.), clamp(p - 1., 0., 1.), c.y); }
+`;
+function gpuProg(fs) {
+  const gl = GPU.gl; let pr = GPU.progs.get(fs); if (pr) return pr;
+  const sh = (t, src) => { const s = gl.createShader(t); gl.shaderSource(s, src); gl.compileShader(s); if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s)); return s; };
+  const p = gl.createProgram(); gl.attachShader(p, sh(gl.VERTEX_SHADER, GL_VS)); gl.attachShader(p, sh(gl.FRAGMENT_SHADER, GL_HEAD + fs)); gl.linkProgram(p);
+  if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(p));
+  const locs = {}; pr = { p, loc: n => n in locs ? locs[n] : (locs[n] = gl.getUniformLocation(p, n)) }; GPU.progs.set(fs, pr); return pr;
+}
+function gpuTex(unit, src, w, h) {
+  const gl = GPU.gl, t = gl.createTexture(); gl.activeTexture(gl.TEXTURE0 + unit); gl.bindTexture(gl.TEXTURE_2D, t);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  if (src instanceof Uint8Array) gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, w, h, 0, gl.RGBA, gl.UNSIGNED_BYTE, src);
+  else gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, gl.RGBA, gl.UNSIGNED_BYTE, src);
+  return t;
+}
+// exécute un shader sur « src » (canvas) ; U : uniformes k_* ; ex.aux : 2e image de même taille ; ex.lut : Uint8Array 256 × 4
+function gpuRun(fs, src, U = {}, ex = {}) {
+  const gl = gpuCtx(), w = src.width, h = src.height; if (!gl || w > GPU.max || h > GPU.max || w * h > 1.1e8) throw new Error('gpu indisponible');
+  const cv = GPU.cv; if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; }
+  gl.viewport(0, 0, w, h); const pr = gpuProg(fs); gl.useProgram(pr.p); gl.bindVertexArray(GPU.vao);
+  gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false); gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false); gl.pixelStorei(gl.UNPACK_COLORSPACE_CONVERSION_WEBGL, gl.NONE);
+  const texs = [gpuTex(0, src)]; texs.push(gpuTex(1, ex.aux || new Uint8Array(4), 1, 1)); texs.push(gpuTex(2, ex.lut || new Uint8Array(4), ex.lut ? 256 : 1, 1));
+  gl.uniform1i(pr.loc('u_src'), 0); gl.uniform1i(pr.loc('u_aux'), 1); gl.uniform1i(pr.loc('u_lut'), 2); gl.uniform2f(pr.loc('u_size'), w, h); gl.uniform1i(pr.loc('u_flip'), 1);
+  for (const [k, v] of Object.entries(U)) { const L = pr.loc('k_' + k); if (!L) continue;
+    if (typeof v === 'number') gl.uniform1f(L, v); else if (v && v.i !== undefined) gl.uniform1i(L, v.i); else if (v.length === 2) gl.uniform2fv(L, v); else if (v.length === 3) gl.uniform3fv(L, v); else gl.uniform4fv(L, v); }
+  gl.drawArrays(gl.TRIANGLES, 0, 3);
+  const out = mkCanvas(w, h); out.getContext('2d').drawImage(cv, 0, 0);
+  texs.forEach(t => gl.deleteTexture(t)); return out;
+}
+const rgb01 = hex => { const c = hexToRgb(hex); return [c.r / 255, c.g / 255, c.b / 255]; };
+const gI = v => ({ i: v | 0 });
+/* ---- shaders des filtres : main() + uniformes k_* ---- */
+const GLF = {
+  bc: { fs: `uniform float k_b, k_f; void main(){ vec4 c = F(P()); o = vec4(clamp(k_f * (c.rgb + k_b - .5) + .5, 0., 1.), c.a); }`,
+    u: p => { const c = p.c * 2.55; return { b: p.b * 2.55 / 255, f: (259 * (c + 255)) / (255 * (259 - c)) }; } },
+  hsl: { fs: `uniform float k_h, k_s, k_l; void main(){ vec4 c = F(P()); if (c.a == 0.) { o = c; return; } vec3 v = rgb2hsv(c.rgb); v.x = fract(v.x + k_h / 360. + 1.); v.y = clamp(v.y * (1. + k_s / 100.), 0., 1.); v.z = clamp(v.z + k_l / 200., 0., 1.); o = vec4(hsv2rgb(v), c.a); }`,
+    u: p => ({ h: p.h, s: p.s, l: p.l }) },
+  threshold: { fs: `uniform float k_t; void main(){ vec4 c = F(P()); o = vec4(vec3(lum(c.rgb) * 255. >= k_t ? 1. : 0.), c.a); }`, u: p => ({ t: p.t }) },
+  vibrance: { fs: `uniform float k_v, k_s; void main(){ vec4 c = F(P()); float mx = max(c.r, max(c.g, c.b)), mn = min(c.r, min(c.g, c.b)), st = mx > 0. ? (mx - mn) / mx : 0.;
+      o = vec4(clamp(satMix(c.rgb, (1. + k_v / 100. * (1. - st) * 1.4) * (1. + k_s / 100.)), 0., 1.), c.a); }`, u: p => ({ v: p.v, s: p.s }) },
+  duotone: { fs: `uniform vec3 k_a, k_b; uniform float k_cf, k_m; void main(){ vec4 c = F(P()); float t = clamp(contr(lum(c.rgb) * 255., k_cf) / 255., 0., 1.); o = vec4(clamp(mix(c.rgb, mix(k_a, k_b, t), k_m), 0., 1.), c.a); }`,
+    u: p => ({ a: rgb01(p.c1), b: rgb01(p.c2), cf: 1 + p.c / 100, m: p.m / 100 }) },
+  presets: { fs: `uniform int k_ps; uniform float k_k, k_vig, k_gr; uniform vec4 k_X;
+    void main(){ vec2 q = P(); vec4 c0 = F(q); if (c0.a == 0.) { o = c0; return; } vec3 c = c0.rgb * 255.; float r = c.r, g = c.g, b = c.b, L = lum(c); vec3 v;
+      if (k_ps == 0) v = vec3(40. + r * .82 + g * .1, 30. + g * .8 + r * .05, 25. + b * .65 + g * .05);
+      else if (k_ps == 1) v = vec3(r * 1.08 + 12., g * 1.02 + 5., b * .86);
+      else if (k_ps == 2) v = vec3((r * .85 + L * .15) * .92, (g * .85 + L * .15) * .99 + 4., (b * .85 + L * .15) * 1.06 + 14.);
+      else if (k_ps == 3) { float l = L / 255., s = 1. - smoothstep(.15, .55, l), h = smoothstep(.45, .9, l); v = vec3(contr(r, 1.12) - 22. * s + 26. * h, contr(g, 1.12) + 6. * s + 8. * h, contr(b, 1.12) + 26. * s - 30. * h); }
+      else if (k_ps == 4) v = vec3(contr(L + (r - L) * 1.4, 1.3), contr(L + (g - L) * 1.4, 1.3), contr(L + (b - L) * 1.4, 1.25) - 6.);
+      else if (k_ps == 5) v = vec3(38. + (L + (r - L) * .78) * .82, 38. + (L + (g - L) * .78) * .82, 44. + (L + (b - L) * .78) * .8);
+      else if (k_ps == 6) v = vec3(contr(lum(vec3(r * 1.1, g, b * .9)), 1.45));
+      else if (k_ps == 7) { float z = 20. + L * .88; v = vec3(z + 4., z + 2., z); }
+      else if (k_ps == 8) { float l = L / 255., s = 1. - l; v = vec3(18. + r * .9 + 18. * l, 22. + g * .9 + 10. * s, 26. + b * .82 + 16. * s); }
+      else if (k_ps == 9) v = vec3(contr(L + (r - L) * 1.55, 1.12), contr(L + (g - L) * 1.55, 1.12), contr(L + (b - L) * 1.55, 1.12));
+      else if (k_ps == 10) v = vec3((L * .5 + r * .5) * .72, (L * .5 + g * .5) * .8 + 4., (L * .5 + b * .5) * .95 + 22.);
+      else v = vec3(r * 1.05 + g * .08 + 6., g * .9 + r * .06, b * .72);
+      if (k_vig > 0.) { float e = length((q - k_X.xy) / k_X.zw) / sqrt(2.); v *= 1. - smoothstep(.4, 1.05, e) * k_vig; }
+      if (k_gr > 0.) v += (h2(q.x - .5, q.y - .5, 77.) - .5) * k_gr * 2.;
+      o = vec4(clamp(mix(c, v, k_k) / 255., 0., 1.), c0.a); }`,
+    u: (p, X) => { const keys = Object.keys(PRESETS), P0 = PRESETS[p.ps] || PRESETS.vintage; return { ps: gI(Math.max(0, keys.indexOf(p.ps))), k: p.i / 100, vig: P0.vig || 0, gr: P0.grain || 0, X: [X.cx, X.cy, X.rw || 1, X.rh || 1] }; } },
+  vignette: { fs: `uniform vec4 k_X; uniform vec3 k_col; uniform float k_R, k_f; void main(){ vec2 q = P(); vec4 c = F(q); float e = length((q - k_X.xy) / k_X.zw) / sqrt(2.), t = smoothstep(k_R * .35, k_R * 1.05, e) * k_f; o = vec4(mix(c.rgb, k_col, t), c.a); }`,
+    u: (p, X) => ({ X: [X.cx, X.cy, X.rw || 1, X.rh || 1], col: rgb01(p.col), R: p.r / 100, f: p.f / 100 }) },
+  redeye: { fs: `uniform float k_lim, k_sat; void main(){ vec4 c = F(P()); vec3 v = c.rgb * 255.; float mx = max(v.r, max(v.g, v.b)), mn = min(v.r, min(v.g, v.b));
+      if (v.r - (v.g + v.b) / 2. > k_lim && mx > 0. && (mx - mn) / mx * 100. >= k_sat && v.r == mx) v = vec3((v.g + v.b) / 2. * .9, v.g * .9, v.b * .9); o = vec4(v / 255., c.a); }`, u: p => ({ lim: (100 - p.t) * 1.2, sat: p.sat }) },
+  grain: { fs: `uniform float k_a, k_sz, k_seed; uniform int k_mono; float z(vec2 g, float k){ return (h2(g.x, g.y, k_seed + k) + h2(g.x, g.y, k_seed + k + 50.) - 1.) * k_a; }
+    void main(){ vec2 q = P(); vec4 c = F(q); vec2 g = floor((q - .5) / k_sz); vec3 v = c.rgb * 255.; if (k_mono == 1) v += z(g, 0.); else v += vec3(z(g, 0.), z(g, 1.), z(g, 2.)); o = vec4(clamp(v / 255., 0., 1.), c.a); }`,
+    u: p => ({ a: p.q * 1.1, sz: p.sz, seed: p.seed, mono: gI(p.mono ? 1 : 0) }) },
+  chroma: { fs: `uniform vec2 k_d; void main(){ vec2 q = P(); vec4 c = F(q), a = F(q + k_d), b = F(q - k_d); o = vec4(a.r, c.g, b.b, max(c.a, max(a.a, b.a))); }`,
+    u: p => { const a = p.a * Math.PI / 180; return { d: [Math.round(Math.cos(a) * p.dd), Math.round(Math.sin(a) * p.dd)] }; } },
+  edges: { fs: `uniform int k_m; uniform float k_k; float g(vec2 p){ return lum(F(p).rgb) * 255.; }
+    void main(){ vec2 q = P(); vec4 c = F(q); float gx = g(q + vec2(1, -1)) + 2. * g(q + vec2(1, 0)) + g(q + vec2(1, 1)) - g(q + vec2(-1, -1)) - 2. * g(q + vec2(-1, 0)) - g(q + vec2(-1, 1));
+      float gy = g(q + vec2(-1, 1)) + 2. * g(q + vec2(0, 1)) + g(q + vec2(1, 1)) - g(q + vec2(-1, -1)) - 2. * g(q + vec2(0, -1)) - g(q + vec2(1, -1)), e = clamp(length(vec2(gx, gy)) / 4. * k_k, 0., 255.);
+      vec3 v; if (k_m == 0) v = vec3(255. - e); else if (k_m == 1) v = vec3(e); else { vec3 s = c.rgb * 255.; float mx = max(max(s.r, s.g), max(s.b, 1.)); v = s / mx * 255. * (e / 255. * 1.6); }
+      o = vec4(clamp(v / 255., 0., 1.), c.a); }`, u: p => ({ m: gI(p.m === 'ink' ? 0 : p.m === 'white' ? 1 : 2), k: p.f / 100 }) },
+  emboss: { fs: `uniform vec2 k_d; uniform float k_h; uniform int k_col; void main(){ vec2 q = P(); vec4 c = F(q); float v = (lum(F(q - k_d).rgb) - lum(F(q + k_d).rgb)) * 255. * k_h;
+      o = vec4(clamp((k_col == 1 ? c.rgb * 255. + v : vec3(128. + v)) / 255., 0., 1.), c.a); }`,
+    u: p => { const a = p.a * Math.PI / 180; return { d: [Math.round(Math.cos(a)), Math.round(Math.sin(a))], h: p.hgt, col: gI(p.col ? 1 : 0) }; } },
+  cartoon: { fs: `uniform float k_th, k_st; uniform int k_e; float g(vec2 p){ return lum(FA(p).rgb) * 255.; }
+    void main(){ vec2 q = P(); vec4 c = F(q), s = FA(q); float gx = g(q + vec2(1, -1)) + 2. * g(q + vec2(1, 0)) + g(q + vec2(1, 1)) - g(q + vec2(-1, -1)) - 2. * g(q + vec2(-1, 0)) - g(q + vec2(-1, 1));
+      float gy = g(q + vec2(-1, 1)) + 2. * g(q + vec2(0, 1)) + g(q + vec2(1, 1)) - g(q + vec2(-1, -1)) - 2. * g(q + vec2(0, -1)) - g(q + vec2(1, -1)), e = length(vec2(gx, gy)) / 4.;
+      bool ink = k_e == 1 && e > k_th; vec3 v = ink ? vec3(20.) : satMix(floor(s.rgb * 255. / k_st + .5) * k_st, 1.2); o = vec4(clamp(v / 255., 0., 1.), c.a); }`,
+    u: p => ({ th: 120 - p.e, st: 255 / (p.n - 1), e: gI(p.e > 0 ? 1 : 0) }), aux: (src, p) => p.sm ? blurCanvas(src, p.sm) : src },
+  unsharp: { fs: `uniform float k_a, k_t; void main(){ vec2 q = P(); vec4 c = F(q), b = FA(q); vec3 d = c.rgb - b.rgb, v = c.rgb;
+      for (int i = 0; i < 3; i++) if (abs(d[i]) * 255. > k_t) v[i] = c.rgb[i] + k_a * d[i]; o = vec4(clamp(v, 0., 1.), c.a); }`, u: p => ({ a: p.a / 100, t: p.t }), aux: (src, p) => blurCanvas(src, p.r) },
+  glow: { fs: `uniform float k_f, k_b; void main(){ vec2 q = P(); vec4 c = F(q), b = FA(q); vec3 g = clamp(k_f * (b.rgb * 255. + k_b * 1.28 - 128.) + 128., 0., 255.); vec3 v = 255. - (255. - c.rgb * 255.) * (255. - g) / 255.; o = vec4(clamp(v / 255., 0., 1.), c.a); }`,
+    u: p => { const C = p.c * 2.55; return { f: (259 * (C + 255)) / (255 * (259 - C)), b: p.b }; }, aux: (src, p) => blurCanvas(src, p.r) },
+  portrait: { fs: `uniform float k_w, k_l, k_t; void main(){ vec2 q = P(); vec4 c = F(q), b = FA(q); if (c.a == 0.) { o = c; return; } vec3 v = c.rgb * 255. * (1. - k_w * .5) + b.rgb * 255. * k_w * .5 + k_l * 2.;
+      v += vec3(k_t * 1.6, k_t * .4, -k_t * 1.6); o = vec4(clamp(v / 255., 0., 1.), c.a); }`, u: p => ({ w: .12 * p.s, l: p.l, t: p.t }), aux: (src, p) => blurCanvas(src, p.s * 1.6) },
+  tiltshift: { fs: `uniform float k_c0, k_hw, k_s; void main(){ vec2 q = P(); vec4 c = F(q), b = FA(q); float t = smoothstep(k_hw, k_hw + .22, abs((q.y - .5) / u_size.y - k_c0)); vec4 m = mix(c, b, t); o = vec4(clamp(satMix(m.rgb, 1. + k_s / 100.), 0., 1.), m.a); }`,
+    u: p => ({ c0: p.pos / 100, hw: p.wd / 200, s: p.s }), aux: (src, p) => blurCanvas(src, p.b) },
+  tones: { fs: `uniform float k_sh, k_hl; void main(){ vec2 q = P(); vec4 c = F(q); float l = lum(FA(q).rgb), up = 1. + k_sh / 100. * 1.6 * (1. - l) * (1. - l), dn = k_hl / 100. * .55 * l * l;
+      vec3 v = c.rgb * 255. * up; v -= (v - 90.) * dn * step(90., v); o = vec4(clamp(v / 255., 0., 1.), c.a); }`, u: p => ({ sh: p.sh, hl: p.hl }), aux: (src, p) => blurCanvas(src, p.r) },
+  bulge: { fs: `uniform vec2 k_c; uniform float k_R, k_e; void main(){ vec2 p = P(), d = p - k_c; float r = length(d); vec2 q = p; if (r < k_R && r > 0.) q = k_c + d * (pow(r / k_R, k_e) * k_R / r); o = EDGE(q, 0); }`,
+    u: (p, X) => ({ c: [X.cx, X.cy], R: Math.min(X.rw, X.rh) * p.r / 100 || 1, e: Math.pow(2, p.a / 100) }) },
+  twist: { fs: `uniform vec2 k_c; uniform float k_R, k_A; void main(){ vec2 p = P(), d = p - k_c; float r = length(d); vec2 q = p; if (r < k_R) { float t = 1. - r / k_R, th = -k_A * t * t, c = cos(th), s = sin(th); q = k_c + vec2(d.x * c - d.y * s, d.x * s + d.y * c); } o = EDGE(q, 0); }`,
+    u: (p, X) => ({ c: [X.cx, X.cy], R: Math.min(X.rw, X.rh) * p.r / 100 || 1, A: p.a * Math.PI / 180 }) },
+  polar: { fs: `uniform vec2 k_c; uniform float k_S, k_a; uniform int k_e; void main(){ vec2 d = (P() - k_c) / k_S; float r2 = dot(d, d); if (r2 == 0.) r2 = 1e-6; o = EDGE(k_c + d / r2 * k_a * k_S, k_e); }`,
+    u: (p, X) => ({ c: [X.cx, X.cy], S: Math.min(X.rw, X.rh) || 1, a: p.a / 100, e: gI({ clamp: 0, wrap: 1, reflect: 2, transparent: 3 }[p.edge] || 0) }) },
+  dents: { fs: `uniform float k_sc, k_a, k_seed; uniform int k_oc; float fb(vec2 p, float sd){ float v = 0., m = 1., t = 0.; for (int i = 0; i < 4; i++) { if (i >= k_oc) break; v += vn(p * exp2(float(i)), sd + float(i) * 31.) * m; t += m; m /= 2.; } return v / t - .5; }
+    void main(){ vec2 p = P(), u = p / k_sc; o = EDGE(p + vec2(fb(u, k_seed), fb(u + vec2(91.7, 33.1), k_seed + 5.)) * 2. * k_a, 2); }`, u: p => ({ sc: p.sc, a: p.sc * p.f / 40, seed: p.seed, oc: gI(p.oc) }) },
+  tile: { fs: `uniform vec2 k_c; uniform float k_S, k_k, k_ca, k_sa; void main(){ vec2 d = P() - k_c; float u = (d.x * k_ca + d.y * k_sa) / k_S, v = (-d.x * k_sa + d.y * k_ca) / k_S, iu = floor(u + .5), iv = floor(v + .5), fu = u - iu, fv = v - iv;
+      u = iu + fu - k_k * sin(6.2831853 * fu) / 3.14159265; v = iv + fv - k_k * sin(6.2831853 * fv) / 3.14159265; o = EDGE(k_c + vec2(u * k_ca - v * k_sa, u * k_sa + v * k_ca) * k_S, 2); }`,
+    u: (p, X) => { const a = p.ang * Math.PI / 180; return { c: [X.cx, X.cy], S: p.sz, k: p.k / 100, ca: Math.cos(a), sa: Math.sin(a) }; } },
+  frost: { fs: `uniform float k_r, k_q, k_seed; void main(){ vec2 p = P(), i = p - .5, s = i; if (h2(i.x, i.y, k_seed + 3.) * 100. < k_q) s = clamp(floor(i + (vec2(h2(i.x, i.y, k_seed), h2(i.x, i.y, k_seed + 1.)) * 2. - 1.) * k_r + .5), vec2(0), u_size - 1.); o = F(s + .5); }`,
+    u: p => ({ r: p.r, q: p.q, seed: p.seed }) },
+  crystal: { fs: `uniform float k_c, k_seed; void main(){ vec2 p = P() - .5; float ci = floor(p.x / k_c), cj = floor(p.y / k_c), best = 1e18; vec2 bp = p;
+      for (float j = cj - 1.; j <= cj + 1.; j++) for (float i = ci - 1.; i <= ci + 1.; i++) { vec2 s = vec2((i + .1 + .8 * h2(i, j, k_seed)) * k_c, (j + .1 + .8 * h2(i, j, k_seed + 17.)) * k_c), d = s - p; float dd = dot(d, d); if (dd < best) { best = dd; bp = s; } }
+      o = F(clamp(floor(bp), vec2(0), u_size - 1.) + .5); }`, u: p => ({ c: p.c, seed: p.seed }) },
+  oil: { fs: `uniform int k_r; void main(){ vec2 p = P(); vec4 c0 = F(p); float bv = 1e18; vec3 bm = c0.rgb;
+      for (int qd = 0; qd < 4; qd++) { vec2 o0 = vec2(float(qd & 1), float(qd >> 1)) * float(k_r); vec3 s = vec3(0); float sl = 0., sl2 = 0., n = 0.;
+        for (int y = 0; y <= 14; y++) { if (y > k_r) break; for (int x = 0; x <= 14; x++) { if (x > k_r) break; vec3 v = F(p + o0 - vec2(float(x), float(y))).rgb * 255.; float l = lum(v); s += v; sl += l; sl2 += l * l; n += 1.; } }
+        float m = sl / n, va = sl2 / n - m * m; if (va < bv) { bv = va; bm = s / n / 255.; } }
+      o = vec4(bm, c0.a); }`, u: p => ({ r: gI(p.r) }) },
+};
+// instantanés (FILTERS) : version GPU
+const GLI = {
+  gray: `void main(){ vec4 c = F(P()); o = vec4(vec3(lum(c.rgb)), c.a); }`,
+  sepia: `void main(){ vec4 c = F(P()); o = vec4(clamp(vec3(dot(c.rgb, vec3(.393, .769, .189)), dot(c.rgb, vec3(.349, .686, .168)), dot(c.rgb, vec3(.272, .534, .131))), 0., 1.), c.a); }`,
+  invert: `void main(){ vec4 c = F(P()); o = vec4(1. - c.rgb, c.a); }`,
+  solarize: `void main(){ vec4 c = F(P()); vec3 v = c.rgb * 255.; v = mix(v, 255. - v, step(128.5, v)); o = vec4(v / 255., c.a); }`,
+  sharpen: `void main(){ vec2 q = P(); vec4 c = F(q); vec3 v = 5. * c.rgb - F(q + vec2(1, 0)).rgb - F(q - vec2(1, 0)).rgb - F(q + vec2(0, 1)).rgb - F(q - vec2(0, 1)).rgb; o = vec4(clamp(v, 0., 1.), c.a); }`,
+};
+const GL_LUT = `void main(){ vec4 c = F(P()); ivec3 i = ivec3(floor(c.rgb * 255. + .5)); o = vec4(texelFetch(u_lut, ivec2(i.r, 0), 0).r, texelFetch(u_lut, ivec2(i.g, 0), 0).g, texelFetch(u_lut, ivec2(i.b, 0), 0).b, c.a); }`;
+function gpuTry(fn) { if (!gpuOn()) return null; try { return fn(); } catch (e) { GPU.fails++; console.warn('GPU → calcul classique', e); return null; } }
+// branchement : chaque filtre porté passe par la carte graphique quand c'est possible
+function gpuInstall() {
+  for (const [name, G] of Object.entries(GLF)) { const F = ADJUST[name]; if (!F || F._gpu) continue; const js = F.run; F._gpu = true; F.runJS = js;
+    F.run = (src, p, X) => gpuTry(() => gpuRun(G.fs, src, G.u(p, X || { cx: src.width / 2, cy: src.height / 2, rw: src.width / 2, rh: src.height / 2 }), G.aux ? { aux: G.aux(src, p) } : {})) || js(src, p, X); }
+  for (const [name, fs] of Object.entries(GLI)) if (FILTERS[name]) FILTERS[name].gl = fs;
+}
+
 /* ---------------- démarrage ---------------- */
+gpuInstall();
 function rangeFill(r) { const mn = +r.min || 0, mx = r.max === '' ? 100 : +r.max, v = +r.value; r.style.setProperty('--p', (mx > mn ? (v - mn) / (mx - mn) * 100 : 0) + '%'); }
 document.addEventListener('input', e => { if (e.target.type === 'range') rangeFill(e.target); }, true);
 new MutationObserver(ms => { for (const m of ms) for (const n of m.addedNodes) if (n.nodeType === 1) { if (n.type === 'range') rangeFill(n); else n.querySelectorAll && n.querySelectorAll('input[type=range]').forEach(rangeFill); } }).observe(document.body, { childList: true, subtree: true });
