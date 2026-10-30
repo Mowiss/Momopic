@@ -583,9 +583,31 @@ aside.panels::-webkit-scrollbar,#pn-tool .pb::-webkit-scrollbar{display:none}
 
 #galwrap{position:absolute;left:0;right:0;top:0;z-index:35;display:flex;flex-direction:column;align-items:center;pointer-events:none;transform:translateY(-150px);
   transition:transform .34s cubic-bezier(.55,0,.8,.25)}
-#stage.gal-open #galwrap{transform:none;transition:transform .55s cubic-bezier(.16,1,.3,1)}
-#gallery{position:relative;width:100%;height:150px;pointer-events:auto}
+#stage.gal-open #galwrap,#stage.proj-open #galwrap{transform:none;transition:transform .55s cubic-bezier(.16,1,.3,1)}
+#gw-body{position:relative;width:100%;height:150px}
+#gallery,#projects{position:absolute;inset:0;pointer-events:auto}
 #stage:not(.gal-open) #gallery{visibility:hidden;transition:visibility 0s .34s}
+#stage:not(.proj-open) #projects{visibility:hidden;transition:visibility 0s .34s}
+.gw-tabs{display:flex;gap:6px}
+#proj-tab{pointer-events:auto;display:flex;align-items:center;gap:6px;padding:3px 14px 5px;margin-top:-1px;border:1px solid var(--g600);border-top:0;border-radius:0 0 11px 11px;background:var(--g800);color:var(--g300);font:700 11.5px system-ui;letter-spacing:.06em;text-transform:uppercase;cursor:pointer}
+#proj-tab:hover{background:var(--g700);color:#fff}#proj-tab svg:first-child{color:#38bdf8}
+#proj-tab .gal-chev{transition:transform .45s cubic-bezier(.16,1,.3,1)}
+#stage.proj-open #proj-tab{background:#141414;border-color:#3a3a3a}#stage.proj-open #proj-tab .gal-chev{transform:rotate(180deg)}
+#proj-n{display:inline-grid;place-items:center;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:#0369a1;color:#fff;font-size:10px;letter-spacing:0}
+#proj-n:empty{display:none}
+.pj-b{color:#38bdf8!important}
+#stage:not(.proj-open) #projects .gal-strip,#stage:not(.proj-open) #projects .gal-head{opacity:0;transition:opacity .15s}
+.pj-it{position:relative;flex:none;height:104px;min-width:96px;display:flex;flex-direction:column;gap:2px;padding:5px;box-sizing:border-box;border-radius:9px;border:2px solid #3a3a3a;background:#1f1f1f;cursor:pointer;transition:transform .15s,border-color .15s}
+.pj-it:hover{transform:translateY(-2px);border-color:#5a5a5a}
+.pj-it.on{border-color:#38bdf8;background:#0c2433;box-shadow:0 0 0 3px #38bdf833}
+.pj-it img{flex:none;height:58px;max-width:150px;object-fit:contain;border-radius:4px;background:repeating-conic-gradient(#ddd 0 25%,#fff 0 50%) 0 0/10px 10px;align-self:center}
+.pj-it b{flex:none;font:600 11px/1.25 system-ui;color:#e5e7eb;max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pj-it small{font:10px system-ui;color:#9ca3af}
+.pj-it .pj-dot{color:#fbbf24}
+.pj-it .gal-x{position:absolute;top:-8px;right:-8px;width:18px;height:18px;border-radius:50%;border:0;background:#dc2626;color:#fff;font:700 12px/18px system-ui;cursor:pointer;display:none;padding:0}
+.pj-it:hover .gal-x{display:block}
+.pj-add{flex:none;height:104px;width:86px;border-radius:9px;border:2px dashed #3a3a3a;background:none;color:#9ca3af;font:600 11px system-ui;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.pj-add:hover{border-color:#38bdf8;color:#fff}.pj-add svg{width:22px;height:22px;color:#38bdf8}
 #gal-tab{pointer-events:auto;display:flex;align-items:center;gap:6px;padding:3px 14px 5px;margin-top:-1px;border:1px solid var(--g600);border-top:0;border-radius:0 0 11px 11px;background:var(--g800);color:var(--g300);font:700 11.5px system-ui;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;transition:background .25s,border-color .25s,color .15s}
 #gal-tab:hover{background:var(--g700);color:#fff}
 #gal-tab svg:first-child{color:#f59e0b}
@@ -598,7 +620,7 @@ aside.panels::-webkit-scrollbar,#pn-tool .pb::-webkit-scrollbar{display:none}
 @keyframes galIn{from{opacity:0;translate:-46px 0;scale:.9}to{opacity:1;translate:0 0;scale:1}}
 #stage.gal-anim .gal-head{animation:galFade .4s ease-out .1s both}
 @keyframes galFade{from{opacity:0}to{opacity:1}}
-#stage:not(.gal-open) .gal-strip,#stage:not(.gal-open) .gal-head{opacity:0;transition:opacity .15s}
+#stage:not(.gal-open) #gallery .gal-strip,#stage:not(.gal-open) #gallery .gal-head{opacity:0;transition:opacity .15s}
 .gal-film{position:absolute;inset:0;background:#141414;border-bottom:1px solid #3a3a3a;display:flex;flex-direction:column;
   background-image:repeating-linear-gradient(90deg,transparent 0 9px,#2c2c2c 9px 19px,transparent 19px 26px),repeating-linear-gradient(90deg,transparent 0 9px,#2c2c2c 9px 19px,transparent 19px 26px);
   background-size:100% 7px,100% 7px;background-position:0 4px,0 calc(100% - 4px);background-repeat:repeat-x}
@@ -979,8 +1001,11 @@ setTimeout(done,6000);
   <div id="stage">
     <canvas id="view"></canvas>
     <div id="galwrap">
+      <div id="gw-body">
       <div id="gallery"><div class="gal-film"><div class="gal-head"><b>Galerie</b><span id="gal-count"></span><span style="flex:1"></span><button type="button" class="gal-btn" id="gal-imp" title="Importer des images dans la galerie et sur la page">+ Importer…</button><button type="button" class="gal-btn" id="gal-zip" title="Télécharger toutes les images de la galerie dans un fichier .zip">Exporter .zip</button><button type="button" class="gal-btn" id="gal-clear" title="Vider la galerie (les images déjà posées restent sur les pages)">Vider</button></div><div class="gal-strip" id="gal-strip"></div></div></div>
-      <button type="button" id="gal-tab" title="Galerie : toutes les photos et images déjà importées"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 8h20M2 16h20M6 5v3M10 5v3M14 5v3M18 5v3M6 16v3M10 16v3M14 16v3M18 16v3"/></svg>Galerie<svg class="gal-chev" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div id="projects"><div class="gal-film"><div class="gal-head"><b class="pj-b">Projets</b><span id="proj-count"></span></div><div class="gal-strip" id="proj-strip"></div></div></div>
+      </div>
+      <div class="gw-tabs"><button type="button" id="gal-tab" title="Galerie : toutes les photos et images déjà importées"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 8h20M2 16h20M6 5v3M10 5v3M14 5v3M18 5v3M6 16v3M10 16v3M14 16v3M18 16v3"/></svg>Galerie<svg class="gal-chev" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6"><path d="m6 9 6 6 6-6"/></svg></button><button type="button" id="proj-tab" title="Projets : les images ouvertes en même temps (clic sur une carte pour passer de l'une à l'autre)"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="14" height="12" rx="2"/><path d="M7 7V5h14v12h-4"/></svg>Projets<span id="proj-n"></span><svg class="gal-chev" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6"><path d="m6 9 6 6 6-6"/></svg></button></div>
     </div>
     <div id="barrel"><div class="br-disc" id="br-disc"></div><div id="br-badges"></div>
       <button type="button" id="br-plus" title="Ajouter une page (molette sur le barillet : faire défiler les pages)"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div>
@@ -1206,7 +1231,7 @@ function updateTitle() {
 
 /* ---------------- document ---------------- */
 function createDoc(w, h, bg = '#ffffff', name = 'Sans titre') {
-  doc = { name, w, h, layers: [], active: 0, dpi: S.newFmtDpi || 96 };
+  projBeforeNew(); doc = { name, w, h, layers: [], active: 0, dpi: S.newFmtDpi || 96 };
   const l = newLayer('Fond', w, h); l.bg = true;
   if (bg && bg !== 'transparent') { const c = l.canvas.getContext('2d'); c.fillStyle = bg; c.fillRect(0, 0, w, h); }
   else l.name = 'Calque 1';
@@ -1214,11 +1239,57 @@ function createDoc(w, h, bg = '#ffffff', name = 'Sans titre') {
   afterNewDoc();
 }
 function afterNewDoc() {
+  projAdopt();
   if (textEdit) { textEdit.ta.remove(); textEdit.hd.remove(); textEdit = null; }
   initPages(); picked = false;
   sel = null; override = null; undoStack = []; redoStack = []; cancelTransient();
-  ensureBuffers(); fit(); renderLayers(); renderPages(); renderOptbar(); markDirty(false); updateStatus(); updateUndoBtns(); req(true);
+  ensureBuffers(); fit(); renderLayers(); renderPages(); renderOptbar(); markDirty(false); updateStatus(); updateUndoBtns(); req(true); projRender();
 }
+/* ---------------- projets : plusieurs images ouvertes en même temps ----------------
+   chaque projet garde son document (pages, éléments), son historique, sa vue, sa sélection et son fichier d'enregistrement */
+const PROJ = { list: [], cur: -1, adding: false, uid: 1 };
+const projPristine = () => !dirty && !undoStack.length && !redoStack.length;
+function projBeforeNew() {   // appelé juste avant qu'un nouveau document remplace « doc »
+  if (PROJ.cur < 0 || !doc) { PROJ.adding = true; return; }
+  if (projPristine()) { PROJ.adding = false; return; }   // une feuille vierge est simplement remplacée
+  projStoreCur(); PROJ.adding = true;
+}
+function projThumb() { try { if (needComp) { composite(comp, true); needComp = false; } const k = Math.min(1, 140 / Math.max(doc.w, doc.h)), c = mkCanvas(doc.w * k, doc.h * k); c.getContext('2d').drawImage(comp, 0, 0, c.width, c.height); return c.toDataURL('image/png'); } catch (e) { return ''; } }
+function projStoreCur() {
+  const P = PROJ.list[PROJ.cur]; if (!P) return;
+  if (textEdit) commitText(); if (typeof xf !== 'undefined' && xf) commitTransform(); if (fltS) fltClose(false); if (pen) penFinish(false); if (pathEdit) endPathEdit();
+  syncPage(); Object.assign(P, { doc, undo: undoStack, redo: redoStack, saveTarget: { ...saveTarget }, dirty, cam: { ...cam }, sel, thumb: projThumb() });
+}
+function projAdopt() {
+  if (PROJ.adding || PROJ.cur < 0) { PROJ.list.push({ id: PROJ.uid++, doc }); PROJ.cur = PROJ.list.length - 1; } else PROJ.list[PROJ.cur].doc = doc;
+  PROJ.adding = false;
+}
+function projSwitch(i) {
+  if (i === PROJ.cur || !PROJ.list[i]) return; projStoreCur();
+  const P = PROJ.list[i]; PROJ.cur = i; cropRect = null; override = null; picked = false;
+  doc = P.doc; undoStack = P.undo || []; redoStack = P.redo || []; saveTarget = P.saveTarget || { handle: null, fmt: 'mms' }; sel = P.sel || null;
+  ensureBuffers(); if (P.cam) Object.assign(cam, P.cam); else fit();
+  dirty = !!P.dirty; updateTitle(); renderLayers(); renderPages(); renderOptbar(); updateStatus(); updateUndoBtns(); req(true); projRender();
+}
+async function projClose(i) {
+  const P = PROJ.list[i]; if (!P) return; const isCur = i === PROJ.cur, d = isCur ? dirty : P.dirty;
+  if (d && !await confirmDlg(`« ${(isCur ? doc : P.doc).name} » n'est pas enregistré. Le fermer quand même ?`)) return;
+  PROJ.list.splice(i, 1);
+  if (!isCur) { if (i < PROJ.cur) PROJ.cur--; projRender(); return; }
+  PROJ.cur = -1;
+  if (!PROJ.list.length) { createDoc(S.newW, S.newH, S.newBg); saveTarget = { handle: null, fmt: 'mms' }; return; }
+  const n = Math.min(i, PROJ.list.length - 1), Q = PROJ.list[n]; PROJ.cur = n; PROJ.list[n] = Q;
+  doc = Q.doc; undoStack = Q.undo || []; redoStack = Q.redo || []; saveTarget = Q.saveTarget || { handle: null, fmt: 'mms' }; sel = Q.sel || null; picked = false; override = null;
+  ensureBuffers(); if (Q.cam) Object.assign(cam, Q.cam); else fit(); dirty = !!Q.dirty; updateTitle(); renderLayers(); renderPages(); renderOptbar(); updateStatus(); updateUndoBtns(); req(true); projRender();
+}
+function projRender() {
+  const n = PROJ.list.length, nb = $('#proj-n'); if (nb) nb.textContent = n > 1 ? n : '';
+  const st = $('#proj-strip'); if (!st) return; $('#proj-count').textContent = n ? (n > 1 ? n + ' images ouvertes' : '1 image ouverte') + ' · clic pour passer de l\'une à l\'autre' : '';
+  st.innerHTML = PROJ.list.map((P, i) => { const cur = i === PROJ.cur, d = cur ? doc : P.doc, th = cur ? projThumb() : P.thumb, dt = cur ? dirty : P.dirty;
+    return `<div class="pj-it${cur ? ' on' : ''}" data-pj="${i}" title="${esc(d.name)} · ${d.w} × ${d.h} px${(d.pages || []).length > 1 ? ' · ' + d.pages.length + ' pages' : ''}"><img src="${th || ''}" alt=""><b>${dt ? '<span class="pj-dot">● </span>' : ''}${esc(d.name)}</b><small>${d.w} × ${d.h}${(d.pages || []).length > 1 ? ' · ' + d.pages.length + ' p.' : ''}</small><button type="button" class="gal-x" data-pjx="${i}" title="Fermer ce projet">×</button></div>`; }).join('') +
+    `<button type="button" class="pj-add" data-pjnew><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Nouveau</button><button type="button" class="pj-add" data-pjopen><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v1H7l-4 9z"/></svg>Ouvrir</button>`;
+}
+function projToggle(v) { const stg = $('#stage'), on = v === undefined ? !stg.classList.contains('proj-open') : v; if (on) { galToggle(false); projRender(); } stg.classList.toggle('proj-open', on); }
 let comp = mkCanvas(1, 1), effect = mkCanvas(1, 1), work = mkCanvas(1, 1);
 function ensureBuffers() {
   if (comp.width !== doc.w || comp.height !== doc.h) { comp = mkCanvas(doc.w, doc.h); effect = mkCanvas(doc.w, doc.h); }
@@ -4539,7 +4610,6 @@ function pickFiles(withMms, cb) {
   i.onchange = () => cb([...i.files]); i.click();
 }
 async function openFile() {
-  if (dirty && !await confirmDlg('Le document actuel n\'est pas enregistré. Continuer ?')) return;
   if (window.showOpenFilePicker) {
     try {
       const [h] = await showOpenFilePicker({ types: [{ description: 'Documents MomoPIC et images', accept: { 'application/x-momopic': ['.mmp', '.mms'], 'image/*': IMG_EXT.map(e => '.' + e) } }] });
@@ -4554,7 +4624,7 @@ async function openAny(f, handle) {
     else {
       if (await openPsdLayers(f)) { galAdd(f, f.name); }
       else {
-        const img = await loadImage(f); galAdd(f, f.name); doc = { name: f.name.replace(/\.[^.]+$/, ''), w: img.naturalWidth || img.width, h: img.naturalHeight || img.height, layers: [], active: 0, dpi: 96 };
+        const img = await loadImage(f); galAdd(f, f.name); projBeforeNew(); doc = { name: f.name.replace(/\.[^.]+$/, ''), w: img.naturalWidth || img.width, h: img.naturalHeight || img.height, layers: [], active: 0, dpi: 96 };
         const l = newLayer('Fond', doc.w, doc.h); l.bg = true; l.canvas.getContext('2d').drawImage(img, 0, 0); doc.layers.push(l); afterNewDoc();
       }
     }
@@ -4568,7 +4638,7 @@ async function openPsdLayers(f) {
   toast('Lecture du PSD « ' + f.name + ' »…');
   const P = await libPsd(), psd = P.readPsd(await f.arrayBuffer(), { skipThumbnail: true }), ls = psdLayerList(psd);
   if (!ls.length) return false;
-  doc = { name: f.name.replace(/\.[^.]+$/, ''), w: psd.width, h: psd.height, layers: [], active: 0, dpi: 96 };
+  projBeforeNew(); doc = { name: f.name.replace(/\.[^.]+$/, ''), w: psd.width, h: psd.height, layers: [], active: 0, dpi: 96 };
   for (const s of ls) { const l = newLayer(s.name, s.canvas.width, s.canvas.height); l.canvas.getContext('2d').drawImage(s.canvas, 0, 0);
     Object.assign(l, { x: s.x, y: s.y, visible: s.visible, opacity: Math.round(s.opacity * 100) / 100, blend: s.blend }); doc.layers.push(l); }
   doc.active = doc.layers.length - 1; afterNewDoc(); return true;
@@ -4639,7 +4709,7 @@ async function loadMms(o, fallbackName) {
   if (o.pages) for (const p of o.pages) { const layers = await loadLayers(p.layers); pages.push({ id: uid++, name: p.name || 'Page ' + (pages.length + 1), layers, active: clamp(p.active ?? layers.length - 1, 0, layers.length - 1) }); }
   else { const layers = await loadLayers(o.layers, true); pages.push({ id: uid++, name: 'Page 1', layers, active: clamp(o.active ?? layers.length - 1, 0, layers.length - 1) }); }
   const pg = clamp(o.page || 0, 0, pages.length - 1);
-  doc = { name: o.name || fallbackName || 'Sans titre', w: o.width, h: o.height, dpi: o.dpi || 96, pages, page: pg, layers: pages[pg].layers, active: pages[pg].active };
+  projBeforeNew(); doc = { name: o.name || fallbackName || 'Sans titre', w: o.width, h: o.height, dpi: o.dpi || 96, pages, page: pg, layers: pages[pg].layers, active: pages[pg].active };
   afterNewDoc();
 }
 const FMT = {
@@ -4791,7 +4861,6 @@ const NF_FMT = [
 const NF_RES_PX = [[720, 'Léger', 'web, mail'], [1080, 'HD', 'Full HD'], [1440, '2K', 'grand écran'], [2160, '4K', 'très détaillé']];
 const NF_RES_DPI = [[96, '96 dpi', 'écran'], [150, '150 dpi', 'brouillon'], [300, '300 dpi', 'impression']];
 async function newDocDialog(startup) {
-  if (!startup && dirty && !await confirmDlg('Le document actuel n\'est pas enregistré. Continuer ?')) return;
   const st = { fmt: S.newFmt || '169', ori: S.newOri || 'land', res: S.newRes || 1080, dpi: S.newDpi || 300, w: S.newW, h: S.newH, bg: S.newBg === 'transparent' ? 'transparent' : S.newBg === '#ffffff' ? '#ffffff' : 'c1' };
   if (!NF_FMT.some(f => f.id === st.fmt)) st.fmt = '169';
   const F = () => NF_FMT.find(f => f.id === st.fmt);
@@ -5243,7 +5312,7 @@ async function galPlace(id, p) {
 }
 let galAnimT = 0;
 function galToggle(v) {
-  const st = $('#stage'), on = v === undefined ? !st.classList.contains('gal-open') : v;
+  const st = $('#stage'), on = v === undefined ? !st.classList.contains('gal-open') : v; if (on) st.classList.remove('proj-open');
   clearTimeout(galAnimT); st.classList.toggle('gal-anim', on); st.classList.toggle('gal-open', on);
   if (on) { $('#gal-strip').scrollLeft = 0; galAnimT = setTimeout(() => st.classList.remove('gal-anim'), 1300); }
 }
@@ -5258,6 +5327,10 @@ async function galZip() {
   download(z, name); toast(`Galerie exportée : ${plural(files.length, 'image', 'images')} dans « ${name} » (${kb(z)}).`);
 }
 $('#gal-tab').onclick = () => galToggle();
+$('#proj-tab').onclick = () => projToggle();
+$('#proj-strip').addEventListener('click', e => { const x = e.target.closest('[data-pjx]'); if (x) { e.stopPropagation(); projClose(+x.dataset.pjx); return; }
+  if (e.target.closest('[data-pjnew]')) return newDocDialog(); if (e.target.closest('[data-pjopen]')) return openFile();
+  const c = e.target.closest('[data-pj]'); if (c) projSwitch(+c.dataset.pj); });
 $('#gal-zip').onclick = () => galZip();
 $('#gal-imp').onclick = () => pickFiles(false, async files => { for (const f of files) await importAsLayer(f); });
 $('#gal-clear').onclick = async () => { if (!galIdx.length) return; if (!await confirmDlg('Vider la galerie ? Les images déjà posées sur les pages restent en place.')) return; for (const g of galIdx) { try { await IDB.set('gal:' + g.id, null); } catch (e) {} } galIdx = []; galSave(); galRender(); };
@@ -5282,7 +5355,7 @@ stage.addEventListener('drop', e => { e.preventDefault(); dzCount = 0; $('#dropz
 /* ---------------- ouverture par association de fichiers (appli installée) ---------------- */
 if ('launchQueue' in window) launchQueue.setConsumer(async p => { if (!p.files || !p.files.length) return; window.__launchFile = true; const h = p.files[0], f = await h.getFile(); openAny(f, h); });
 
-window.addEventListener('beforeunload', e => { if (dirty) { doBackup(false); if (S.confirmClose) { e.preventDefault(); e.returnValue = ''; } } });
+window.addEventListener('beforeunload', e => { if (dirty || PROJ.list.some((P, i) => i !== PROJ.cur && P.dirty)) { doBackup(false); if (S.confirmClose) { e.preventDefault(); e.returnValue = ''; } } });
 
 /* =========================================================================
    MOMOtticelli — le compagnon IA de MomoPIC (Gemini ou Claude), au béret de peintre.
@@ -5974,6 +6047,7 @@ uniform sampler2D u_src; uniform sampler2D u_aux; uniform sampler2D u_lut; unifo
 vec2 P(){ vec2 f = floor(gl_FragCoord.xy); if (u_flip == 1) f.y = u_size.y - 1.0 - f.y; return f + 0.5; }
 vec4 F(vec2 p){ return texelFetch(u_src, clamp(ivec2(floor(p)), ivec2(0), ivec2(u_size) - 1), 0); }
 vec4 FA(vec2 p){ return texelFetch(u_aux, clamp(ivec2(floor(p)), ivec2(0), ivec2(u_size) - 1), 0); }
+vec4 FL(vec2 p){ return texelFetch(u_lut, clamp(ivec2(floor(p)), ivec2(0), ivec2(u_size) - 1), 0); }
 float lum(vec3 c){ return dot(c, vec3(.299, .587, .114)); }
 float contr(float v, float c){ return (v - 128.) * c + 128.; }
 vec3 satMix(vec3 c, float f){ float l = lum(c); return l + (c - l) * f; }
@@ -6103,6 +6177,39 @@ const GLF = {
         float m = sl / n, va = sl2 / n - m * m; if (va < bv) { bv = va; bm = s / n / 255.; } }
       o = vec4(bm, c0.a); }`, u: p => ({ r: gI(p.r) }) },
 };
+// médiane : recherche dichotomique de la valeur de rang T dans la fenêtre (8 tours, 3 canaux à la fois)
+GLF.median = { fs: `uniform int k_r; uniform float k_T; void main(){ vec2 p = P(); vec4 c0 = F(p); vec3 lo = vec3(0.), hi = vec3(255.);
+    for (int it = 0; it < 8; it++) { vec3 mid = floor((lo + hi) * .5), cnt = vec3(0.);
+      for (int y = -k_r; y <= k_r; y++) for (int x = -k_r; x <= k_r; x++) { vec3 v = floor(F(p + vec2(x, y)).rgb * 255. + .5); cnt += step(v, mid); }
+      bvec3 ok = greaterThanEqual(cnt, vec3(k_T)); hi = mix(hi, mid, vec3(ok)); lo = mix(mid + 1., lo, vec3(ok)); }
+    o = vec4(lo / 255., c0.a); }`,
+  u: p => { const N = (2 * p.r + 1) * (2 * p.r + 1); return { r: gI(p.r), T: clamp(Math.round(N * p.pc / 100), 1, N) }; }, max: p => p.r <= 8 };
+// réduction du bruit (filtre guidé) en 3 passes : coefficients a, b par fenêtre, puis moyenne de a et b
+const GL_GF_A = `uniform int k_r; uniform float k_eps; uniform int k_b; void main(){ vec2 p = P(); vec3 s = vec3(0), s2 = vec3(0); float n = 0.;
+  for (int y = -k_r; y <= k_r; y++) for (int x = -k_r; x <= k_r; x++) { vec2 q = p + vec2(x, y); if (q.x < 0. || q.y < 0. || q.x > u_size.x || q.y > u_size.y) continue; vec3 v = F(q).rgb; s += v; s2 += v * v; n += 1.; }
+  vec3 m = s / n, va = max(s2 / n - m * m, 0.), a = va / (va + k_eps); o = vec4(k_b == 1 ? m - a * m : a, 1.); }`;
+const GL_GF_Q = `uniform int k_r; uniform float k_keep; void main(){ vec2 p = P(); vec4 c = F(p); vec3 sa = vec3(0), sb = vec3(0); float n = 0.;
+  for (int y = -k_r; y <= k_r; y++) for (int x = -k_r; x <= k_r; x++) { vec2 q = p + vec2(x, y); if (q.x < 0. || q.y < 0. || q.x > u_size.x || q.y > u_size.y) continue; sa += FA(q).rgb; sb += FL(q).rgb; n += 1.; }
+  vec3 qv = sa / n * c.rgb + sb / n; o = vec4(clamp(qv + (c.rgb - qv) * k_keep, 0., 1.), c.a); }`;
+// plusieurs passes : les résultats intermédiaires restent dans la carte graphique (textures), seule la dernière revient
+function gpuMulti(src, steps) {
+  const gl = gpuCtx(), w = src.width, h = src.height; if (!gl || w > GPU.max || h > GPU.max || w * h > 6e7) throw new Error('gpu indisponible');
+  gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false); gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false); gl.pixelStorei(gl.UNPACK_COLORSPACE_CONVERSION_WEBGL, gl.NONE);
+  const T = { src: gpuTex(0, src) }, dummy = gpuTex(1, new Uint8Array(4), 1, 1), fbo = gl.createFramebuffer(), cv = GPU.cv; let out = null;
+  gl.bindVertexArray(GPU.vao);
+  for (const st of steps) {
+    const pr = gpuProg(st.fs); gl.useProgram(pr.p);
+    gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, T.src); gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, T[st.a] || dummy); gl.activeTexture(gl.TEXTURE2); gl.bindTexture(gl.TEXTURE_2D, T[st.b] || dummy);
+    gl.uniform1i(pr.loc('u_src'), 0); gl.uniform1i(pr.loc('u_aux'), 1); gl.uniform1i(pr.loc('u_lut'), 2); gl.uniform2f(pr.loc('u_size'), w, h);
+    for (const [k, v] of Object.entries(st.U || {})) { const L = pr.loc('k_' + k); if (!L) continue; if (typeof v === 'number') gl.uniform1f(L, v); else gl.uniform1i(L, v.i); }
+    if (st.out) { const t = gpuTex(3, new Uint8Array(w * h * 4), w, h); T[st.out] = t; gl.bindFramebuffer(gl.FRAMEBUFFER, fbo); gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, t, 0);
+      gl.uniform1i(pr.loc('u_flip'), 0); gl.viewport(0, 0, w, h); gl.drawArrays(gl.TRIANGLES, 0, 3); gl.bindFramebuffer(gl.FRAMEBUFFER, null); }
+    else { if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; } gl.uniform1i(pr.loc('u_flip'), 1); gl.viewport(0, 0, w, h); gl.drawArrays(gl.TRIANGLES, 0, 3);
+      out = mkCanvas(w, h); out.getContext('2d').drawImage(cv, 0, 0); }
+  }
+  Object.values(T).forEach(t => gl.deleteTexture(t)); gl.deleteTexture(dummy); gl.deleteFramebuffer(fbo); return out;
+}
+GLF.denoise = { multi: p => { const r = gI(p.r), eps = Math.pow(p.f / 100, 2) * .04 + 1e-5; return [{ fs: GL_GF_A, U: { r, eps, b: gI(0) }, out: 'A' }, { fs: GL_GF_A, U: { r, eps, b: gI(1) }, out: 'B' }, { fs: GL_GF_Q, U: { r, keep: p.k / 100 }, a: 'A', b: 'B' }]; } };
 // instantanés (FILTERS) : version GPU
 const GLI = {
   gray: `void main(){ vec4 c = F(P()); o = vec4(vec3(lum(c.rgb)), c.a); }`,
@@ -6116,7 +6223,7 @@ function gpuTry(fn) { if (!gpuOn()) return null; try { return fn(); } catch (e) 
 // branchement : chaque filtre porté passe par la carte graphique quand c'est possible
 function gpuInstall() {
   for (const [name, G] of Object.entries(GLF)) { const F = ADJUST[name]; if (!F || F._gpu) continue; const js = F.run; F._gpu = true; F.runJS = js;
-    F.run = (src, p, X) => gpuTry(() => gpuRun(G.fs, src, G.u(p, X || { cx: src.width / 2, cy: src.height / 2, rw: src.width / 2, rh: src.height / 2 }), G.aux ? { aux: G.aux(src, p) } : {})) || js(src, p, X); }
+    F.run = (src, p, X) => (G.max && !G.max(p) ? null : gpuTry(() => G.multi ? gpuMulti(src, G.multi(p)) : gpuRun(G.fs, src, G.u(p, X || { cx: src.width / 2, cy: src.height / 2, rw: src.width / 2, rh: src.height / 2 }), G.aux ? { aux: G.aux(src, p) } : {}))) || js(src, p, X); }
   for (const [name, fs] of Object.entries(GLI)) if (FILTERS[name]) FILTERS[name].gl = fs;
 }
 
