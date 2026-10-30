@@ -608,6 +608,9 @@ aside.panels::-webkit-scrollbar,#pn-tool .pb::-webkit-scrollbar{display:none}
 .pj-it .pj-dot{color:#fbbf24}
 .pj-it .gal-x{position:absolute;top:-8px;right:-8px;width:18px;height:18px;border-radius:50%;border:0;background:#dc2626;color:#fff;font:700 12px/18px system-ui;cursor:pointer;display:none;padding:0}
 .pj-it:hover .gal-x{display:block}
+.pj-ren{position:absolute;top:-8px;right:14px;width:18px;height:18px;border-radius:50%;border:0;background:#0369a1;color:#fff;font:700 10px/18px system-ui;cursor:pointer;display:none;padding:0}
+.pj-it:hover .pj-ren{display:block}
+.pj-in{width:140px;font:600 11px system-ui;padding:1px 4px!important;border-radius:4px;border:1px solid #38bdf8!important;background:#0b1220!important;color:#fff}
 .pj-add{flex:none;height:104px;width:86px;border-radius:9px;border:2px dashed #3a3a3a;background:none;color:#9ca3af;font:600 11px system-ui;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
 .pj-add:hover{border-color:#38bdf8;color:#fff}.pj-add svg{width:22px;height:22px;color:#38bdf8}
 #gal-tab{pointer-events:auto;display:flex;align-items:center;gap:6px;padding:3px 14px 5px;margin-top:-1px;border:1px solid var(--g600);border-top:0;border-radius:0 0 11px 11px;background:var(--g800);color:var(--g300);font:700 11.5px system-ui;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;transition:background .25s,border-color .25s,color .15s}
@@ -1293,7 +1296,7 @@ function projRender() {
   const n = PROJ.list.length, nb = $('#proj-n'); if (nb) nb.textContent = n > 1 ? n : '';
   const st = $('#proj-strip'); if (!st) return; $('#proj-count').textContent = n ? (n > 1 ? n + ' images ouvertes' : '1 image ouverte') + ' · clic pour passer de l\'une à l\'autre' : '';
   st.innerHTML = PROJ.list.map((P, i) => { const cur = i === PROJ.cur, d = cur ? doc : P.doc, th = cur ? projThumb() : P.thumb, dt = cur ? dirty : P.dirty;
-    return `<div class="pj-it${cur ? ' on' : ''}" data-pj="${i}" title="${esc(d.name)} · ${d.w} × ${d.h} px${(d.pages || []).length > 1 ? ' · ' + d.pages.length + ' pages' : ''}"><img src="${th || ''}" alt=""><b>${dt ? '<span class="pj-dot">● </span>' : ''}${esc(d.name)}</b><small>${d.w} × ${d.h}${(d.pages || []).length > 1 ? ' · ' + d.pages.length + ' p.' : ''}</small><button type="button" class="gal-x" data-pjx="${i}" title="Fermer ce projet">×</button></div>`; }).join('') +
+    return `<div class="pj-it${cur ? ' on' : ''}" data-pj="${i}" title="${esc(d.name)} · ${d.w} × ${d.h} px${(d.pages || []).length > 1 ? ' · ' + d.pages.length + ' pages' : ''}"><img src="${th || ''}" alt=""><b data-pjname="${i}" title="Double-clic pour renommer">${dt ? '<span class="pj-dot">● </span>' : ''}${esc(d.name)}</b><button type="button" class="pj-ren" data-pjren="${i}" title="Renommer">✎</button><small>${d.w} × ${d.h}${(d.pages || []).length > 1 ? ' · ' + d.pages.length + ' p.' : ''}</small><button type="button" class="gal-x" data-pjx="${i}" title="Fermer ce projet">×</button></div>`; }).join('') +
     `<button type="button" class="pj-add" data-pjnew><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Nouveau</button><button type="button" class="pj-add" data-pjopen><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v1H7l-4 9z"/></svg>Ouvrir</button>`;
 }
 function projToggle(v) { const stg = $('#stage'), on = v === undefined ? !stg.classList.contains('proj-open') : v; if (on) { galToggle(false); projRender(); } stg.classList.toggle('proj-open', on); }
@@ -5400,7 +5403,19 @@ async function galZip() {
 }
 $('#gal-tab').onclick = () => galToggle();
 $('#proj-tab').onclick = () => projToggle();
-$('#proj-strip').addEventListener('click', e => { const x = e.target.closest('[data-pjx]'); if (x) { e.stopPropagation(); projClose(+x.dataset.pjx); return; }
+// renommer un projet : double-clic sur son nom (ou ✎), ou clic sur le nom du fichier en bas à gauche
+function projRename(i) {
+  const P = PROJ.list[i]; if (!P) return; const d = i === PROJ.cur ? doc : P.doc, b = $(`#proj-strip [data-pjname="${i}"]`);
+  const done = v => { v = (v || '').trim().replace(/[\\/:*?"<>|]+/g, '_'); if (v && v !== d.name) { d.name = v; if (i === PROJ.cur) markDirty(); else P.dirty = true; } projRender(); updateTitle(); };
+  if (!b) { promptDlg('Nom du projet', d.name).then(v => v != null && done(v)); return; }
+  const inp = document.createElement('input'); inp.type = 'text'; inp.value = d.name; inp.className = 'pj-in'; b.replaceWith(inp); inp.focus(); inp.select();
+  let ok = false; inp.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter') { ok = true; done(inp.value); } if (e.key === 'Escape') { ok = true; projRender(); } });
+  inp.addEventListener('blur', () => { if (!ok) done(inp.value); }); inp.addEventListener('click', e => e.stopPropagation());
+}
+$('#proj-strip').addEventListener('dblclick', e => { const n = e.target.closest('[data-pjname]'); if (n) { e.stopPropagation(); projRename(+n.dataset.pjname); } });
+$('#docname').style.cursor = 'pointer'; $('#docname').title = 'Clic : renommer le projet';
+$('#docname').addEventListener('click', () => { if (doc) promptDlg('Nom du projet', doc.name).then(v => { v = (v || '').trim().replace(/[\\/:*?"<>|]+/g, '_'); if (v && v !== doc.name) { doc.name = v; markDirty(); projRender(); } }); });
+$('#proj-strip').addEventListener('click', e => { const rn = e.target.closest('[data-pjren]'); if (rn) { e.stopPropagation(); projRename(+rn.dataset.pjren); return; } const x = e.target.closest('[data-pjx]'); if (x) { e.stopPropagation(); projClose(+x.dataset.pjx); return; }
   if (e.target.closest('[data-pjnew]')) return newDocDialog(); if (e.target.closest('[data-pjopen]')) return openFile();
   const c = e.target.closest('[data-pj]'); if (c) projSwitch(+c.dataset.pj); });
 $('#gal-zip').onclick = () => galZip();
