@@ -1108,6 +1108,9 @@ const IC = {
   arrow: SV('<path d="M4 20 19 5"/><path d="M10 5h9v9"/>'),
   pen: SV('<path d="M12 19 19 12l3 3-7 7z"/><path d="m18 13-1.5-7.5L2 2l3.5 14.5L13 18z"/><path d="m2 2 7.6 7.6"/><circle cx="11" cy="11" r="2"/>'),
   recolor: SV('<path d="M18 3 9 12l3 3 9-9z"/><path d="M9 12c-3 0-5 2-5 5 0 2-1 3-2 3 4 1 9 0 10-5z"/><path d="M15 15a3 3 0 0 0 5 2" stroke-dasharray="2 2"/>'),
+  dodge: SV('<circle cx="9" cy="9" r="5"/><path d="M12.5 12.5 20 20"/><path d="M9 4v10" stroke-dasharray="0"/><path d="M9 4a5 5 0 0 1 0 10z" fill="currentColor" fill-opacity=".5"/>'),
+  sponge: SV('<rect x="4" y="7" width="16" height="11" rx="3"/><circle cx="9" cy="11" r="1.2" fill="currentColor"/><circle cx="14" cy="13" r="1.2" fill="currentColor"/><circle cx="16" cy="10" r=".9" fill="currentColor"/><circle cx="8" cy="15" r=".9" fill="currentColor"/>'),
+  freepath: SV('<path d="M3 17c3-7 5 2 8-4s4-6 7-3 2 6-1 7"/><circle cx="3" cy="17" r="1.6" fill="currentColor"/><circle cx="17" cy="17" r="1.6" fill="currentColor"/>'),
   polyline: SV('<path d="M3 19 8 8l6 7 7-11"/><rect x="1.5" y="17.5" width="3" height="3" fill="currentColor"/><rect x="6.5" y="6.5" width="3" height="3" fill="currentColor"/><rect x="12.5" y="13.5" width="3" height="3" fill="currentColor"/><rect x="19.5" y="2.5" width="3" height="3" fill="currentColor"/>'),
   path: SV('<path d="M4 18C6 8 10 6 12 12s6 4 8-6"/><rect x="2.5" y="16.5" width="3" height="3" fill="currentColor"/><rect x="18.5" y="4.5" width="3" height="3" fill="currentColor"/>'),
   polygon: SV('<path d="m12 2.5 2.9 6 6.6.8-4.9 4.6 1.3 6.5L12 17.2l-5.9 3.2 1.3-6.5-4.9-4.6 6.6-.8z" fill="currentColor" fill-opacity=".25"/>'),
@@ -1136,21 +1139,21 @@ const TOOLS = [
     { id: 'lasso', name: 'Lasso', key: 'L', c: '#34d399' }, { id: 'wand', name: 'Baguette magique', key: 'W', c: '#facc15' }, { id: 'crop', name: 'Recadrage', key: 'C', c: '#fb923c' } ] },
   { id: 'paint', group: 'Peinture', items: [
     { id: 'brush', name: 'Pinceau', key: 'B', c: '#f472b6' }, { id: 'pencil', name: 'Crayon', key: 'N', c: '#e5e7eb' }, { id: 'eraser', name: 'Gomme', key: 'E', c: '#f9a8d4' },
-    { id: 'bucket', name: 'Pot de peinture', key: 'G', c: '#22d3ee' }, { id: 'gradient', name: 'Dégradé', key: 'Q', c: '#2dd4bf' }, { id: 'picker', name: 'Pipette', key: 'I', c: '#a3e635' }, { id: 'clone', name: 'Tampon de duplication', key: 'S', c: '#fb7185' }, { id: 'smudge', name: 'Doigt (étaler)', key: 'F', c: '#fdba74' }, { id: 'recolor', name: 'Remplacement de couleur', key: 'Maj+B', c: '#f97316' }, { id: 'blur', name: 'Flou / Netteté', key: 'K', c: '#67e8f9' },
+    { id: 'bucket', name: 'Pot de peinture', key: 'G', c: '#22d3ee' }, { id: 'gradient', name: 'Dégradé', key: 'Q', c: '#2dd4bf' }, { id: 'picker', name: 'Pipette', key: 'I', c: '#a3e635' }, { id: 'clone', name: 'Tampon de duplication', key: 'S', c: '#fb7185' }, { id: 'smudge', name: 'Doigt (étaler)', key: 'F', c: '#fdba74' }, { id: 'recolor', name: 'Remplacement de couleur', key: 'Maj+B', c: '#f97316' }, { id: 'dodge', name: 'Densité (éclaircir / assombrir)', key: 'Maj+O', c: '#fde68a' }, { id: 'sponge', name: 'Éponge (saturer / désaturer)', key: 'Maj+S', c: '#86efac' }, { id: 'blur', name: 'Flou / Netteté', key: 'K', c: '#67e8f9' },
     { sep: true },
     { id: 'text', name: 'Texte', key: 'T', c: '#fcd34d' }, { id: 'rect', name: 'Rectangle', key: 'R', c: '#fcd34d' }, { id: 'ellipse', name: 'Ellipse', key: 'U', c: '#fcd34d' },
-    { id: 'line', name: 'Ligne', key: 'Y', c: '#fcd34d' }, { id: 'arrow', name: 'Flèche', key: 'A', c: '#fcd34d' }, { id: 'polygon', name: 'Polygone / étoile', key: 'Maj+P', c: '#fcd34d' }, { id: 'pen', name: 'Plume (tracé de Bézier)', key: 'P', c: '#38bdf8' }, { id: 'polyline', name: 'Polyligne', key: 'Maj+Y', c: '#38bdf8' } ] },
+    { id: 'line', name: 'Ligne', key: 'Y', c: '#fcd34d' }, { id: 'arrow', name: 'Flèche', key: 'A', c: '#fcd34d' }, { id: 'polygon', name: 'Polygone / étoile', key: 'Maj+P', c: '#fcd34d' }, { id: 'pen', name: 'Plume (tracé de Bézier)', key: 'P', c: '#38bdf8' }, { id: 'polyline', name: 'Polyligne', key: 'Maj+Y', c: '#38bdf8' }, { id: 'freepath', name: 'Tracé libre (main levée)', key: 'Maj+F', c: '#38bdf8' } ] },
   { id: 'view', group: 'Vue', items: [ { id: 'hand', name: 'Main (Espace)', key: 'H', c: '#4ade80' }, { id: 'zoom', name: 'Loupe + (zoom avant)', key: 'Z', c: '#4ade80' }, { id: 'zoomout', name: 'Loupe − (zoom arrière)', key: 'Maj+Z', c: '#4ade80' }, { id: 'measure', name: 'Mesure (distance, angle)', key: 'J', c: '#4ade80' } ] },
 ];
 const TOOL_BY_ID = {}; TOOLS.forEach(g => g.items.forEach(t => { if (!t.sep) TOOL_BY_ID[t.id] = t; }));
-const PAINT_TOOLS = ['brush', 'pencil', 'eraser', 'clone', 'blur', 'smudge', 'recolor'];
+const PAINT_TOOLS = ['brush', 'pencil', 'eraser', 'clone', 'blur', 'smudge', 'recolor', 'dodge', 'sponge'];
 const SHAPE_TOOLS = ['rect', 'ellipse', 'line', 'arrow', 'polygon'];
-const toolSize = () => ({ pencil: opts.pSize, eraser: opts.eSize, clone: opts.cSize, blur: opts.blSize, smudge: opts.smSize, recolor: opts.rcSize })[tool] ?? opts.size;
+const toolSize = () => ({ pencil: opts.pSize, eraser: opts.eSize, clone: opts.cSize, blur: opts.blSize, smudge: opts.smSize, recolor: opts.rcSize, dodge: opts.dgSize, sponge: opts.spSize })[tool] ?? opts.size;
 const shapeAlpha = () => (tool === 'line' ? opts.lnOpacity : tool === 'arrow' ? opts.arOpacity : opts.shOpacity) / 100;
-const EDIT_TOOLS = ['brush', 'pencil', 'eraser', 'clone', 'blur', 'smudge', 'recolor', 'bucket', 'gradient'];
+const EDIT_TOOLS = ['brush', 'pencil', 'eraser', 'clone', 'blur', 'smudge', 'recolor', 'dodge', 'sponge', 'bucket', 'gradient'];
 
 const OPT_DEFAULTS = {
-  size: 20, hard: 80, opacity: 100, pSize: 2, pOpacity: 100, cSize: 40, cHard: 60, cOpacity: 100, cAligned: true, cSample: 'layer', smSize: 30, smHard: 50, smStrength: 60, rcSize: 40, rcHard: 70, rcTol: 35, rcSample: 'once', blSize: 40, blHard: 50, blRadius: 4, blMode: 'blur', blStrength: 100, arWidth: 6, arHead: 4, arDouble: false, arOpacity: 100, pgSides: 6, pgStar: false, pgInner: 50, eSize: 30, eHard: 80, eOpacity: 100,
+  size: 20, hard: 80, opacity: 100, pSize: 2, pOpacity: 100, cSize: 40, cHard: 60, cOpacity: 100, cAligned: true, cSample: 'layer', smSize: 30, smHard: 50, smStrength: 60, rcSize: 40, rcHard: 70, rcTol: 35, rcSample: 'once', dgSize: 60, dgHard: 30, dgExp: 30, dgMode: 'dodge', dgRange: 'mid', spSize: 60, spHard: 30, spFlow: 30, spMode: 'sat', fpSmooth: 40, blSize: 40, blHard: 50, blRadius: 4, blMode: 'blur', blStrength: 100, arWidth: 6, arHead: 4, arDouble: false, arOpacity: 100, pgSides: 6, pgStar: false, pgInner: 50, eSize: 30, eHard: 80, eOpacity: 100,
   tol: 32, contig: true, sample: 'layer', bOpacity: 100, wTol: 32, wContig: true, wSample: 'merged',
   gType: 'linear', gMode: 'c2', gOpacity: 100, font: 'Arial', fSize: 48, bold: false, italic: false,
   tAlign: 'left', tLs: 0, tLh: 1.25, shMode: 'fill', shWidth: 4, penWidth: 4, shOpacity: 100, lnWidth: 4, lnOpacity: 100, selMode: 'new', pkSample: 'merged'
@@ -1311,9 +1314,14 @@ function insertLayer(l, index = doc.active + 1) { doc.layers.splice(index, 0, l)
 /* ---------------- composition & rendu ---------------- */
 let needComp = true, rafId = 0;
 function req(c = false) { if (c) needComp = true; if (!rafId) rafId = requestAnimationFrame(frame); }
-function frame() { rafId = 0; if (needComp) { composite(comp, true); needComp = false; } draw(); }
-function composite(target, withOverride) {
-  const c = target.getContext('2d'); c.save(); c.clearRect(0, 0, target.width, target.height);
+function frame() { rafId = 0; if (needComp) { composite(comp, true); needComp = false; compRect = null; } else if (compRect) { composite(comp, true, compRect); compRect = null; } draw(); }
+// recomposition partielle : seule la zone touchée par le pinceau est recalculée (gros documents, vue dézoomée)
+let compRect = null;
+function reqRect(r) { const x0 = Math.max(0, Math.floor(r.x)), y0 = Math.max(0, Math.floor(r.y)), x1 = Math.min(doc.w, Math.ceil(r.x + r.w)), y1 = Math.min(doc.h, Math.ceil(r.y + r.h)); if (x1 <= x0 || y1 <= y0) return req();
+  if (compRect) { const a = compRect; compRect = { x: Math.min(a.x, x0), y: Math.min(a.y, y0) }; compRect.w = Math.max(a.x + a.w, x1) - compRect.x; compRect.h = Math.max(a.y + a.h, y1) - compRect.y; } else compRect = { x: x0, y: y0, w: x1 - x0, h: y1 - y0 }; req(); }
+function composite(target, withOverride, r) {
+  const c = target.getContext('2d'); c.save();
+  if (r) { c.beginPath(); c.rect(r.x, r.y, r.w, r.h); c.clip(); c.clearRect(r.x, r.y, r.w, r.h); } else c.clearRect(0, 0, target.width, target.height);
   for (const l of doc.layers) {
     if (!l.visible || l.opacity <= 0) continue;
     const src = (withOverride && override && override.layer === l) ? override.canvas : l.canvas;
@@ -1340,7 +1348,7 @@ function draw() {
   if (!doc) return;
   const sx = cam.x, sy = cam.y, sw = doc.w * cam.z, sh = doc.h * cam.z;
   c.save(); c.translate(Math.round(sx), Math.round(sy)); c.fillStyle = getChecker(); c.fillRect(0, 0, sw, sh); c.restore();
-  c.imageSmoothingEnabled = cam.z < 2; c.imageSmoothingQuality = 'high';
+  c.imageSmoothingEnabled = cam.z < 2; c.imageSmoothingQuality = drag && cam.z < .7 && ['paint', 'tone', 'recolor', 'smudge'].includes(drag.kind) ? 'low' : 'high';   // pendant le trait : réduction rapide, nette au relâcher
   c.drawImage(comp, sx, sy, sw, sh);
   c.strokeStyle = '#0009'; c.lineWidth = 1; c.strokeRect(Math.round(sx) - .5, Math.round(sy) - .5, Math.round(sw) + 1, Math.round(sh) + 1);
   // grille de pixels à fort zoom
@@ -1553,8 +1561,13 @@ function maskedEffect(src) {
 function applyEffectTo(ctx, l, eff, op, alpha) {
   ctx.save(); ctx.globalAlpha = alpha; ctx.globalCompositeOperation = op; ctx.drawImage(eff, -l.x, -l.y); ctx.restore();
 }
-function previewEffect(op, alpha) {
+function previewEffect(op, alpha, r) {
   const l = L();
+  if (r && !sel && override && override.layer === l && override.canvas === work && work.width === l.canvas.width && work.height === l.canvas.height) {
+    const c = work.getContext('2d'), x = Math.floor(r.x - l.x), y = Math.floor(r.y - l.y), w = Math.ceil(r.w) + 2, h = Math.ceil(r.h) + 2;
+    c.save(); c.beginPath(); c.rect(x, y, w, h); c.clip(); c.clearRect(x, y, w, h); c.drawImage(l.canvas, 0, 0); applyEffectTo(c, l, effect, op, alpha); c.restore();
+    reqRect(r); return;
+  }
   if (work.width !== l.canvas.width || work.height !== l.canvas.height) work = mkCanvas(l.canvas.width, l.canvas.height);
   const c = work.getContext('2d'); c.clearRect(0, 0, work.width, work.height); c.drawImage(l.canvas, 0, 0);
   applyEffectTo(c, l, maskedEffect(effect), op, alpha);
@@ -1662,6 +1675,27 @@ function recolorAt(p) {
     d[di] += (nr - d[di]) * w; d[di + 1] += (ng - d[di + 1]) * w; d[di + 2] += (nb - d[di + 2]) * w;
   }
   c.putImageData(id, x0, y0);
+}
+// Densité (éclaircir / assombrir) et Éponge (saturer / désaturer) : effet doux qui s'accumule en repassant
+function toneAt(p) {
+  const l = drag.l, W = l.canvas.width, H = l.canvas.height, dg = tool === 'dodge', size = dg ? opts.dgSize : opts.spSize, r = Math.max(1, size / 2), hard = (dg ? opts.dgHard : opts.spHard) / 100;
+  const x0 = Math.max(0, Math.floor(p.x - l.x - r)), y0 = Math.max(0, Math.floor(p.y - l.y - r)), x1 = Math.min(W, Math.ceil(p.x - l.x + r)), y1 = Math.min(H, Math.ceil(p.y - l.y + r)); if (x1 <= x0 || y1 <= y0) return;
+  const c = drag.copy.getContext('2d', { willReadFrequently: true }), id = c.getImageData(x0, y0, x1 - x0, y1 - y0), d = id.data, cx = p.x - l.x, cy = p.y - l.y;
+  let mode = dg ? opts.dgMode : opts.spMode; if (drag.alt) mode = { dodge: 'burn', burn: 'dodge', sat: 'desat', desat: 'sat' }[mode];
+  const k = (dg ? opts.dgExp : opts.spFlow) / 100 * .12;
+  for (let y = y0; y < y1; y++) for (let x = x0; x < x1; x++) {
+    const dist = Math.hypot(x + .5 - cx, y + .5 - cy) / r; if (dist > 1) continue;
+    const i = ((y - y0) * (x1 - x0) + (x - x0)) * 4; if (!d[i + 3]) continue;
+    const w = (dist <= hard ? 1 : 1 - (dist - hard) / Math.max(1e-3, 1 - hard)) * k, L0 = lumv(d[i], d[i + 1], d[i + 2]) / 255;
+    if (dg) { const rg = opts.dgRange === 'shadow' ? (1 - L0) * (1 - L0) * 1.6 : opts.dgRange === 'high' ? L0 * L0 * 1.6 : 1 - Math.abs(L0 - .5) * 1.4, ww = w * Math.max(0, rg);
+      for (let c2 = 0; c2 < 3; c2++) d[i + c2] = mode === 'dodge' ? d[i + c2] + (255 - d[i + c2]) * ww : d[i + c2] * (1 - ww); }
+    else satMix(d, i, mode === 'sat' ? 1 + w * 1.5 : 1 - w * 1.5);
+  }
+  c.putImageData(id, x0, y0);
+}
+function toneTo(p) {
+  const size = tool === 'dodge' ? opts.dgSize : opts.spSize, last = drag.last, dx = p.x - last.x, dy = p.y - last.y, dist = Math.hypot(dx, dy), step = Math.max(1, size * .25);
+  if (dist < step) return; const n = Math.floor(dist / step); for (let i = 1; i <= n; i++) toneAt({ x: last.x + dx * i / n, y: last.y + dy * i / n }); drag.last = p;
 }
 function recolorTo(p) {
   const last = drag.last, dx = p.x - last.x, dy = p.y - last.y, dist = Math.hypot(dx, dy), step = Math.max(1, opts.rcSize * .2);
@@ -2315,7 +2349,7 @@ let elQuad = false;                 // déformation (perspective) d'un texte / d
 let elGuides = null;                // repères magnétiques affichés pendant un déplacement
 const isVec = l => l.kind === 'text' || l.kind === 'shape';
 const isLine = l => l.kind === 'shape' && (l.data.type === 'line' || l.data.type === 'arrow');
-const EL_TOOLS = ['move', 'text', 'rect', 'ellipse', 'line', 'arrow', 'polygon', 'pen', 'polyline'];
+const EL_TOOLS = ['move', 'text', 'rect', 'ellipse', 'line', 'arrow', 'polygon', 'pen', 'polyline', 'freepath'];
 let shiftHeld = false;
 function box(l) { const t = l.tf; return { x: l.x, y: l.y, w: t ? t.w : l.canvas.width, h: t ? t.h : l.canvas.height, rot: t ? t.rot || 0 : 0, fx: t ? t.fx || 1 : 1, fy: t ? t.fy || 1 : 1 }; }
 function ensureTf(l) { if (!l.tf) l.tf = { w: l.canvas.width, h: l.canvas.height, rot: 0, fx: 1, fy: 1 }; return l.tf; }
@@ -2670,15 +2704,29 @@ function pathRefit(l) {
   rerender(l, 'c');
 }
 function penFinish(closed) {
-  const P = pen && pen.pts, poly = pen && pen.poly; drag = null;
+  const P = pen && pen.pts, poly = pen && pen.poly, free = pen && pen.freeName; drag = null;
   if (!P || P.length < 2) { pen = null; req(); renderOptbar(); return; }
-  pen = null; const l = newShapeEl('rect', 0, 0, 10, 10); l.data.type = 'path'; l.data.closed = !!closed; l.name = poly ? 'Polyligne' : SHAPE_NAMES.path;
+  pen = null; const l = newShapeEl('rect', 0, 0, 10, 10); l.data.type = 'path'; l.data.closed = !!closed; l.name = free ? 'Tracé libre' : poly ? 'Polyligne' : SHAPE_NAMES.path;
   if (!closed) { l.data.fill = null; l.data.stroke = color1; l.data.sw = Math.max(1, opts.penWidth || 4); }
   else if (opts.shMode === 'fill') { l.data.stroke = null; } else if (!l.data.sw) l.data.sw = opts.penWidth || 4;
   const S = pathSamples(P, closed), pad = pathPad(l.data), x0 = Math.min(...S.map(p => p.x)) - pad, y0 = Math.min(...S.map(p => p.y)) - pad;
   l.tf = { w: Math.max(2, Math.max(...S.map(p => p.x)) + pad - x0), h: Math.max(2, Math.max(...S.map(p => p.y)) + pad - y0), rot: 0, fx: 1, fy: 1 }; l.x = x0; l.y = y0;
   pathStore(l, P.map(p => ({ x: p.x - x0, y: p.y - y0, ix: p.ix - x0, iy: p.iy - y0, ox: p.ox - x0, oy: p.oy - y0 })));
-  renderShape(l); histSay(poly ? 'Polyligne' : 'Tracé à la plume'); pushDoc(); insertLayer(l); picked = true; renderLayers(); renderOptbar(); req(true); renderPagesThumb();
+  renderShape(l); histSay(free ? 'Tracé libre' : poly ? 'Polyligne' : 'Tracé à la plume'); pushDoc(); insertLayer(l); picked = true; renderLayers(); renderOptbar(); req(true); renderPagesThumb();
+}
+// main levée → courbe : simplification (Ramer-Douglas-Peucker) puis poignées lissées (Catmull-Rom)
+function rdp(P, eps) { if (P.length < 3) return P; let dm = 0, k = 0; const a = P[0], b = P[P.length - 1], L = Math.hypot(b.x - a.x, b.y - a.y) || 1;
+  const tiny = Math.hypot(b.x - a.x, b.y - a.y) < 1e-6 || L < eps;   // boucle fermée : distance au point de départ
+  for (let i = 1; i < P.length - 1; i++) { const d = tiny ? Math.hypot(P[i].x - a.x, P[i].y - a.y) : Math.abs((b.x - a.x) * (a.y - P[i].y) - (a.x - P[i].x) * (b.y - a.y)) / L; if (d > dm) { dm = d; k = i; } }
+  return dm > eps ? [...rdp(P.slice(0, k + 1), eps).slice(0, -1), ...rdp(P.slice(k), eps)] : [a, b]; }
+function freeFinish() {
+  const raw = pen && pen.raw; if (!raw || raw.length < 3) { pen = null; req(); return; }
+  const first = raw[0], last = raw[raw.length - 1], closed = raw.length > 8 && Math.hypot(last.x - first.x, last.y - first.y) * cam.z < 14;
+  let P = rdp(raw, (.6 + opts.fpSmooth / 100 * 5) / cam.z); if (closed && P.length > 3) P = P.slice(0, -1);
+  const n = P.length, sm = .18 + opts.fpSmooth / 100 * .2;
+  pen.pts = P.map((q, i) => { const a = P[closed ? (i - 1 + n) % n : Math.max(0, i - 1)], b = P[closed ? (i + 1) % n : Math.min(n - 1, i + 1)], end = !closed && (i === 0 || i === n - 1), tx = end ? 0 : (b.x - a.x) * sm, ty = end ? 0 : (b.y - a.y) * sm;
+    return { x: q.x, y: q.y, ix: q.x - tx, iy: q.y - ty, ox: q.x + tx, oy: q.y + ty }; });
+  pen.poly = false; pen.freeName = true; penFinish(closed && n > 2);
 }
 function penCancel() { pen = null; drag = null; req(); renderOptbar(); }
 function startPathEdit(l) { if (!isPath(l) || l.locked) return; if (pen) penFinish(false); pathEdit = { l, sel: -1 }; picked = true; renderOptbar(); req(); toast('Points du tracé : glisse les points et les poignées · clic sur le trait = ajouter · Alt+clic = anguleux / courbe · Suppr = retirer · Entrée = terminer.'); }
@@ -2754,7 +2802,9 @@ function drawPen(c) {
   const ac = '#38bdf8';
   const dot = (q, on, sq = true) => { c.beginPath(); sq ? c.rect(q.x - 4.5, q.y - 4.5, 9, 9) : c.arc(q.x, q.y, 4, 0, 7); c.fillStyle = on ? ac : '#fff'; c.fill(); c.lineWidth = 1.5; c.strokeStyle = on ? '#fff' : ac; c.stroke(); };
   const handles = (a, S) => { const A = S(a); [[a.ix, a.iy], [a.ox, a.oy]].forEach(([x, y]) => { if (x === a.x && y === a.y) return; const H = S({ x, y }); c.beginPath(); c.moveTo(A.x, A.y); c.lineTo(H.x, H.y); c.strokeStyle = ac; c.lineWidth = 1; c.stroke(); dot(H, false, false); }); };
-  if (pen && pen.pts.length) {
+  if (pen && pen.free && pen.raw) { c.save(); c.beginPath(); pen.raw.forEach((q, i) => { const s2 = S2(q); i ? c.lineTo(s2.x, s2.y) : c.moveTo(s2.x, s2.y); }); c.lineJoin = c.lineCap = 'round';
+    c.strokeStyle = 'rgba(0,0,0,.45)'; c.lineWidth = Math.max(3, (opts.penWidth || 4) * cam.z + 2); c.stroke(); c.strokeStyle = color1; c.lineWidth = Math.max(1.5, (opts.penWidth || 4) * cam.z); c.stroke(); c.restore(); }
+  else if (pen && pen.pts.length) {
     const P = pen.pts.map(p => ({ x: S2(p).x, y: S2(p).y, ix: S2({ x: p.ix, y: p.iy }).x, iy: S2({ x: p.ix, y: p.iy }).y, ox: S2({ x: p.ox, y: p.oy }).x, oy: S2({ x: p.ox, y: p.oy }).y }));
     c.save(); c.beginPath(); tracePath(c, P, false);
     if (!drag && mouse.in) { const a = P[P.length - 1], m = S2(pen.poly && shiftHeld ? polySnap(mouse) : mouse); if (pen.poly) c.lineTo(m.x, m.y); else c.bezierCurveTo(a.ox, a.oy, m.x, m.y, m.x, m.y); }
@@ -3248,6 +3298,7 @@ view.addEventListener('pointerdown', e => {
   if (textEdit) { const h = elHit(p); if (h && h.id !== 'move') { startElDrag(h, p, e); return; } commitText(); if (tool === 'text') return; }
   if (e.button !== 0) return;
   if (xf && xfPointerDown(e, p) !== 'pass') return;
+  if (tool === 'freepath' && !pathEdit && !e.altKey) { if (elActive() && isPath(L()) && topElementAt(p) === doc.active && e.detail > 1) { startPathEdit(L()); return; } unpick(); pen = { pts: [], raw: [{ x: p.x, y: p.y }], free: true }; drag = { kind: 'free' }; req(); return; }
   if ((PEN_T.includes(tool) || pathEdit) && penDown(e, p)) return;
   // éléments : sélection, poignées, textes et formes vivants
   if (tool === 'move') {
@@ -3289,6 +3340,7 @@ view.addEventListener('pointerdown', e => {
   if (tool === 'clone' && !cloneSrc) { toast('Ctrl+clic sur l\'image pour choisir la source du tampon.'); return; }
   if (tool === 'eraser') { let i = topElementAt(p); if (i < 0) i = doc.layers.findIndex(l => l.bg && l.visible); if (i >= 0 && i !== doc.active) { doc.active = i; picked = false; renderLayers(); } }   // la gomme efface ce qui est sous le curseur
   if (EDIT_TOOLS.includes(tool) && !editable()) return;
+  if (tool === 'dodge' || tool === 'sponge') { const l = L(); drag = { kind: 'tone', l, copy: cloneCanvas(l.canvas), last: p, alt: e.altKey }; toneAt(p); override = { layer: l, canvas: drag.copy }; req(true); return; }
   if (tool === 'recolor') { const l = L(), lx = Math.floor(p.x - l.x), ly = Math.floor(p.y - l.y), od = l.canvas.getContext('2d', { willReadFrequently: true }).getImageData(0, 0, l.canvas.width, l.canvas.height);
     let tg = hexToRgb(color2); if (opts.rcSample === 'once') { if (lx < 0 || ly < 0 || lx >= l.canvas.width || ly >= l.canvas.height) return; const i = (ly * l.canvas.width + lx) * 4; if (!od.data[i + 3]) return; tg = { r: od.data[i], g: od.data[i + 1], b: od.data[i + 2] }; }
     drag = { kind: 'recolor', l, orig: od.data, copy: cloneCanvas(l.canvas), last: p, tg, to: hexToRgb(color1) }; recolorAt(p); override = { layer: l, canvas: drag.copy }; req(true); return; }
@@ -3318,6 +3370,7 @@ view.addEventListener('pointermove', e => {
   const p = toDoc(e); mouse = { sx: p.sx, sy: p.sy, x: p.x, y: p.y, rx: p.rx, ry: p.ry, in: true };
   $('#st-pos').textContent = `${Math.floor(p.x)}, ${Math.floor(p.y)}`;
   if (drag && (drag.kind === 'pen' || drag.kind === 'pedit')) { penDragMove(p, e); return; }
+  if (drag && drag.kind === 'free') { const R0 = pen.raw, a = R0[R0.length - 1]; if (Math.hypot(p.x - a.x, p.y - a.y) * cam.z >= 2) R0.push({ x: p.x, y: p.y }); req(); return; }
   shiftHeld = e.shiftKey; if (!drag && (pen || pathEdit)) req();
   if (!drag && !xf && elActive()) { const h = elHit(p); view.style.cursor = !h ? (tool === 'move' ? 'default' : tool === 'text' ? 'text' : 'crosshair') : h.id === 'move' ? 'move' : h.id === 'rot' ? 'grab' : 'pointer'; if (tool === 'move') req(); return; }
   if (!drag && tool === 'move') { view.style.cursor = topElementAt(p) >= 0 ? 'move' : 'default'; req(); }
@@ -3341,15 +3394,16 @@ view.addEventListener('pointermove', e => {
       renderOptbar(); req(); break; }
     case 'move': { const l = L(); l.x = drag.ox + Math.round(p.x - drag.a.x); l.y = drag.oy + Math.round(p.y - drag.a.y); drag.moved = true; req(true); break; }
     case 'paint': {
-      const evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [e];
-      for (const ev of evs) { const q = toDoc(ev); strokeTo(q, ev.pointerType === 'pen' ? (ev.pressure || .5) : 1); }
-      previewEffect(drag.op, drag.alpha); break; }
+      const evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [e], a = drag.last; let x0 = a.x, y0 = a.y, x1 = a.x, y1 = a.y;
+      for (const ev of evs) { const q = toDoc(ev); x0 = Math.min(x0, q.x); y0 = Math.min(y0, q.y); x1 = Math.max(x1, q.x); y1 = Math.max(y1, q.y); strokeTo(q, ev.pointerType === 'pen' ? (ev.pressure || .5) : 1); }
+      const m = toolSize() / 2 + 3; previewEffect(drag.op, drag.alpha, { x: x0 - m, y: y0 - m, w: x1 - x0 + 2 * m, h: y1 - y0 + 2 * m }); break; }
     case 'gradient': drag.b = p; drawGradientEffect(drag.a, p); previewEffect('source-over', opts.gOpacity / 100); break;
     case 'shape': drag.b = p; drag.shift = e.shiftKey; drawShapeEffect(drag.a, p, e.shiftKey); previewEffect('source-over', shapeAlpha()); break;
     case 'el': elDragMove(e, p); break;
     case 'tbox': drag.b = p; req(); break;
     case 'xf': xfPointerMove(e, p); break;
     case 'smudge': { const evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [e]; for (const ev of evs) smudgeTo(toDoc(ev)); break; }
+    case 'tone': { const evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [e]; for (const ev of evs) toneTo(toDoc(ev)); override = { layer: drag.l, canvas: drag.copy }; req(true); break; }
     case 'recolor': { const evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [e]; for (const ev of evs) recolorTo(toDoc(ev)); override = { layer: drag.l, canvas: drag.copy }; req(true); break; }
     case 'measure': { let b = p; if (e.shiftKey) { const dx = p.x - drag.a.x, dy = p.y - drag.a.y, ang = Math.round(Math.atan2(dy, dx) / (Math.PI / 4)) * Math.PI / 4, len = Math.hypot(dx, dy); b = { x: drag.a.x + Math.cos(ang) * len, y: drag.a.y + Math.sin(ang) * len }; } measure = { a: drag.a, b }; renderOptbar(); req(); break; }
   }
@@ -3371,6 +3425,7 @@ view.addEventListener('pointerup', e => {
     case 'gradient': if (Math.hypot(d.b.x - d.a.x, d.b.y - d.a.y) < 1) { override = null; break; } commitEffect('source-over', opts.gOpacity / 100); break;
     case 'shape': createShapeFromDrag(d.a, d.b, d.shift); break;
     case 'pen': req(); break;
+    case 'free': freeFinish(); break;
     case 'pedit': markDirty(); updateThumb(pathEdit ? pathEdit.l : L()); break;
     case 'el': elDragEnd(d); break;
     case 'tbox': {
@@ -3381,6 +3436,7 @@ view.addEventListener('pointerup', e => {
       insertLayer(el); startTextEdit(el, true); break; }
     case 'smudge': override = null; smCarry = null; commitLayerResult(d.l, d.copy); break;
     case 'recolor': override = null; commitLayerResult(d.l, d.copy); break;
+    case 'tone': override = null; commitLayerResult(d.l, d.copy); break;
     case 'xf': renderOptbar(); break;
     case 'measure': if (Math.hypot(measure.b.x - measure.a.x, measure.b.y - measure.a.y) < 1) measure = null; renderOptbar(); break;
   }
@@ -3447,13 +3503,16 @@ document.addEventListener('keydown', e => {
     if (e.key === 'ArrowLeft') cam.x += s; if (e.key === 'ArrowRight') cam.x -= s; if (e.key === 'ArrowUp') cam.y += s; if (e.key === 'ArrowDown') cam.y -= s;
     styleTextEdit(); req(); return;
   }
-  if (k === '[' || k === ']') { const f = k === ']' ? 1.2 : 1 / 1.2; const key = tool === 'pencil' ? 'pSize' : tool === 'eraser' ? 'eSize' : tool === 'clone' ? 'cSize' : tool === 'blur' ? 'blSize' : tool === 'smudge' ? 'smSize' : tool === 'recolor' ? 'rcSize' : 'size'; opts[key] = clamp(Math.round(opts[key] * f + (k === ']' ? 1 : -1)), 1, LOGMAX[key] || 500); saveOpts(); renderOptbar(); req(); return; }
+  if (k === '[' || k === ']') { const f = k === ']' ? 1.2 : 1 / 1.2; const key = tool === 'pencil' ? 'pSize' : tool === 'eraser' ? 'eSize' : tool === 'clone' ? 'cSize' : tool === 'blur' ? 'blSize' : tool === 'smudge' ? 'smSize' : tool === 'recolor' ? 'rcSize' : tool === 'dodge' ? 'dgSize' : tool === 'sponge' ? 'spSize' : 'size'; opts[key] = clamp(Math.round(opts[key] * f + (k === ']' ? 1 : -1)), 1, LOGMAX[key] || 500); saveOpts(); renderOptbar(); req(); return; }
   if (k === 'x') { [color1, color2] = [color2, color1]; setColor1(color1); return; }
   if (k === 'd') { color2 = '#ffffff'; setColor1('#000000'); return; }
   if (k === 'z' && e.shiftKey) { setTool('zoomout'); return; }
   if (k === 'p' && e.shiftKey) { setTool('polygon'); return; }
   if (k === 'y' && e.shiftKey) { setTool('polyline'); return; }
   if (k === 'b' && e.shiftKey) { setTool('recolor'); return; }
+  if (k === 'o' && e.shiftKey) { setTool('dodge'); return; }
+  if (k === 's' && e.shiftKey) { setTool('sponge'); return; }
+  if (k === 'f' && e.shiftKey) { setTool('freepath'); return; }
   for (const id in TOOL_BY_ID) if (TOOL_BY_ID[id].key.toLowerCase() === k) { setTool(id); return; }
 });
 document.addEventListener('keyup', e => { if (e.key === ' ') { spaceDown = false; updateCursor(); } });
@@ -3542,7 +3601,7 @@ function setTool(id) {
   if (id !== 'crop') cropRect = null;
   else if (!cropRect && doc) cropRect = { x: 0, y: 0, w: doc.w, h: doc.h };
   if (id === 'picker' && tool !== 'picker') PK.prev = tool;
-  if (fltS) fltClose(false); if (pen && id !== tool) penFinish(false); if (pathEdit && !['move', 'pen', 'polyline', 'hand', 'zoom', 'zoomout'].includes(id)) endPathEdit();
+  if (fltS) fltClose(false); if (pen && id !== tool) { if (pen.free) { pen = null; drag = null; } else penFinish(false); } if (pathEdit && !['move', 'pen', 'polyline', 'hand', 'zoom', 'zoomout'].includes(id)) endPathEdit();
   tool = id; $$('.tool-btn').forEach(b => b.classList.toggle('active', b.dataset.tool === id)); document.body.classList.toggle('picking', id === 'picker'); if (id !== 'picker') pkHide();
   renderOptbar(); updateCursor(); req();
 }
@@ -3643,6 +3702,13 @@ function optSpec() {
     case 'polyline': return [{ type: 'hint', text: pen ? `<b style="color:var(--tc)">Polyligne en cours : ${pen.pts.length} point${pen.pts.length > 1 ? 's' : ''}</b><br>Clic sur le 1er point = fermer · Entrée ou double-clic = terminer · Retour arrière = retirer le dernier point.` : 'Un clic par sommet : segments droits. <b>Maj</b> = angles par pas de 15°. Clic sur le 1er point pour fermer (forme pleine), Entrée ou double-clic pour un trait ouvert.' },
       styleTiles(), range('Épaisseur du trait', 'penWidth', 1, 100, 'px'), range('Opacité', 'shOpacity', 1, 100, '%'), { type: 'hint', text: 'Retoucher : <b>double-clic</b> sur la polyligne (points, ajout sur un segment, Alt+clic = point courbe).' }];
     case 'polygon': return [tiles('Forme', 'pgStar', [[false, TI('<polygon points="16,4 27,11 27,22 16,28 5,22 5,11" fill="var(--tc)"/>'), 'Polygone'], [true, TI('<polygon points="16,3 19.5,11.5 28.5,12 21.5,18 24,27 16,22 8,27 10.5,18 3.5,12 12.5,11.5" fill="var(--tc)"/>'), 'Étoile']]), range(opts.pgStar ? 'Nombre de branches' : 'Nombre de côtés', 'pgSides', 3, 24), ...(opts.pgStar ? [range('Creux de l\'étoile', 'pgInner', 10, 95, '%')] : []), styleTiles(), { type: 'hint', text: SHHINT() }, ...(opts.shMode !== 'fill' ? [range('Contour', 'shWidth', 1, 100, 'px')] : []), range('Opacité', 'shOpacity', 1, 100, '%'), { type: 'hint', text: 'Glisser du centre vers un sommet · Maj = rotation par pas de 15°' }];
+    case 'dodge': return [{ type: 'preview' }, tiles('Effet', 'dgMode', [['dodge', TI('<circle cx="16" cy="16" r="9" fill="#fde68a"/>'), 'Éclaircir'], ['burn', TI('<circle cx="16" cy="16" r="9" fill="#78350f"/>'), 'Assombrir']]),
+      { type: 'select', label: 'Tons visés', key: 'dgRange', items: [['shadow', 'Ombres'], ['mid', 'Tons moyens'], ['high', 'Hautes lumières']] }, range('Taille', 'dgSize', 2, 800, 'px'), range('Dureté', 'dgHard', 0, 100, '%'), range('Exposition', 'dgExp', 1, 100, '%'),
+      { type: 'hint', text: 'Repasse pour accentuer. Alt pendant le trait : effet inverse.' }];
+    case 'sponge': return [{ type: 'preview' }, tiles('Effet', 'spMode', [['sat', TI('<circle cx="16" cy="16" r="9" fill="#f43f5e"/>'), 'Saturer'], ['desat', TI('<circle cx="16" cy="16" r="9" fill="#9ca3af"/>'), 'Désaturer']]),
+      range('Taille', 'spSize', 2, 800, 'px'), range('Dureté', 'spHard', 0, 100, '%'), range('Débit', 'spFlow', 1, 100, '%'), { type: 'hint', text: 'Repasse pour accentuer. Alt pendant le trait : effet inverse.' }];
+    case 'freepath': return [styleTiles(), range('Épaisseur du trait', 'penWidth', 1, 100, 'px'), range('Lissage', 'fpSmooth', 0, 100, '%'), range('Opacité', 'shOpacity', 1, 100, '%'),
+      { type: 'hint', text: 'Dessine à main levée : le trait devient une courbe vectorielle lissée. Termine près du point de départ pour fermer la forme. Double-clic dessus pour retoucher les points.' }];
     case 'recolor': return [{ type: 'preview' }, range('Taille', 'rcSize', 2, 500, 'px'), range('Dureté', 'rcHard', 0, 100, '%'), range('Tolérance', 'rcTol', 1, 100, '%'),
       tiles('Couleur à remplacer', 'rcSample', [['once', TI('<circle cx="16" cy="16" r="9" fill="var(--tc)"/><path d="M16 4v6M16 22v6M4 16h6M22 16h6" stroke="#fff" stroke-width="2"/>'), 'Sous le pinceau'], ['c2', TI('<rect x="8" y="8" width="16" height="16" rx="3" fill="var(--tc)"/>'), 'Couleur 2']]),
       { type: 'hint', text: 'Peint en couleur 1 uniquement ce qui ressemble à la couleur visée (prise sous le pinceau au début du trait, ou la couleur 2), en gardant les ombres et les reflets. Tolérance : plus elle est haute, plus des teintes proches sont touchées.' }];
