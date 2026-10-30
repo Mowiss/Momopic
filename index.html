@@ -159,6 +159,9 @@ aside.panels{width:268px;background:var(--g800);border-left:1px solid var(--g700
 #toolopts .to-t{flex:1;min-width:0}
 #toolopts .to-k{font:700 10.5px ui-monospace,monospace;padding:2px 6px;border-radius:5px;background:#111827;color:var(--tc);border:1px solid color-mix(in srgb,var(--tc) 50%,transparent)}
 #toolopts .otiles{display:grid;gap:6px}
+#toolopts .fl-v{color:#fff!important;font:600 12px ui-monospace,monospace;background:#111827;border:1px solid var(--g700);border-radius:6px;padding:1px 7px}
+#toolopts .fl-col .olab{align-items:center}#toolopts .fl-col input[type=color]{width:46px;height:26px;border:1px solid var(--g600);border-radius:7px;background:none;padding:1px;cursor:pointer}
+#toolopts select{width:100%;background:#111827;border:1px solid var(--g700);color:var(--g200);padding:6px 8px}
 #pick-loupe{position:fixed;z-index:10000;width:122px;height:122px;transform:translate(-50%,-50%);pointer-events:none;display:none;border-radius:50%;box-shadow:0 6px 22px rgba(0,0,0,.5)}
 body.picking:not(.pk-ex),body.picking:not(.pk-ex) *{cursor:none!important}
 /* ===== réglages : boutons, curseurs, cases plus vivants ===== */
@@ -2154,7 +2157,7 @@ function floatShape(a, alpha) {
   const w = x1 - x0 + 1, h = y1 - y0 + 1, fl = mkCanvas(w, h), c = fl.getContext('2d'); c.globalAlpha = alpha; c.drawImage(ef, -x0, -y0);
   const keep = sel; if (!startFloat(fl, x0, y0)) return; xf.shape = tool; xf.paste = false; xf.oldSel = keep; renderOptbar();
 }
-function cancelTransient() { cancelTransform(); cropRect = null; if (drag && drag.kind !== 'pan') drag = null; if (override && !filterPreviewActive) override = null; }
+function cancelTransient() { if (typeof fltS !== 'undefined' && fltS) fltClose(false); cancelTransform(); cropRect = null; if (drag && drag.kind !== 'pan') drag = null; if (override && !filterPreviewActive) override = null; }
 
 /* =========================================================================
    ÉLÉMENTS façon Canva : chaque calque est un élément déplaçable, redimensionnable, orientable.
@@ -3269,6 +3272,7 @@ document.addEventListener('keydown', e => {
   if (e.key === ' ') { if (!spaceDown) { spaceDown = true; updateCursor(); } e.preventDefault(); return; }
   if (elQuad && (e.key === 'Enter' || e.key === 'Escape')) { elQuad = false; renderOptbar(); req(); return; }
   if (penKey(e)) return;
+  if (fltS && (e.key === 'Enter' || e.key === 'Escape') && !(e.target.tagName === 'SELECT')) { e.preventDefault(); fltClose(e.key === 'Enter'); return; }
   if (xf && e.key === 'Enter') { commitTransform(); return; }
   if (xf && e.key === 'Escape') { cancelTransform(); return; }
   if (tool === 'picker' && e.key === 'Escape') { setTool(PK.prev || 'brush'); return; }
@@ -3380,7 +3384,7 @@ function setTool(id) {
   if (id !== 'crop') cropRect = null;
   else if (!cropRect && doc) cropRect = { x: 0, y: 0, w: doc.w, h: doc.h };
   if (id === 'picker' && tool !== 'picker') PK.prev = tool;
-  if (pen && id !== 'pen') penFinish(false); if (pathEdit && !['move', 'pen', 'hand', 'zoom', 'zoomout'].includes(id)) endPathEdit();
+  if (fltS) fltClose(false); if (pen && id !== 'pen') penFinish(false); if (pathEdit && !['move', 'pen', 'hand', 'zoom', 'zoomout'].includes(id)) endPathEdit();
   tool = id; $$('.tool-btn').forEach(b => b.classList.toggle('active', b.dataset.tool === id)); document.body.classList.toggle('picking', id === 'picker'); if (id !== 'picker') pkHide();
   renderOptbar(); updateCursor(); req();
 }
@@ -3494,6 +3498,7 @@ function optSpec() {
   return [];
 }
 function renderOptbar() {
+  if (fltS) { renderFilterPanel($('#toolopts')); return; }
   { const bx = $('#toolopts'); if (doc && !xf && EL_TOOLS.includes(tool) && L() && picked) { renderElPanel(bx); return; } }
   const T = xf && xf.shape ? { c: TOOL_BY_ID[xf.shape].c, name: TOOL_BY_ID[xf.shape].name + (xf.mode === 'distort' ? ' · déformation' : ' · modifiable'), key: 'Entrée' } : xf ? { c: xf.mode === 'distort' ? '#c084fc' : xf.copy ? '#f59e0b' : '#60a5fa', name: xf.mode === 'distort' ? 'Déformer la sélection' : xf.paste ? 'Collage (flottant)' : xf.copy ? 'Copie miroir' : 'Rotation / échelle', key: 'Entrée' } : TOOL_BY_ID[tool], box = $('#toolopts');
   const ico = xf && xf.shape ? IC[xf.shape] : xf ? IC[xf.mode === 'distort' ? 'xdistort' : xf.copy ? 'xmirror' : 'xrotate'] : IC[tool];
@@ -4052,60 +4057,67 @@ function runFilterVec(name, idx) {
   const before = l.fx ? JSON.parse(JSON.stringify(l.fx)) : [];
   if (FILTERS[name]) { pushDoc(); l.fx = [...before, { name }]; rerender(l, 'c'); afterVec(l); toast('Effet ajouté : ' + (FILTER_NAMES[name] || name) + ' (panneau de l\'élément pour le retirer).'); return; }
   const F = ADJUST[name]; if (!F) return;
-  const PS = F.params.map(q => Array.isArray(q) ? { t: 'range', lab: q[0], k: q[1], min: q[2], max: q[3], def: q[4], step: q[5] || 1, unit: q[6] || '' } : q);
-  const p = {}; PS.forEach(q => p[q.k] = q.def); Object.assign(p, filterMem[name] || {}); if (F.init) F.init(p); if (idx !== undefined && before[idx]) Object.assign(p, before[idx].p);
-  const fmt = (q, v) => (q.step < 1 ? (+v).toFixed(1) : v) + (q.unit || '');
-  const body = (F.note ? `<div class="note" style="margin-top:-2px">${F.note}</div>` : '') + PS.map(q => {
-    if (q.t === 'range') return `<div class="row"><span>${q.lab}</span><input type="range" data-k="${q.k}" min="${q.min}" max="${q.max}" step="${q.step}" value="${p[q.k]}"><span class="val" data-v="${q.k}" style="width:58px">${fmt(q, p[q.k])}</span></div>`;
-    if (q.t === 'select') return `<div class="row"><span>${q.lab}</span><select data-k="${q.k}">${q.opts.map(([v, t]) => `<option value="${v}"${p[q.k] === v ? ' selected' : ''}>${t}</option>`).join('')}</select></div>`;
-    if (q.t === 'color') return `<div class="row"><span>${q.lab}</span><input type="color" data-k="${q.k}" value="${p[q.k]}" style="width:60px;height:28px;background:none;border:0;flex:none"></div>`;
-    if (q.t === 'check') return `<label class="row"><input type="checkbox" data-k="${q.k}"${p[q.k] ? ' checked' : ''} style="accent-color:var(--brand2)"> ${q.lab}</label>`;
-  }).join('') + `<div class="note">Effet <b>non destructif</b> : « ${esc(l.name)} » reste un ${l.kind === 'text' ? 'texte modifiable' : 'élément vectoriel'} ; l'effet se règle ou se retire dans le panneau de l'élément.</div>`;
-  const show = () => { const fx = [...before]; if (idx !== undefined) fx[idx] = { name, p: { ...p } }; else fx.push({ name, p: { ...p } }); l.fx = fx; rerender(l, 'c'); req(true); };
-  let tmr = 0; filterPreviewActive = true;
-  dialog({ title: F.title + ' · ' + (l.kind === 'text' ? 'texte' : 'forme'), body, ok: idx !== undefined ? 'Appliquer' : 'Ajouter l\'effet', light: true, onOpen: root => {
-    root.querySelectorAll('[data-k]').forEach(el => el.addEventListener('input', () => { const q = PS.find(q => q.k === el.dataset.k); p[q.k] = q.t === 'range' ? +el.value : q.t === 'check' ? el.checked : el.value; if (q.t === 'range') root.querySelector(`[data-v="${q.k}"]`).textContent = fmt(q, el.value); clearTimeout(tmr); tmr = setTimeout(show, 30); }));
-    show(); } })
-    .then(ok => { clearTimeout(tmr); filterPreviewActive = false; const nfx = l.fx; l.fx = before; rerender(l, 'c');
-      if (ok) { pushDoc(); l.fx = nfx; filterMem[name] = { ...p }; rerender(l, 'c'); } afterVec(l); });
+  const PS = fltParams(F), p = {}; PS.forEach(q => p[q.k] = q.def); Object.assign(p, filterMem[name] || {}); if (F.init) F.init(p); if (idx !== undefined && before[idx]) Object.assign(p, before[idx].p);
+  fltOpen({ name, F, PS, p, vec: true, l, edit: idx !== undefined,
+    preview: () => { const fx = [...before]; if (idx !== undefined) fx[idx] = { name, p: { ...p } }; else fx.push({ name, p: { ...p } }); l.fx = fx; rerender(l, 'c'); req(true); },
+    apply: () => { const nfx = l.fx; l.fx = before; rerender(l, 'c'); pushDoc(); l.fx = nfx; filterMem[name] = { ...p }; rerender(l, 'c'); afterVec(l); },
+    cancel: () => { l.fx = before; rerender(l, 'c'); afterVec(l); } });
 }
 function afterVec(l) { markDirty(); req(true); updateThumb(l); renderPagesThumb(); renderOptbar(); }
 function runFilter(name) {
+  if (fltS) fltClose(false);
   if (L() && isVec(L()) && !L().locked) return runFilterVec(name);
   if (!editable()) return; const l = L();
   if (FILTERS[name]) { commitLayerResult(l, pixelFilter(l.canvas, FILTERS[name])); return; }
-  const F = ADJUST[name];
-  const PS = F.params.map(q => Array.isArray(q) ? { t: 'range', lab: q[0], k: q[1], min: q[2], max: q[3], def: q[4], step: q[5] || 1, unit: q[6] || '' } : q);
-  const p = {}; PS.forEach(q => p[q.k] = q.def); Object.assign(p, filterMem[name] || {}); if (F.init) F.init(p);
+  const F = ADJUST[name]; if (!F) return;
+  const PS = fltParams(F), p = {}; PS.forEach(q => p[q.k] = q.def); Object.assign(p, filterMem[name] || {}); if (F.init) F.init(p);
   // zone de travail : sélection (ou calque entier), en coordonnées du calque
   const b = sel ? sel.bbox : { x: l.x, y: l.y, w: l.canvas.width, h: l.canvas.height };
   const X = { cx: b.x - l.x + b.w / 2, cy: b.y - l.y + b.h / 2, rw: b.w / 2, rh: b.h / 2, mask: null };
   if (sel) { X.mask = mkCanvas(l.canvas.width, l.canvas.height); X.mask.getContext('2d').drawImage(sel.mask, -l.x, -l.y); }
-  const fmt = (q, v) => (q.step < 1 ? (+v).toFixed(1) : v) + (q.unit || '');
-  let body = (F.note ? `<div class="note" style="margin-top:-2px">${F.note}</div>` : '') + PS.map(q => {
-    if (q.t === 'range') return `<div class="row"><span>${q.lab}</span><input type="range" data-k="${q.k}" min="${q.min}" max="${q.max}" step="${q.step}" value="${p[q.k]}"><span class="val" data-v="${q.k}" style="width:58px">${fmt(q, p[q.k])}</span></div>`;
-    if (q.t === 'select') return `<div class="row"><span>${q.lab}</span><select data-k="${q.k}">${q.opts.map(([v, t]) => `<option value="${v}"${p[q.k] === v ? ' selected' : ''}>${t}</option>`).join('')}</select></div>`;
-    if (q.t === 'color') return `<div class="row"><span>${q.lab}</span><input type="color" data-k="${q.k}" value="${p[q.k]}" style="width:60px;height:28px;background:none;border:0;flex:none"></div>`;
-    if (q.t === 'check') return `<label class="row"><input type="checkbox" data-k="${q.k}"${p[q.k] ? ' checked' : ''} style="accent-color:var(--brand2)"> ${q.lab}</label>`;
-  }).join('');
-  body += `<label class="row note"><input type="checkbox" id="f-prev" checked style="accent-color:var(--brand2)"> Aperçu en direct${sel ? (F.noMask ? ' — à partir du contenu de la sélection' : ' — limité à la sélection') : ''}</label>`;
   const show = dst => { if (F.noMask) { override = { layer: l, canvas: dst }; req(true); } else layerResultPreview(l, dst); };
-  let tmr = 0; filterPreviewActive = true;
-  const preview = () => { clearTimeout(tmr); tmr = setTimeout(() => { if ($('#f-prev')?.checked) show(F.run(l.canvas, p, X)); else { override = null; req(true); } }, 30); };
-  dialog({ title: F.title, body, ok: 'Appliquer', light: true, onOpen: root => {
-    root.querySelectorAll('[data-k]').forEach(el => el.addEventListener('input', () => {
-      const q = PS.find(q => q.k === el.dataset.k);
-      p[q.k] = q.t === 'range' ? +el.value : q.t === 'check' ? el.checked : el.value;
-      if (q.t === 'range') root.querySelector(`[data-v="${q.k}"]`).textContent = fmt(q, el.value);
-      preview(); }));
-    root.querySelector('#f-prev').onchange = preview; preview(); } })
-    .then(ok => { clearTimeout(tmr); filterPreviewActive = false; override = null;
-      if (!ok) { req(true); return; }
-      filterMem[name] = { ...p }; const out = F.run(l.canvas, p, X);
+  fltOpen({ name, F, PS, p, l, live: true,
+    preview: () => { if (fltS.live) show(F.run(l.canvas, p, X)); else { override = null; req(true); } },
+    apply: () => { override = null; filterMem[name] = { ...p }; const out = F.run(l.canvas, p, X);
       if (F.noMask) { pushPx(l); const c = l.canvas.getContext('2d'); c.clearRect(0, 0, l.canvas.width, l.canvas.height); c.drawImage(out, 0, 0); afterPixelEdit(l); }
-      else commitLayerResult(l, out); });
+      else commitLayerResult(l, out); },
+    cancel: () => { override = null; req(true); } });
 }
-
+/* ---------- réglages d'un filtre dans le volet « Outil en cours » (aperçu en direct) ---------- */
+let fltS = null;
+const fltParams = F => F.params.map(q => Array.isArray(q) ? { t: 'range', lab: q[0], k: q[1], min: q[2], max: q[3], def: q[4], step: q[5] || 1, unit: q[6] || '' } : q);
+function fltOpen(st) {
+  fltS = { ...st, def: { ...st.p }, tmr: 0 }; filterPreviewActive = true;
+  const pn = $('#pn-tool'); if (pn) pn.classList.remove('collapsed');
+  renderOptbar(); const bx = $('#toolopts'); if (bx) bx.scrollTop = 0; fltPreview();
+}
+function fltPreview() { if (!fltS) return; clearTimeout(fltS.tmr); fltS.tmr = setTimeout(() => { if (fltS) fltS.preview(); }, 30); }
+function fltClose(ok) {
+  const st = fltS; if (!st) return; clearTimeout(st.tmr); fltS = null; filterPreviewActive = false;
+  if (ok) st.apply(); else st.cancel(); renderOptbar(); req(true);
+}
+function renderFilterPanel(bx) {
+  const st = fltS, F = st.F, p = st.p, fmt = (q, v) => (q.step < 1 ? (+v).toFixed(q.step < .1 ? 2 : 1) : v) + (q.unit || '');
+  bx.style.setProperty('--tc', '#f472b6');
+  const rows = st.PS.map(q => {
+    if (q.t === 'range') return `<div class="orow"><div class="olab"><span>${q.lab}</span><span class="fl-v" data-v="${q.k}">${fmt(q, p[q.k])}</span></div><input type="range" data-k="${q.k}" min="${q.min}" max="${q.max}" step="${q.step}" value="${p[q.k]}"></div>`;
+    if (q.t === 'select') return `<div class="orow"><div class="olab"><span>${q.lab}</span></div><select data-k="${q.k}">${q.opts.map(([v, t]) => `<option value="${v}"${p[q.k] === v ? ' selected' : ''}>${t}</option>`).join('')}</select></div>`;
+    if (q.t === 'color') return `<div class="orow fl-col"><div class="olab"><span>${q.lab}</span><input type="color" data-k="${q.k}" value="${p[q.k]}"></div></div>`;
+    if (q.t === 'check') return `<label class="ochk"><input type="checkbox" data-k="${q.k}"${p[q.k] ? ' checked' : ''}> ${q.lab}</label>`;
+    return '';
+  }).join('');
+  bx.innerHTML = `<div class="to-name"><span class="to-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.6L18.5 9l-4.6 1.9L12 15.5l-1.9-4.6L5.5 9l4.6-1.4z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg></span><span class="to-t">${esc(F.title)}<small>${st.vec ? 'effet modifiable · ' + esc(st.l.name) : 'filtre · ' + esc(st.l.name) + (sel ? ' (sélection)' : '')}</small></span><kbd class="to-k">Entrée</kbd></div>
+    ${F.note ? `<div class="ohint" style="margin:-4px 0 10px">${F.note}</div>` : ''}${rows}
+    ${st.vec ? `<div class="ohint">Effet <b>non destructif</b> : le ${st.l.kind === 'text' ? 'texte reste modifiable' : 'tracé reste vectoriel'} ; l'effet se règle ou se retire dans le panneau de l'élément.</div>` : `<label class="ochk"><input type="checkbox" data-live${st.live ? ' checked' : ''}> Aperçu en direct${sel ? (F.noMask ? ' (contenu de la sélection)' : ' (limité à la sélection)') : ''}</label>`}
+    <div class="obtns" style="margin-top:4px"><button type="button" class="obtn" data-freset><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 0 2.5-5.8L4 8.5"/><path d="M4 3v5.5h5.5"/></svg>Par défaut</button></div>
+    <div class="xfp-acts"><button type="button" class="ok" data-fok>${st.vec && !st.edit ? 'Ajouter l\'effet' : 'Appliquer'}<kbd>Entrée</kbd></button><button type="button" data-fno>Annuler<kbd>Échap</kbd></button></div>`;
+  bx.querySelectorAll('[data-k]').forEach(el => el.addEventListener('input', () => { const q = st.PS.find(q => q.k === el.dataset.k);
+    p[q.k] = q.t === 'range' ? +el.value : q.t === 'check' ? el.checked : el.value; if (q.t === 'range') bx.querySelector(`[data-v="${q.k}"]`).textContent = fmt(q, el.value); fltPreview(); }));
+  bx.querySelectorAll('select[data-k],input[type=checkbox][data-k]').forEach(el => el.addEventListener('change', () => el.blur()));
+  const lv = bx.querySelector('[data-live]'); if (lv) lv.onchange = () => { st.live = lv.checked; fltPreview(); };
+  bx.querySelector('[data-freset]').onclick = () => { Object.assign(p, st.def); st.PS.forEach(q => { if (q.t === 'range' || q.t === 'select' || q.t === 'color') p[q.k] = q.def; else if (q.t === 'check') p[q.k] = q.def; }); renderFilterPanel(bx); fltPreview(); };
+  bx.querySelector('[data-fok]').onclick = () => fltClose(true); bx.querySelector('[data-fno]').onclick = () => fltClose(false);
+}
 /* ---------------- fichiers ---------------- */
 /* ---------------- formats d'image : natifs + « exotiques » décodés à la demande ----------------
    natifs (navigateur) : PNG, JPEG/JFIF, WEBP, AVIF, GIF, BMP, ICO/CUR, SVG
